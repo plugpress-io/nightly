@@ -76,7 +76,6 @@ if ( !class_exists( 'WPNightly' ) ):
             if ( !isset( self::$instance ) && !( self::$instance instanceof WPNightly ) ) {
                 self::$instance = new WPNightly;
                 self::$instance->includes();
-
             }
 
             return self::$instance;
@@ -86,15 +85,19 @@ if ( !class_exists( 'WPNightly' ) ):
          * All files
          */
         private function includes() {
-
             require_once WP_NIGHTLY_PLUGIN_DIR . 'freemius.php';
-
             if ( is_admin() ) {
-                require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-dashboard.php';
+                require_once WP_NIGHTLY_PLUGIN_DIR . 'src/dashboard.php';
             }
-            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-settings.php';
-            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-main.php';
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/dashboard-settings.php';
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/plugin.php';
             require_once WP_NIGHTLY_PLUGIN_DIR . 'src/functions.php';
+
+            if ( wpn_fs()->is__premium_only() ) {
+                if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro__premium_only/index.php' ) ) {
+                    require_once plugin_dir_path( __FILE__ ) . 'pro__premium_only/index.php';
+                }
+            }
         }
 
         /**
