@@ -132,7 +132,7 @@ class Switch extends Component {
                                     this.state.wp_nightly_settings_switch_style
                                     ? this.state
                                           .wp_nightly_settings_switch_style
-                                    : wpNightlyParams.options['switch_style']
+                                    : wpnightly.options['switch_style']
                             }
                             options={switchOptions}
                             onChange={(value) =>

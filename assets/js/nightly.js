@@ -10,11 +10,13 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nightly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./nightly */ "./src/nightly/nightly.js");
+/* harmony import */ var wpnightly__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! wpnightly */ "wpnightly");
+/* harmony import */ var wpnightly__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(wpnightly__WEBPACK_IMPORTED_MODULE_1__);
+
 
 const wpnightly = {
   config() {
-    const options = JSON.parse(JSON.stringify(window.wpNightlyParams.options));
-    window.WPNightly = new _nightly__WEBPACK_IMPORTED_MODULE_0__["default"](options);
+    window.WPNightly = new _nightly__WEBPACK_IMPORTED_MODULE_0__["default"](wpnightly__WEBPACK_IMPORTED_MODULE_1__.options);
     window.WPNightly.init();
   }
 
@@ -32,32 +34,31 @@ document.addEventListener('DOMContentLoaded', wpnightly.config);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ WPNightly; }
+/* harmony export */   "default": function() { return /* binding */ Nightly; }
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
 /* harmony import */ var darkreader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! darkreader */ "./node_modules/darkreader/darkreader.js");
 /* harmony import */ var darkreader__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(darkreader__WEBPACK_IMPORTED_MODULE_1__);
 
 
-class WPNightly {
+class Nightly {
   constructor(_options) {
     (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(this, "init", () => {
       if ('1' === this.options.enabled) {
         // Cache Saved
         const wpNighlyActivated = this.ls.getItem('wpnightly');
-        const wpNighlyNeverActivatedByAction = this.ls.getItem('wpnightly') === null;
-        console.log(this.options); // osAware Darkmode
+        const wpNighlyNeverActivatedByAction = this.ls.getItem('wpnightly') === null; // osAware Darkmode
 
         const osAware = '1' === this.options.os_aware ? this.osAware() : '';
 
-        if (false != wpNighlyActivated || 'dark' === osAware && wpNighlyNeverActivatedByAction) {
+        if (false !== wpNighlyActivated || 'dark' === osAware && wpNighlyNeverActivatedByAction) {
           this.fireToggle();
         } // Switch Darkmode
 
 
         if (this.options.enabled_switch) {
-          const button = this.button;
-          button.getElementById('toggle-switch').addEventListener('click', () => {
+          this.button.addEventListener('click', e => {
+            e.preventDefault();
             this.fireToggle();
           });
         }
@@ -91,36 +92,99 @@ class WPNightly {
       const options = this.options;
       const css = `
             .wpnightly-switch {
-                width: 3rem;
-                height: 3rem;
                 position: fixed;
                 cursor: pointer;
-                display: flex;
-                justify-content: center;
-                align-items: center;
                 right: 32px;
                 bottom: 32px;
                 left: unset;
             }
+
+            .wpn-switch-control input {
+                display: none;
+            }
+            
+            .wpn-switch-control.style1 {
+                user-select: none;
+                height: 30px;
+                width: 54px;
+            }
+
+            .wpn-switch-control.style1 input:checked ~ .wpn-switch-handle {
+                background-color: purple;
+            }
+
+            .wpn-switch-control.style1 input:checked ~ .wpn-switch-handle::before {
+                background: purple;
+                left: 19px;
+                transform: scale(1);
+            }
+
+            ..wpn-switch-control.style1 input:checked ~ .wpn-switch-handle::after {
+                background: #ffffff;
+                left: 28px;
+            }
+
+            .wpn-switch-control.style1 .wpn-switch-handle {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 30px;
+                width: 100%;
+                border-radius: 25px;
+                background-color: gray;
+            }
+
+            .wpn-switch-control.style1 .wpn-switch-handle::before {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                left: 0px;
+                top: 4px;
+                border-radius: 50%;
+                transform: scale(0);
+                background: gray;
+                z-index: 5;
+                transition: all 0.125s ease-in;
+            }
+
+            .wpn-switch-control.style1 .wpn-switch-handle::after {
+                content: "";
+                position: absolute;
+                left: 5px;
+                top: 5px;
+                width: 20px;
+                height: 20px;
+                border-radius: 25px;
+                background: #ffffff;
+            }
+
         `;
-      this.addStyle(css, 'head');
-      button.classList.add('wpnightly-switch');
-      button.classList.add(options.switch_style);
-      let buttonStyle = '';
+      this.addStyle(css, 'head'); // Add Class name
 
-      if ('style1' === options.switch_style) {
-        buttonStyle = document.createElement('input');
+      button.classList.add('wpnightly-switch'); // Label Wrap
 
-        if (true === typeof this.ls.getItem('wpnightly')) {
-          buttonStyle.checked = true;
-        }
+      const labelWrap = document.createElement('label');
+      labelWrap.classList.add('wpn-switch-control');
+      labelWrap.classList.add(options.switch_style); // Input checkbox
 
-        buttonStyle.type = 'checkbox';
-        buttonStyle.className = 'wpn-switch';
-        buttonStyle.id = 'toggle-switch';
+      const _input = document.createElement('input');
+
+      if (this.ls.getItem('wpnightly')) {
+        _input.checked = true;
       }
 
-      button.appendChild(buttonStyle);
+      _input.type = 'checkbox';
+      _input.className = 'wpn-switch';
+      _input.id = 'wpn-switch'; // Span Handle
+
+      const _span = document.createElement('span');
+
+      _span.className = 'wpn-switch-handle'; // Append
+
+      labelWrap.appendChild(_input);
+      labelWrap.appendChild(_span);
+      button.appendChild(labelWrap);
       document.body.insertBefore(button, document.body.firstChild);
     });
 
@@ -148,7 +212,7 @@ class WPNightly {
     this.options = _options;
     this.ls = window.localStorage; // Generate Floating Button
 
-    if (this.options.enabled_switch) {
+    if ('1' === _options.enabled && '1' === _options.enabled_switch) {
       const button = document.createElement('div');
       this.createButton(button);
       this.button = button;
@@ -5605,6 +5669,17 @@ class WPNightly {
 
 }));
 
+
+/***/ }),
+
+/***/ "wpnightly":
+/*!****************************!*\
+  !*** external "wpnightly" ***!
+  \****************************/
+/***/ (function(module) {
+
+"use strict";
+module.exports = wpnightly;
 
 /***/ }),
 

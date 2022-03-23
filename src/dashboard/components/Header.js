@@ -4,6 +4,7 @@
 import classnames from 'classnames';
 import SVG, { Props as SVGProps } from 'react-inlinesvg';
 import { Link } from 'react-router-dom';
+import { assetsPath } from 'wpnightly';
 
 /**
  * WPNightly Component
@@ -16,14 +17,13 @@ import Icons from './common/icons';
 const { __ } = wp.i18n;
 
 const Header = () => {
+    console.log(assetsPath);
     return (
         <header className='wpn-header'>
             <div className={classnames('wpn-header-wrap', '', 'wpn-step-one')}>
                 <div className='wpn-logo'>
                     <Link to='/settings'>
-                        <SVG
-                            src={`${wpNightlyParams.assetsPath}/images/logo.svg`}
-                        />
+                        <SVG src={`${assetsPath}/images/logo.svg`} />
                     </Link>
                 </div>
                 <div class='wpn-header-actions'>

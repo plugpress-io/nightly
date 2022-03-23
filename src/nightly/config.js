@@ -1,12 +1,9 @@
-import WPNightly from './nightly';
+import Nightly from './nightly';
+import { options } from 'wpnightly';
 
 const wpnightly = {
     config() {
-        const options = JSON.parse(
-            JSON.stringify(window.wpNightlyParams.options)
-        );
-
-        window.WPNightly = new WPNightly(options);
+        window.WPNightly = new Nightly(options);
         window.WPNightly.init();
     },
 };

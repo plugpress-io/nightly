@@ -17,6 +17,9 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, './build/dashboard'),
         },
+        externals: {
+            wpnightly: 'wpnightly',
+        },
         plugins: [
             ...defaultConfig.plugins,
             new WebpackBar({
@@ -38,6 +41,9 @@ module.exports = [
         },
         output: {
             path: path.resolve(__dirname, './assets/js/'),
+        },
+        externals: {
+            wpnightly: 'wpnightly',
         },
         plugins: [
             ...defaultConfig.plugins,

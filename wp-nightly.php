@@ -86,12 +86,15 @@ if ( !class_exists( 'WPNightly' ) ):
          * All files
          */
         private function includes() {
+
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'freemius.php';
+
             if ( is_admin() ) {
-                require_once WP_NIGHTLY_PLUGIN_DIR . 'inc/class-dashboard.php';
+                require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-dashboard.php';
             }
-            require_once WP_NIGHTLY_PLUGIN_DIR . 'inc/class-settings.php';
-            require_once WP_NIGHTLY_PLUGIN_DIR . 'inc/class-main.php';
-            require_once WP_NIGHTLY_PLUGIN_DIR . 'inc/functions.php';
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-settings.php';
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/class-main.php';
+            require_once WP_NIGHTLY_PLUGIN_DIR . 'src/functions.php';
         }
 
         /**

@@ -2,12 +2,19 @@
  * Extranal dependencies
  */
 import Toast from './Toast';
+import TimePicker from 'react-time-picker';
 
 /**
  * WordPress dependencies.
  */
 const { __ } = wp.i18n;
-const { PanelBody, PanelRow, ToggleControl } = wp.components;
+const {
+    PanelBody,
+    PanelRow,
+    ToggleControl,
+    RadioControl,
+    DateTimePicker,
+} = wp.components;
 const { render, Component, Fragment } = wp.element;
 
 /**
@@ -25,6 +32,10 @@ class General extends Component {
             isAPISaving: false,
             wp_nightly_settings_enabled: false,
             wp_nightly_settings_schedule: false,
+            wp_nightly_settings_schedule_type: '',
+            wp_nightly_settings_schedule_time: '',
+            wp_nightly_settings_schedule_time_start: '22:30',
+            wp_nightly_settings_schedule_time_end: '06:30',
             wp_nightly_settings_os_aware: false,
         };
     }
@@ -45,6 +56,16 @@ class General extends Component {
                         wp_nightly_settings_os_aware: Boolean(
                             response.wp_nightly_settings_os_aware
                         ),
+
+                        wp_nightly_settings_schedule_type:
+                            response.wp_nightly_settings_schedule_type,
+                        wp_nightly_settings_schedule_time:
+                            response.wp_nightly_settings_schedule_time,
+                        wp_nightly_settings_schedule_time:
+                            response.wp_nightly_settings_schedule_time_start,
+                        wp_nightly_settings_schedule_time:
+                            response.wp_nightly_settings_schedule_time_end,
+
                         isAPILoaded: true,
                     });
                 });
@@ -88,15 +109,16 @@ class General extends Component {
 
         return (
             <Fragment>
-                <PanelBody className='wpn-panel-title-only'>
-                    <PanelTitle title={_title} subtitle={_sub_title} />
-                </PanelBody>
                 <PanelBody>
+                    <PanelTitle title={_title} subtitle={_sub_title} />
                     <PanelRow>
                         <ToggleControl
                             className='wpn-toggle-control'
-                            label={__('Enable Dark Mode')}
-                            help={__(' Activate dark mode your website.')}
+                            label={__('Enable Dark Mode', 'wp-nightly')}
+                            help={__(
+                                'Setting use to disable or enable dark mode across the website.',
+                                'wp-nightly'
+                            )}
                             checked={this.state.wp_nightly_settings_enabled}
                             onChange={() =>
                                 this.changeOptions(
@@ -106,38 +128,143 @@ class General extends Component {
                             }
                         />
                     </PanelRow>
-                    <PanelRow className='wpn-pro-feature'>
-                        <ToggleControl
-                            className='wpn-toggle-control'
-                            label={__('Schedule Dark Mode')}
-                            help={__(
-                                'Setting use to disable or enable OS aware dark mode across the site.'
+
+                    {this.state.wp_nightly_settings_enabled ? (
+                        <PanelRow className='wpn-row-multi-control wpn-pro-feature'>
+                            <ToggleControl
+                                className='wpn-toggle-control'
+                                label={__(
+                                    'Enable Schedule Dark Mode',
+                                    'wp-nightly'
+                                )}
+                                help={__(
+                                    'Setting use to disable or enable OS aware dark mode across the site.',
+                                    'wp-nightly'
+                                )}
+                                checked={
+                                    this.state.wp_nightly_settings_schedule
+                                }
+                                onChange={() =>
+                                    this.changeOptions(
+                                        'wp_nightly_settings_schedule',
+                                        !this.state.wp_nightly_settings_schedule
+                                    )
+                                }
+                            />
+                            {this.state.wp_nightly_settings_schedule ? (
+                                <div className='components-fieldset wpn-fieldset'>
+                                    <RadioControl
+                                        options={[
+                                            {
+                                                label: __(
+                                                    'Sunset to Sunrise',
+                                                    'wp-nightly'
+                                                ),
+                                                value: 'sun',
+                                            },
+                                            {
+                                                label: __(
+                                                    'Custom Time',
+                                                    'wp-nightly'
+                                                ),
+                                                value: 'custom',
+                                            },
+                                        ]}
+                                        selected={
+                                            this.state
+                                                .wp_nightly_settings_schedule_type
+                                        }
+                                        onChange={(value) =>
+                                            this.changeOptions(
+                                                'wp_nightly_settings_schedule_type',
+                                                value
+                                            )
+                                        }
+                                    />
+                                    {'custom' ===
+                                    this.state
+                                        .wp_nightly_settings_schedule_type ? (
+                                        <div className='components-base-control wpn-time-picker'>
+                                            <label
+                                                className='wpn-time-picker-start-label'
+                                                for='time'
+                                            >
+                                                {__('From:', 'wp-nightly')}
+                                            </label>
+                                            <TimePicker
+                                                amPmAriaLabel={'Select AM/PM'}
+                                                clockAriaLabel={'Toggle clock'}
+                                                format={'h:m a'}
+                                                onChange={(value) =>
+                                                    this.changeOptions(
+                                                        'wp_nightly_settings_schedule_time_start',
+                                                        value
+                                                    )
+                                                }
+                                                value={
+                                                    this.state
+                                                        .wp_nightly_settings_schedule_time_start
+                                                }
+                                                clockIcon={null}
+                                                clearIcon={null}
+                                            />
+                                            <label
+                                                className='wpn-time-picker-end-label'
+                                                for='time'
+                                            >
+                                                {__('To:', 'wp-nightly')}
+                                            </label>
+                                            <TimePicker
+                                                format={'h:m a'}
+                                                onChange={(value) =>
+                                                    this.changeOptions(
+                                                        'wp_nightly_settings_schedule_time_end',
+                                                        value
+                                                    )
+                                                }
+                                                value={
+                                                    this.state
+                                                        .wp_nightly_settings_schedule_time_end
+                                                }
+                                                clockIcon={null}
+                                                clearIcon={null}
+                                            />
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
+                            ) : (
+                                ''
                             )}
-                            checked={this.state.wp_nightly_settings_schedule}
-                            onChange={() =>
-                                this.changeOptions(
-                                    'wp_nightly_settings_schedule',
-                                    !this.state.wp_nightly_settings_schedule
-                                )
-                            }
-                        />
-                    </PanelRow>
-                    <PanelRow>
-                        <ToggleControl
-                            className='wpn-toggle-control'
-                            label={__('OS Aware')}
-                            help={__(
-                                'Setting use to disable or enable OS aware dark mode across the site.'
-                            )}
-                            checked={this.state.wp_nightly_settings_os_aware}
-                            onChange={() =>
-                                this.changeOptions(
-                                    'wp_nightly_settings_os_aware',
-                                    !this.state.wp_nightly_settings_os_aware
-                                )
-                            }
-                        />
-                    </PanelRow>
+                        </PanelRow>
+                    ) : (
+                        ''
+                    )}
+
+                    {this.state.wp_nightly_settings_enabled ? (
+                        <PanelRow>
+                            <ToggleControl
+                                className='wpn-toggle-control'
+                                label={__('OS Aware', 'wp-nightly')}
+                                help={__(
+                                    'Setting use to disable or enable OS aware dark mode across the site.',
+                                    'wp-nightly'
+                                )}
+                                checked={
+                                    this.state.wp_nightly_settings_os_aware
+                                }
+                                onChange={() =>
+                                    this.changeOptions(
+                                        'wp_nightly_settings_os_aware',
+                                        !this.state.wp_nightly_settings_os_aware
+                                    )
+                                }
+                            />
+                        </PanelRow>
+                    ) : (
+                        ''
+                    )}
                 </PanelBody>
             </Fragment>
         );
