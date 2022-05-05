@@ -20,8 +20,7 @@ const { render, Component, Fragment } = wp.element;
 /**
  * Internals Dependencies
  */
-
-import PanelTitle from './common/panel-title';
+import SettingsName from './common/settings-name';
 
 class General extends Component {
     constructor() {
@@ -104,17 +103,16 @@ class General extends Component {
     }
 
     render() {
-        const _title = __('General Settings', 'wp-nightly');
-        const _sub_title = __('', 'wp-nightly');
-
         return (
             <Fragment>
-                <PanelBody>
-                    <PanelTitle title={_title} subtitle={_sub_title} />
+                <PanelBody title={__('General Settings', 'wp-nightly')}>
                     <PanelRow>
+                        <SettingsName
+                            name={__('Dark Mode Settings', 'wp-nightly')}
+                        />
                         <ToggleControl
-                            className='wpn-toggle-control'
-                            label={__('Enable Dark Mode', 'wp-nightly')}
+                            className='wpn-control-field'
+                            label={__('Enable', 'wp-nightly')}
                             help={__(
                                 'Setting use to disable or enable dark mode across the website.',
                                 'wp-nightly'
@@ -129,124 +127,129 @@ class General extends Component {
                         />
                     </PanelRow>
 
-                    {this.state.wp_nightly_settings_enabled ? (
+                    {/* {this.state.wp_nightly_settings_enabled ? (
                         <PanelRow className='wpn-row-multi-control wpn-pro-feature'>
-                            <ToggleControl
-                                className='wpn-toggle-control'
-                                label={__(
-                                    'Enable Schedule Dark Mode',
-                                    'wp-nightly'
-                                )}
-                                help={__(
-                                    'Setting use to disable or enable OS aware dark mode across the site.',
-                                    'wp-nightly'
-                                )}
-                                checked={
-                                    this.state.wp_nightly_settings_schedule
-                                }
-                                onChange={() =>
-                                    this.changeOptions(
-                                        'wp_nightly_settings_schedule',
-                                        !this.state.wp_nightly_settings_schedule
-                                    )
-                                }
-                            />
-                            {this.state.wp_nightly_settings_schedule ? (
-                                <div className='components-fieldset wpn-fieldset'>
-                                    <RadioControl
-                                        options={[
-                                            {
-                                                label: __(
-                                                    'Sunset to Sunrise',
-                                                    'wp-nightly'
-                                                ),
-                                                value: 'sun',
-                                            },
-                                            {
-                                                label: __(
-                                                    'Custom Time',
-                                                    'wp-nightly'
-                                                ),
-                                                value: 'custom',
-                                            },
-                                        ]}
-                                        selected={
-                                            this.state
-                                                .wp_nightly_settings_schedule_type
-                                        }
-                                        onChange={(value) =>
-                                            this.changeOptions(
-                                                'wp_nightly_settings_schedule_type',
-                                                value
-                                            )
-                                        }
-                                    />
-                                    {'custom' ===
-                                    this.state
-                                        .wp_nightly_settings_schedule_type ? (
-                                        <div className='components-base-control wpn-time-picker'>
-                                            <label
-                                                className='wpn-time-picker-start-label'
-                                                for='time'
-                                            >
-                                                {__('From:', 'wp-nightly')}
-                                            </label>
-                                            <TimePicker
-                                                amPmAriaLabel={'Select AM/PM'}
-                                                clockAriaLabel={'Toggle clock'}
-                                                format={'h:m a'}
-                                                onChange={(value) =>
-                                                    this.changeOptions(
-                                                        'wp_nightly_settings_schedule_time_start',
-                                                        value
-                                                    )
-                                                }
-                                                value={
-                                                    this.state
-                                                        .wp_nightly_settings_schedule_time_start
-                                                }
-                                                clockIcon={null}
-                                                clearIcon={null}
-                                            />
-                                            <label
-                                                className='wpn-time-picker-end-label'
-                                                for='time'
-                                            >
-                                                {__('To:', 'wp-nightly')}
-                                            </label>
-                                            <TimePicker
-                                                format={'h:m a'}
-                                                onChange={(value) =>
-                                                    this.changeOptions(
-                                                        'wp_nightly_settings_schedule_time_end',
-                                                        value
-                                                    )
-                                                }
-                                                value={
-                                                    this.state
-                                                        .wp_nightly_settings_schedule_time_end
-                                                }
-                                                clockIcon={null}
-                                                clearIcon={null}
-                                            />
-                                        </div>
-                                    ) : (
-                                        ''
+                            <SettingsName name={__('Schedule', 'wp-nightly')} />
+                            <div className='wpn-control-field'>
+                                <ToggleControl
+                                    label={__('Enable', 'wp-nightly')}
+                                    help={__(
+                                        'Setting use to disable or enable dark mode across the site.',
+                                        'wp-nightly'
                                     )}
-                                </div>
-                            ) : (
-                                ''
-                            )}
+                                    checked={
+                                        this.state.wp_nightly_settings_schedule
+                                    }
+                                    onChange={() =>
+                                        this.changeOptions(
+                                            'wp_nightly_settings_schedule',
+                                            !this.state
+                                                .wp_nightly_settings_schedule
+                                        )
+                                    }
+                                />
+                                {this.state.wp_nightly_settings_schedule ? (
+                                    <div className='components-fieldset wpn-fieldset'>
+                                        <RadioControl
+                                            options={[
+                                                {
+                                                    label: __(
+                                                        'Sunset to Sunrise',
+                                                        'wp-nightly'
+                                                    ),
+                                                    value: 'sun',
+                                                },
+                                                {
+                                                    label: __(
+                                                        'Custom Time',
+                                                        'wp-nightly'
+                                                    ),
+                                                    value: 'custom',
+                                                },
+                                            ]}
+                                            selected={
+                                                this.state
+                                                    .wp_nightly_settings_schedule_type
+                                            }
+                                            onChange={(value) =>
+                                                this.changeOptions(
+                                                    'wp_nightly_settings_schedule_type',
+                                                    value
+                                                )
+                                            }
+                                        />
+                                        {'custom' ===
+                                        this.state
+                                            .wp_nightly_settings_schedule_type ? (
+                                            <div className='components-base-control wpn-time-picker'>
+                                                <label
+                                                    className='wpn-time-picker-start-label'
+                                                    for='time'
+                                                >
+                                                    {__('From:', 'wp-nightly')}
+                                                </label>
+                                                <TimePicker
+                                                    amPmAriaLabel={
+                                                        'Select AM/PM'
+                                                    }
+                                                    clockAriaLabel={
+                                                        'Toggle clock'
+                                                    }
+                                                    format={'h:m a'}
+                                                    onChange={(value) =>
+                                                        this.changeOptions(
+                                                            'wp_nightly_settings_schedule_time_start',
+                                                            value
+                                                        )
+                                                    }
+                                                    value={
+                                                        this.state
+                                                            .wp_nightly_settings_schedule_time_start
+                                                    }
+                                                    clockIcon={null}
+                                                    clearIcon={null}
+                                                />
+                                                <label
+                                                    className='wpn-time-picker-end-label'
+                                                    for='time'
+                                                >
+                                                    {__('To:', 'wp-nightly')}
+                                                </label>
+                                                <TimePicker
+                                                    format={'h:m a'}
+                                                    onChange={(value) =>
+                                                        this.changeOptions(
+                                                            'wp_nightly_settings_schedule_time_end',
+                                                            value
+                                                        )
+                                                    }
+                                                    value={
+                                                        this.state
+                                                            .wp_nightly_settings_schedule_time_end
+                                                    }
+                                                    clockIcon={null}
+                                                    clearIcon={null}
+                                                />
+                                            </div>
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
                         </PanelRow>
                     ) : (
                         ''
-                    )}
+                    )} */}
 
                     {this.state.wp_nightly_settings_enabled ? (
                         <PanelRow>
+                            <SettingsName name={__('OS Aware', 'wp-nightly')} />
                             <ToggleControl
-                                className='wpn-toggle-control'
-                                label={__('OS Aware', 'wp-nightly')}
+                                className='wpn-control-field'
+                                label={__('Enable', 'wp-nightly')}
                                 help={__(
                                     'Setting use to disable or enable OS aware dark mode across the site.',
                                     'wp-nightly'

@@ -17,19 +17,22 @@ import Icons from './common/icons';
 const { __ } = wp.i18n;
 
 const Header = () => {
-    console.log(assetsPath);
     return (
         <header className='wpn-header'>
-            <div className={classnames('wpn-header-wrap', '', 'wpn-step-one')}>
+            <div className='wpn-container wpn-header-content'>
                 <div className='wpn-logo'>
-                    <Link to='/settings'>
+                    <Link to='/general'>
                         <SVG src={`${assetsPath}/images/logo.svg`} />
                     </Link>
                 </div>
-                <div class='wpn-header-actions'>
-                    <span class='round'>{Icons['notification']}</span>
-                    <span class='round'>{Icons['question']}</span>
-                </div>
+                {/* <div class='wpn-links'>
+                    <a href='' class='wpn-help' title='Need Help?'>
+                        {Icons['question']} {__('Need Help?', 'wp-nightly')}
+                    </a>
+                    <a href='' class='wpn-docs' title='Read Docs'>
+                        {Icons['notification']} {__('Read Docs', 'wp-nightly')}
+                    </a>
+                </div> */}
             </div>
         </header>
     );

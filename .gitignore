@@ -7,9 +7,10 @@ artifact
 build
 dist
 coverage
-**/*__premium_only*
+# **/*__premium_only*
 
 composer.phar
 composer.lock
 /vendor
 /wordpress
+nightly.zip

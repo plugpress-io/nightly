@@ -14,7 +14,6 @@ const { render, Component, Fragment } = wp.element;
  */
 import Navigation from './Navigation';
 import General from './General';
-import Switch from './Switch';
 import Frontend from './Frontend';
 import Admin from './Admin';
 import Tools from './Tools';
@@ -31,10 +30,7 @@ class Main extends Component {
                             element={<Navigate to='/general' />}
                         ></Route>
                         <Route path='/general' element={<General />}></Route>
-                        <Route path='/switch' element={<Switch />}></Route>
                         <Route path='/frontend' element={<Frontend />}></Route>
-                        <Route path='/Admin' element={<Admin />}></Route>
-                        <Route path='/advanced' element={<Tools />}></Route>
                     </Routes>
                 </div>
             </div>
