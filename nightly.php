@@ -5,7 +5,7 @@
  * Description: Protect your visitor's eyes and enable dark mode on your website
  * Author: WPPAW
  * Author URI: https://www.wppaw.com
- * Version: 0.0.1-beta
+ * Version: 0.0.1-beta.3
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain: wp-nightly
@@ -29,7 +29,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 if ( !defined( 'WP_NIGHTLY_VERSION' ) ) {
-    define( 'WP_NIGHTLY_VERSION', '0.0.1-beta' );
+    define( 'WP_NIGHTLY_VERSION', '0.0.1-beta.3' );
 }
 
 if ( !defined( 'WP_NIGHTLY_PLUGIN_DIR' ) ) {
