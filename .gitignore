@@ -5,10 +5,10 @@ node_modules
 logs
 artifact
 build
-dist
 coverage
 # **/*__premium_only*
 
+.env
 composer.phar
 composer.lock
 /vendor
