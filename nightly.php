@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: Nightly
- * Description: A plugin to enable dark mode on your website
+ * Description: Protect your visitor's eyes and enable dark mode on your website
  * Author: PlugPress
  * Version: 1.0.0
  * License: GPL2+
