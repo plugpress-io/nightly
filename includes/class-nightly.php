@@ -125,7 +125,7 @@ class Nightly {
         if ($this->should_load_frontend_assets()) {
             // Get file modification time for cache busting
             $js_file = NIGHTLY_PLUGIN_DIR . 'build/frontend/index.js';
-            $css_file = NIGHTLY_PLUGIN_DIR . 'build/frontend.css';
+            $css_file = NIGHTLY_PLUGIN_DIR . 'build/frontend/index.css';
             
             $js_version = file_exists($js_file) ? filemtime($js_file) : $this->version;
             $css_version = file_exists($css_file) ? filemtime($css_file) : $this->version;
@@ -149,7 +149,7 @@ class Nightly {
             // Enqueue CSS with media query optimization
             wp_enqueue_style(
                 'nightly-frontend',
-                NIGHTLY_PLUGIN_URL . 'build/frontend.css',
+                NIGHTLY_PLUGIN_URL . 'build/frontend/index.css',
                 array(),
                 $css_version,
                 'all'
@@ -157,7 +157,7 @@ class Nightly {
             
             // Add preload hint for critical CSS
             add_action('wp_head', function() {
-                echo '<link rel="preload" href="' . esc_url(NIGHTLY_PLUGIN_URL . 'build/frontend.css') . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">';
+                echo '<link rel="preload" href="' . esc_url(NIGHTLY_PLUGIN_URL . 'build/frontend/index.css') . '" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">';
             }, 1);
             
             // Localize script with minimal settings
@@ -182,7 +182,7 @@ class Nightly {
         if ($hook === 'appearance_page_nightly') {
             // Get file modification time for cache busting
             $js_file = NIGHTLY_PLUGIN_DIR . 'build/admin/index.js';
-            $css_file = NIGHTLY_PLUGIN_DIR . 'build/admin.css';
+            $css_file = NIGHTLY_PLUGIN_DIR . 'build/admin/index.css';
             
             $js_version = file_exists($js_file) ? filemtime($js_file) : $this->version;
             $css_version = file_exists($css_file) ? filemtime($css_file) : $this->version;
@@ -199,7 +199,7 @@ class Nightly {
             // Enqueue admin CSS
             wp_enqueue_style(
                 'nightly-admin',
-                NIGHTLY_PLUGIN_URL . 'build/admin.css',
+                NIGHTLY_PLUGIN_URL . 'build/admin/index.css',
                 array(),
                 $css_version
             );

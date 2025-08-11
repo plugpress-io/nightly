@@ -15,9 +15,6 @@ html {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-// Theme variables are defined in _tokens.scss and applied via CSS custom properties
-// The JavaScript will set [data-nightly-theme="dark"] on the html element
-
 // =============================================================================
 // TOGGLE BUTTON STYLES
 // =============================================================================
@@ -26,14 +23,15 @@ html {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   background: var(--nightly-bg-surface);
   border: 1px solid var(--nightly-border-primary);
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   color: var(--nightly-text-primary);
   cursor: pointer;
-  font-family: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.875rem;
+  font-weight: 500;
   line-height: 1.5;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -45,6 +43,8 @@ html {
   &:hover {
     background: var(--nightly-bg-surface-hover);
     border-color: var(--nightly-border-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
   &:focus {
@@ -54,12 +54,18 @@ html {
   
   &:active {
     background: var(--nightly-bg-surface-pressed);
+    transform: translateY(0);
   }
   
   &[aria-pressed="true"] {
     background: var(--nightly-interactive-primary);
     color: var(--nightly-text-inverse);
     border-color: var(--nightly-interactive-primary);
+    
+    &:hover {
+      background: var(--nightly-interactive-primary-hover);
+      border-color: var(--nightly-interactive-primary-hover);
+    }
   }
 }
 
@@ -67,8 +73,9 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 1rem;
   
   .nightly-icon-light {
     display: block;
@@ -92,6 +99,7 @@ html {
 
 .nightly-toggle-text {
   font-weight: 500;
+  white-space: nowrap;
 }
 
 // Screen reader only content
@@ -138,8 +146,8 @@ html {
   right: 1.5rem;
   z-index: 1000;
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   padding: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   
@@ -148,8 +156,9 @@ html {
   }
   
   .nightly-toggle-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.25rem;
   }
   
   &.position-bottom-left {
@@ -172,6 +181,14 @@ html {
   @media (max-width: 768px) {
     bottom: 1rem;
     right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    
+    .nightly-toggle-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      font-size: 1rem;
+    }
     
     &.position-bottom-left {
       left: 1rem;
@@ -189,6 +206,40 @@ html {
 }
 
 // =============================================================================
+// THEME COLORS - LIGHT MODE (DEFAULT)
+// =============================================================================
+
+:root {
+  --nightly-bg-surface: #ffffff;
+  --nightly-bg-surface-hover: #f8f9fa;
+  --nightly-bg-surface-pressed: #e9ecef;
+  --nightly-border-primary: #dee2e6;
+  --nightly-border-secondary: #adb5bd;
+  --nightly-border-focus: #0d6efd;
+  --nightly-text-primary: #212529;
+  --nightly-text-inverse: #ffffff;
+  --nightly-interactive-primary: #0d6efd;
+  --nightly-interactive-primary-hover: #0b5ed7;
+}
+
+// =============================================================================
+// THEME COLORS - DARK MODE
+// =============================================================================
+
+[data-nightly-theme="dark"] {
+  --nightly-bg-surface: #343a40;
+  --nightly-bg-surface-hover: #495057;
+  --nightly-bg-surface-pressed: #6c757d;
+  --nightly-border-primary: #495057;
+  --nightly-border-secondary: #6c757d;
+  --nightly-border-focus: #0d6efd;
+  --nightly-text-primary: #f8f9fa;
+  --nightly-text-inverse: #212529;
+  --nightly-interactive-primary: #0d6efd;
+  --nightly-interactive-primary-hover: #3d8bfd;
+}
+
+// =============================================================================
 // REDUCED MOTION SUPPORT
 // =============================================================================
 
@@ -196,6 +247,10 @@ html {
   html,
   .nightly-toggle-button {
     transition: none !important;
+  }
+  
+  .nightly-toggle-button:hover {
+    transform: none !important;
   }
 }
 

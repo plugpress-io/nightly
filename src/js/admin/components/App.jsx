@@ -17,10 +17,7 @@ import {
     Notice,
     Spinner,
     Flex,
-    FlexItem,
-    __experimentalHeading as Heading,
-    __experimentalText as Text,
-    __experimentalSpacer as Spacer
+    FlexItem
 } from '@wordpress/components';
 import useSettings from '../hooks/useSettings';
 
@@ -73,13 +70,12 @@ const App = () => {
     if (loading) {
         return (
             <div className="nightly-admin-loading">
-                <Flex justify="center" align="center" style={{ minHeight: '200px' }}>
-                    <FlexItem>
-                        <Spinner />
-                        <Spacer marginTop={3} />
-                        <Text>{__('Loading settings...', 'nightly')}</Text>
-                    </FlexItem>
-                </Flex>
+                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                    <Spinner />
+                    <p style={{ marginTop: '1rem', color: '#666' }}>
+                        {__('Loading settings...', 'nightly')}
+                    </p>
+                </div>
             </div>
         );
     }
@@ -88,15 +84,9 @@ const App = () => {
         <div className="nightly-admin-app">
             {/* Header */}
             <div className="nightly-admin-header">
-                <Heading level={1} size="large">
-                    {__('Nightly — Dark Mode Toggle', 'nightly')}
-                </Heading>
-                <Text variant="muted">
-                    {__('Configure dark mode toggle settings for your website.', 'nightly')}
-                </Text>
+                <h1>{__('Nightly — Dark Mode Toggle', 'nightly')}</h1>
+                <p>{__('Configure dark mode toggle settings for your website.', 'nightly')}</p>
             </div>
-
-            <Spacer marginY={6} />
 
             {/* Error Notice */}
             {error && (
@@ -112,9 +102,7 @@ const App = () => {
             {/* Settings Card */}
             <Card size="large">
                 <CardHeader>
-                    <Heading level={2} size="medium">
-                        {__('Toggle Settings', 'nightly')}
-                    </Heading>
+                    <h2>{__('Toggle Settings', 'nightly')}</h2>
                 </CardHeader>
                 <CardBody>
                     <div className="nightly-settings-grid">
@@ -129,27 +117,22 @@ const App = () => {
                             />
                         </div>
 
-                        <Spacer marginY={4} />
-
                         {/* Floating Position Setting */}
                         {localSettings.auto_inject && (
-                            <>
-                                <div className="nightly-setting-item">
-                                    <SelectControl
-                                        label={__('Floating toggle position', 'nightly')}
-                                        help={__('Choose where the floating toggle appears on the page', 'nightly')}
-                                        value={localSettings.floating_position || 'bottom-right'}
-                                        options={[
-                                            { label: __('Bottom Right', 'nightly'), value: 'bottom-right' },
-                                            { label: __('Bottom Left', 'nightly'), value: 'bottom-left' },
-                                            { label: __('Top Right', 'nightly'), value: 'top-right' },
-                                            { label: __('Top Left', 'nightly'), value: 'top-left' }
-                                        ]}
-                                        onChange={(value) => handleSettingChange('floating_position', value)}
-                                    />
-                                </div>
-                                <Spacer marginY={4} />
-                            </>
+                            <div className="nightly-setting-item">
+                                <SelectControl
+                                    label={__('Floating toggle position', 'nightly')}
+                                    help={__('Choose where the floating toggle appears on the page', 'nightly')}
+                                    value={localSettings.floating_position || 'bottom-right'}
+                                    options={[
+                                        { label: __('Bottom Right', 'nightly'), value: 'bottom-right' },
+                                        { label: __('Bottom Left', 'nightly'), value: 'bottom-left' },
+                                        { label: __('Top Right', 'nightly'), value: 'top-right' },
+                                        { label: __('Top Left', 'nightly'), value: 'top-left' }
+                                    ]}
+                                    onChange={(value) => handleSettingChange('floating_position', value)}
+                                />
+                            </div>
                         )}
 
                         {/* System Preference Setting */}
@@ -162,8 +145,6 @@ const App = () => {
                             />
                         </div>
 
-                        <Spacer marginY={4} />
-
                         {/* Transition Duration Setting */}
                         <div className="nightly-setting-item">
                             <RangeControl
@@ -174,30 +155,28 @@ const App = () => {
                                 min={0}
                                 max={1000}
                                 step={50}
-                                marks={[
-                                    { value: 0, label: __('Instant', 'nightly') },
-                                    { value: 200, label: __('Fast', 'nightly') },
-                                    { value: 500, label: __('Medium', 'nightly') },
-                                    { value: 1000, label: __('Slow', 'nightly') }
-                                ]}
                             />
+                            <div className="nightly-range-labels">
+                                <span>Instant</span>
+                                <span>Fast</span>
+                                <span>Medium</span>
+                                <span>Slow</span>
+                            </div>
                         </div>
 
                     </div>
                 </CardBody>
             </Card>
 
-            <Spacer marginY={6} />
-
             {/* Save Button */}
-            <Card>
+            <Card style={{ marginTop: '1.5rem' }}>
                 <CardBody>
                     <Flex justify="space-between" align="center">
                         <FlexItem>
                             {hasChanges && (
-                                <Text variant="muted">
+                                <span style={{ color: '#666', fontSize: '0.875rem' }}>
                                     {__('You have unsaved changes', 'nightly')}
-                                </Text>
+                                </span>
                             )}
                         </FlexItem>
                         <FlexItem>
@@ -215,20 +194,13 @@ const App = () => {
             </Card>
 
             {/* Usage Instructions */}
-            <Spacer marginY={6} />
-            
-            <Card>
+            <Card style={{ marginTop: '1.5rem' }}>
                 <CardHeader>
-                    <Heading level={3} size="small">
-                        {__('How to Use', 'nightly')}
-                    </Heading>
+                    <h3>{__('How to Use', 'nightly')}</h3>
                 </CardHeader>
                 <CardBody>
                     <div className="nightly-usage-instructions">
-                        <Text>
-                            {__('Add the dark mode toggle to your site in several ways:', 'nightly')}
-                        </Text>
-                        <Spacer marginY={3} />
+                        <p>{__('Add the dark mode toggle to your site in several ways:', 'nightly')}</p>
                         <ul>
                             <li>
                                 <strong>{__('Block Editor:', 'nightly')}</strong> {__('Search for "Nightly" in the block inserter', 'nightly')}

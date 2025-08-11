@@ -59,7 +59,7 @@ class Block {
     public function enqueue_block_editor_assets() {
         // Get file modification time for cache busting
         $js_file = NIGHTLY_PLUGIN_DIR . 'build/block/index.js';
-        $css_file = NIGHTLY_PLUGIN_DIR . 'build/block.css';
+        $css_file = NIGHTLY_PLUGIN_DIR . 'build/block/index.css';
         
         $js_version = file_exists($js_file) ? filemtime($js_file) : NIGHTLY_VERSION;
         $css_version = file_exists($css_file) ? filemtime($css_file) : NIGHTLY_VERSION;
@@ -74,10 +74,11 @@ class Block {
         );
         
         // Enqueue block editor styles
+        $css_file = NIGHTLY_PLUGIN_DIR . 'build/block/index.css';
         if (file_exists($css_file)) {
             wp_enqueue_style(
                 'nightly-block-editor',
-                NIGHTLY_PLUGIN_URL . 'build/block.css',
+                NIGHTLY_PLUGIN_URL . 'build/block/index.css',
                 array(),
                 $css_version
             );
