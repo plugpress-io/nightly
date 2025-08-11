@@ -1,5 +1,5 @@
 === Nightly ===
-Contributors: badhonrocks
+Contributors: badhonrocks, plugpressco
 Tags: dark mode, night mode, blocks, gutenberg blocks
 Requires at least: 4.7
 Requires PHP: 5.6

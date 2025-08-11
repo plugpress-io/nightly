@@ -1,0 +1,311 @@
+/**
+ * Admin Interface Styles
+ *
+ * @package Nightly
+ */
+
+@import 'tokens';
+
+// =============================================================================
+// ADMIN APP LAYOUT
+// =============================================================================
+
+.nightly-admin-app {
+  max-width: 800px;
+  margin: 0;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.nightly-admin-header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1e1e1e;
+  }
+  
+  p {
+    margin: 0;
+    color: #757575;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+// =============================================================================
+// LOADING STATE
+// =============================================================================
+
+.nightly-admin-loading {
+  padding: 3rem;
+  text-align: center;
+  
+  .components-spinner {
+    margin: 0 auto 1rem;
+  }
+  
+  p {
+    color: #757575;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+// =============================================================================
+// SETTINGS GRID
+// =============================================================================
+
+.nightly-settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.nightly-setting-item {
+  .components-base-control {
+    margin-bottom: 0;
+  }
+  
+  .components-base-control__label {
+    font-weight: 500;
+    color: #1e1e1e;
+    margin-bottom: 0.5rem;
+  }
+  
+  .components-base-control__help {
+    color: #757575;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+  
+  .components-toggle-control {
+    .components-toggle-control__label {
+      font-weight: 500;
+    }
+  }
+  
+  .components-select-control__input {
+    min-height: 40px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    
+    &:focus {
+      border-color: #007cba;
+      box-shadow: 0 0 0 1px #007cba;
+    }
+  }
+  
+  .components-range-control {
+    .components-range-control__wrapper {
+      margin-top: 1rem;
+    }
+    
+    .components-range-control__track {
+      background: #ddd;
+      height: 4px;
+      border-radius: 2px;
+    }
+    
+    .components-range-control__thumb {
+      background: #007cba;
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .components-range-control__marks {
+      margin-top: 0.5rem;
+    }
+    
+    .components-range-control__mark {
+      color: #757575;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// =============================================================================
+// CARDS
+// =============================================================================
+
+.components-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  .components-card__header {
+    padding: 1.5rem 1.5rem 0;
+    border-bottom: none;
+    
+    h2, h3 {
+      margin: 0;
+      color: #1e1e1e;
+    }
+  }
+  
+  .components-card__body {
+    padding: 1.5rem;
+  }
+}
+
+// =============================================================================
+// BUTTONS
+// =============================================================================
+
+.components-button {
+  &.is-primary {
+    background: #007cba;
+    border-color: #007cba;
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    min-height: 40px;
+    
+    &:hover:not(:disabled) {
+      background: #005a87;
+      border-color: #005a87;
+    }
+    
+    &:focus:not(:disabled) {
+      box-shadow: 0 0 0 2px #007cba;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+    }
+  }
+}
+
+// =============================================================================
+// NOTICES
+// =============================================================================
+
+.components-notice {
+  margin-bottom: 1.5rem;
+  border-radius: 6px;
+  
+  &.is-error {
+    border-left-color: #d63638;
+  }
+  
+  .components-notice__content {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+  
+  .components-notice__dismiss {
+    padding: 0.5rem;
+  }
+}
+
+// =============================================================================
+// USAGE INSTRUCTIONS
+// =============================================================================
+
+.nightly-usage-instructions {
+  ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    
+    li {
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      strong {
+        color: #1e1e1e;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// RESPONSIVE DESIGN
+// =============================================================================
+
+@media (max-width: 768px) {
+  .nightly-admin-app {
+    padding: 1rem;
+  }
+  
+  .nightly-admin-header {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .components-card {
+    .components-card__header,
+    .components-card__body {
+      padding: 1rem;
+    }
+  }
+}
+
+// =============================================================================
+// DARK MODE SUPPORT
+// =============================================================================
+
+@media (prefers-color-scheme: dark) {
+  .nightly-admin-app {
+    .nightly-admin-header {
+      h1 {
+        color: #f0f0f0;
+      }
+      
+      p {
+        color: #a0a0a0;
+      }
+    }
+    
+    .components-card {
+      background: #2c2c2c;
+      border-color: #404040;
+      
+      .components-card__header {
+        h2, h3 {
+          color: #f0f0f0;
+        }
+      }
+    }
+    
+    .nightly-setting-item {
+      .components-base-control__label {
+        color: #f0f0f0;
+      }
+      
+      .components-base-control__help {
+        color: #a0a0a0;
+      }
+      
+      .components-select-control__input {
+        background: #404040;
+        border-color: #606060;
+        color: #f0f0f0;
+        
+        &:focus {
+          border-color: #007cba;
+        }
+      }
+    }
+    
+    .nightly-usage-instructions {
+      ul li {
+        color: #d0d0d0;
+        
+        strong {
+          color: #f0f0f0;
+        }
+      }
+    }
+  }
+}

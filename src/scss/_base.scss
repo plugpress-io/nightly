@@ -1,0 +1,266 @@
+/**
+ * Base Styles and Normalization
+ *
+ * @package Nightly
+ */
+
+// =============================================================================
+// GLOBAL BASE STYLES
+// =============================================================================
+
+// Ensure consistent box-sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Base typography and color inheritance
+.nightly-component {
+  font-family: var(--nightly-font-family-base);
+  color: var(--nightly-text-primary);
+  line-height: var(--nightly-line-height-base);
+  
+  // Ensure proper text rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// =============================================================================
+// WORDPRESS ADMIN COMPATIBILITY
+// =============================================================================
+
+// Reset WordPress admin styles that might interfere with our components
+.nightly-admin-page {
+  .form-table {
+    th,
+    td {
+      padding: var(--nightly-space-md);
+      vertical-align: top;
+    }
+    
+    th {
+      font-weight: var(--nightly-font-weight-medium);
+      color: var(--nightly-text-primary);
+    }
+  }
+  
+  // Override WordPress button styles when needed
+  .button.nightly-button {
+    font-family: var(--nightly-font-family-base) !important;
+    font-size: var(--nightly-font-size-sm) !important;
+    line-height: var(--nightly-line-height-tight) !important;
+  }
+}
+
+// =============================================================================
+// BLOCK EDITOR COMPATIBILITY
+// =============================================================================
+
+// Ensure our blocks work well in the editor
+.editor-styles-wrapper {
+  .wp-block-nightly-toggle {
+    font-family: var(--nightly-font-family-base);
+    
+    // Prevent editor styles from interfering
+    * {
+      box-sizing: border-box;
+    }
+  }
+}
+
+// Block editor specific overrides
+.block-editor-page {
+  .nightly-toggle {
+    // Ensure proper styling in the editor
+    font-family: var(--nightly-font-family-base) !important;
+  }
+}
+
+// =============================================================================
+// THEME COMPATIBILITY
+// =============================================================================
+
+// Ensure our components work well with various themes
+.nightly-theme-compatible {
+  // Reset common theme styles that might interfere
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  // Ensure proper link styling
+  a {
+    text-decoration: none;
+    color: inherit;
+    
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+// Enhanced focus management
+.nightly-focus-target {
+  &:focus,
+  &.nightly-focused {
+    outline: 2px solid var(--nightly-border-focus);
+    outline-offset: 2px;
+    border-radius: var(--nightly-radius-sm);
+    
+    // Enhanced focus for high contrast mode
+    @include high-contrast {
+      outline-width: 3px;
+      outline-style: solid;
+      outline-color: Highlight; // System highlight color
+    }
+  }
+  
+  // Focus-visible for modern browsers
+  &:focus-visible {
+    outline: 2px solid var(--nightly-border-focus);
+    outline-offset: 2px;
+  }
+  
+  // Remove focus outline when not using keyboard
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+// Screen reader improvements
+.nightly-sr-only,
+.screen-reader-text {
+  @include sr-only;
+}
+
+// Live region for announcements
+#nightly-live-region {
+  @include sr-only;
+}
+
+// High contrast mode enhancements
+@include high-contrast {
+  .nightly-toggle,
+  .nightly-button {
+    border-width: 2px !important;
+    border-style: solid !important;
+  }
+  
+  .nightly-card {
+    border-width: 2px !important;
+    border-style: solid !important;
+  }
+  
+  // Enhanced focus indicators in high contrast
+  .nightly-high-contrast-focus {
+    &:focus,
+    &.nightly-focused {
+      outline: 3px solid Highlight !important;
+      outline-offset: 2px !important;
+      background: HighlightText !important;
+      color: Highlight !important;
+    }
+  }
+}
+
+// High contrast mode class for JavaScript detection
+.nightly-high-contrast {
+  .nightly-toggle,
+  .nightly-button {
+    border-width: 2px;
+    border-style: solid;
+    
+    &:focus,
+    &.nightly-focused {
+      outline: 3px solid;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Reduced motion preferences
+@include reduced-motion {
+  .nightly-toggle,
+  .nightly-button,
+  .nightly-card {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  html {
+    transition: none !important;
+  }
+  
+  // Disable transform animations
+  .nightly-floating-toggle {
+    &:hover,
+    &:active {
+      transform: none !important;
+    }
+  }
+}
+
+// Enhanced keyboard navigation
+.nightly-toggle,
+.nightly-button {
+  // Ensure minimum touch target size
+  min-width: 44px;
+  min-height: 44px;
+  
+  // Improve keyboard navigation
+  &:focus {
+    z-index: 1; // Ensure focus outline is visible
+  }
+}
+
+// Skip link for keyboard users (if needed in future)
+.nightly-skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--nightly-bg-surface);
+  color: var(--nightly-text-primary);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--nightly-radius-sm);
+  z-index: 1000;
+  
+  &:focus {
+    top: 6px;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  .nightly-floating-toggle {
+    display: none !important;
+  }
+  
+  .nightly-toggle {
+    // Show current state in print
+    &::after {
+      content: " (Dark mode: " attr(aria-checked) ")";
+      font-size: var(--nightly-font-size-xs);
+      color: var(--nightly-text-secondary);
+    }
+  }
+}

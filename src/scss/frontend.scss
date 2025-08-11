@@ -1,0 +1,227 @@
+/**
+ * Frontend Styles
+ *
+ * @package Nightly
+ */
+
+@import 'tokens';
+
+// =============================================================================
+// THEME SWITCHING STYLES
+// =============================================================================
+
+// Basic theme transition
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+// Theme variables are defined in _tokens.scss and applied via CSS custom properties
+// The JavaScript will set [data-nightly-theme="dark"] on the html element
+
+// =============================================================================
+// TOGGLE BUTTON STYLES
+// =============================================================================
+
+.nightly-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--nightly-bg-surface);
+  border: 1px solid var(--nightly-border-primary);
+  border-radius: 0.375rem;
+  color: var(--nightly-text-primary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  
+  // Minimum touch target
+  min-width: 44px;
+  min-height: 44px;
+  
+  &:hover {
+    background: var(--nightly-bg-surface-hover);
+    border-color: var(--nightly-border-secondary);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--nightly-border-focus);
+    outline-offset: 2px;
+  }
+  
+  &:active {
+    background: var(--nightly-bg-surface-pressed);
+  }
+  
+  &[aria-pressed="true"] {
+    background: var(--nightly-interactive-primary);
+    color: var(--nightly-text-inverse);
+    border-color: var(--nightly-interactive-primary);
+  }
+}
+
+.nightly-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  
+  .nightly-icon-light {
+    display: block;
+  }
+  
+  .nightly-icon-dark {
+    display: none;
+  }
+}
+
+// Show dark icon when in dark mode
+[data-nightly-theme="dark"] .nightly-toggle-icon {
+  .nightly-icon-light {
+    display: none;
+  }
+  
+  .nightly-icon-dark {
+    display: block;
+  }
+}
+
+.nightly-toggle-text {
+  font-weight: 500;
+}
+
+// Screen reader only content
+.nightly-sr-state,
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// =============================================================================
+// BLOCK WRAPPER STYLES
+// =============================================================================
+
+.nightly-toggle-block {
+  margin: 1rem 0;
+  
+  &.align-left {
+    text-align: left;
+  }
+  
+  &.align-center {
+    text-align: center;
+  }
+  
+  &.align-right {
+    text-align: right;
+  }
+}
+
+// =============================================================================
+// FLOATING TOGGLE STYLES
+// =============================================================================
+
+.nightly-floating-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  .nightly-toggle-text {
+    display: none;
+  }
+  
+  .nightly-toggle-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  &.position-bottom-left {
+    left: 1.5rem;
+    right: auto;
+  }
+  
+  &.position-top-right {
+    top: 1.5rem;
+    bottom: auto;
+  }
+  
+  &.position-top-left {
+    top: 1.5rem;
+    left: 1.5rem;
+    right: auto;
+    bottom: auto;
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 1rem;
+    right: 1rem;
+    
+    &.position-bottom-left {
+      left: 1rem;
+    }
+    
+    &.position-top-right {
+      top: 1rem;
+    }
+    
+    &.position-top-left {
+      top: 1rem;
+      left: 1rem;
+    }
+  }
+}
+
+// =============================================================================
+// REDUCED MOTION SUPPORT
+// =============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  .nightly-toggle-button {
+    transition: none !important;
+  }
+}
+
+// =============================================================================
+// HIGH CONTRAST SUPPORT
+// =============================================================================
+
+@media (prefers-contrast: high) {
+  .nightly-toggle-button {
+    border-width: 2px;
+  }
+}
+
+@media (forced-colors: active) {
+  .nightly-toggle-button {
+    background: ButtonFace;
+    color: ButtonText;
+    border-color: ButtonText;
+    
+    &:hover {
+      background: Highlight;
+      color: HighlightText;
+    }
+    
+    &:focus {
+      outline: 2px solid Highlight;
+    }
+  }
+}

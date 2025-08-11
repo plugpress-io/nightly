@@ -1,0 +1,312 @@
+/**
+ * Design Tokens - Shopify Polaris Inspired
+ *
+ * @package Nightly
+ */
+
+// =============================================================================
+// SCSS Variables for Development
+// =============================================================================
+
+// Color System - Light Theme
+$nightly-light: (
+  // Background colors
+  bg-primary: #ffffff,
+  bg-secondary: #f6f6f7,
+  bg-tertiary: #f1f2f3,
+  bg-surface: #ffffff,
+  bg-surface-hover: #f6f6f7,
+  bg-surface-pressed: #f1f2f3,
+  bg-surface-selected: #f6f6f7,
+  
+  // Text colors
+  text-primary: #202223,
+  text-secondary: #6d7175,
+  text-tertiary: #8c9196,
+  text-disabled: #b5b5b5,
+  text-inverse: #ffffff,
+  
+  // Border colors
+  border-primary: #e1e3e5,
+  border-secondary: #d2d5d8,
+  border-focus: #005bd3,
+  border-critical: #d72c0d,
+  border-success: #008060,
+  
+  // Interactive colors
+  interactive-primary: #008060,
+  interactive-primary-hover: #00704a,
+  interactive-primary-pressed: #005e42,
+  interactive-secondary: #f6f6f7,
+  interactive-secondary-hover: #f1f2f3,
+  interactive-secondary-pressed: #e8eaed,
+  
+  // Status colors
+  critical: #d72c0d,
+  critical-hover: #c5260a,
+  critical-pressed: #b32409,
+  warning: #ffc453,
+  warning-hover: #ffb84d,
+  warning-pressed: #ff9f00,
+  success: #008060,
+  success-hover: #00704a,
+  success-pressed: #005e42,
+  
+  // Shadow colors
+  shadow-base: rgba(23, 24, 24, 0.05),
+  shadow-deep: rgba(23, 24, 24, 0.1),
+  shadow-inset: rgba(23, 24, 24, 0.05)
+);
+
+// Color System - Dark Theme
+$nightly-dark: (
+  // Background colors
+  bg-primary: #1a1a1a,
+  bg-secondary: #262626,
+  bg-tertiary: #303030,
+  bg-surface: #262626,
+  bg-surface-hover: #303030,
+  bg-surface-pressed: #3a3a3a,
+  bg-surface-selected: #303030,
+  
+  // Text colors
+  text-primary: #f6f6f7,
+  text-secondary: #b5b5b5,
+  text-tertiary: #8c9196,
+  text-disabled: #6d7175,
+  text-inverse: #202223,
+  
+  // Border colors
+  border-primary: #33363a,
+  border-secondary: #44474a,
+  border-focus: #0099ff,
+  border-critical: #ff6b47,
+  border-success: #00a47c,
+  
+  // Interactive colors
+  interactive-primary: #00a47c,
+  interactive-primary-hover: #00b386,
+  interactive-primary-pressed: #00c28f,
+  interactive-secondary: #303030,
+  interactive-secondary-hover: #3a3a3a,
+  interactive-secondary-pressed: #444444,
+  
+  // Status colors
+  critical: #ff6b47,
+  critical-hover: #ff7a56,
+  critical-pressed: #ff8965,
+  warning: #ffcc66,
+  warning-hover: #ffd480,
+  warning-pressed: #ffdc99,
+  success: #00a47c,
+  success-hover: #00b386,
+  success-pressed: #00c28f,
+  
+  // Shadow colors
+  shadow-base: rgba(0, 0, 0, 0.2),
+  shadow-deep: rgba(0, 0, 0, 0.4),
+  shadow-inset: rgba(0, 0, 0, 0.1)
+);
+
+// Spacing System
+$nightly-spacing: (
+  xs: 0.25rem,    // 4px
+  sm: 0.5rem,     // 8px
+  md: 1rem,       // 16px
+  lg: 1.5rem,     // 24px
+  xl: 2rem,       // 32px
+  xxl: 3rem,      // 48px
+  xxxl: 4rem      // 64px
+);
+
+// Typography System
+$nightly-typography: (
+  font-family-base: (-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif),
+  font-family-mono: ('SF Mono', Monaco, Inconsolata, 'Roboto Mono', 'Source Code Pro', monospace),
+  
+  // Font sizes
+  font-size-xs: 0.75rem,    // 12px
+  font-size-sm: 0.875rem,   // 14px
+  font-size-base: 1rem,     // 16px
+  font-size-lg: 1.125rem,   // 18px
+  font-size-xl: 1.25rem,    // 20px
+  font-size-xxl: 1.5rem,    // 24px
+  font-size-xxxl: 2rem,     // 32px
+  
+  // Line heights
+  line-height-tight: 1.25,
+  line-height-base: 1.5,
+  line-height-relaxed: 1.75,
+  
+  // Font weights
+  font-weight-light: 300,
+  font-weight-normal: 400,
+  font-weight-medium: 500,
+  font-weight-semibold: 600,
+  font-weight-bold: 700
+);
+
+// Border Radius System
+$nightly-border-radius: (
+  none: 0,
+  sm: 0.125rem,   // 2px
+  base: 0.25rem,  // 4px
+  md: 0.375rem,   // 6px
+  lg: 0.5rem,     // 8px
+  xl: 0.75rem,    // 12px
+  full: 9999px
+);
+
+// Z-Index System
+$nightly-z-index: (
+  dropdown: 1000,
+  sticky: 1020,
+  fixed: 1030,
+  modal-backdrop: 1040,
+  modal: 1050,
+  popover: 1060,
+  tooltip: 1070
+);
+
+// Transition System
+$nightly-transitions: (
+  fast: 150ms ease-in-out,
+  base: 200ms ease-in-out,
+  slow: 300ms ease-in-out,
+  bounce: 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55)
+);
+
+// =============================================================================
+// CSS Custom Properties for Runtime Theme Switching
+// =============================================================================
+
+:root {
+  // Color tokens - Light theme defaults
+  --nightly-bg-primary: #{map-get($nightly-light, bg-primary)};
+  --nightly-bg-secondary: #{map-get($nightly-light, bg-secondary)};
+  --nightly-bg-tertiary: #{map-get($nightly-light, bg-tertiary)};
+  --nightly-bg-surface: #{map-get($nightly-light, bg-surface)};
+  --nightly-bg-surface-hover: #{map-get($nightly-light, bg-surface-hover)};
+  --nightly-bg-surface-pressed: #{map-get($nightly-light, bg-surface-pressed)};
+  --nightly-bg-surface-selected: #{map-get($nightly-light, bg-surface-selected)};
+  
+  --nightly-text-primary: #{map-get($nightly-light, text-primary)};
+  --nightly-text-secondary: #{map-get($nightly-light, text-secondary)};
+  --nightly-text-tertiary: #{map-get($nightly-light, text-tertiary)};
+  --nightly-text-disabled: #{map-get($nightly-light, text-disabled)};
+  --nightly-text-inverse: #{map-get($nightly-light, text-inverse)};
+  
+  --nightly-border-primary: #{map-get($nightly-light, border-primary)};
+  --nightly-border-secondary: #{map-get($nightly-light, border-secondary)};
+  --nightly-border-focus: #{map-get($nightly-light, border-focus)};
+  --nightly-border-critical: #{map-get($nightly-light, border-critical)};
+  --nightly-border-success: #{map-get($nightly-light, border-success)};
+  
+  --nightly-interactive-primary: #{map-get($nightly-light, interactive-primary)};
+  --nightly-interactive-primary-hover: #{map-get($nightly-light, interactive-primary-hover)};
+  --nightly-interactive-primary-pressed: #{map-get($nightly-light, interactive-primary-pressed)};
+  --nightly-interactive-secondary: #{map-get($nightly-light, interactive-secondary)};
+  --nightly-interactive-secondary-hover: #{map-get($nightly-light, interactive-secondary-hover)};
+  --nightly-interactive-secondary-pressed: #{map-get($nightly-light, interactive-secondary-pressed)};
+  
+  --nightly-critical: #{map-get($nightly-light, critical)};
+  --nightly-critical-hover: #{map-get($nightly-light, critical-hover)};
+  --nightly-critical-pressed: #{map-get($nightly-light, critical-pressed)};
+  --nightly-warning: #{map-get($nightly-light, warning)};
+  --nightly-warning-hover: #{map-get($nightly-light, warning-hover)};
+  --nightly-warning-pressed: #{map-get($nightly-light, warning-pressed)};
+  --nightly-success: #{map-get($nightly-light, success)};
+  --nightly-success-hover: #{map-get($nightly-light, success-hover)};
+  --nightly-success-pressed: #{map-get($nightly-light, success-pressed)};
+  
+  --nightly-shadow-base: #{map-get($nightly-light, shadow-base)};
+  --nightly-shadow-deep: #{map-get($nightly-light, shadow-deep)};
+  --nightly-shadow-inset: #{map-get($nightly-light, shadow-inset)};
+  
+  // Spacing tokens
+  --nightly-space-xs: #{map-get($nightly-spacing, xs)};
+  --nightly-space-sm: #{map-get($nightly-spacing, sm)};
+  --nightly-space-md: #{map-get($nightly-spacing, md)};
+  --nightly-space-lg: #{map-get($nightly-spacing, lg)};
+  --nightly-space-xl: #{map-get($nightly-spacing, xl)};
+  --nightly-space-xxl: #{map-get($nightly-spacing, xxl)};
+  --nightly-space-xxxl: #{map-get($nightly-spacing, xxxl)};
+  
+  // Typography tokens
+  --nightly-font-family-base: #{map-get($nightly-typography, font-family-base)};
+  --nightly-font-family-mono: #{map-get($nightly-typography, font-family-mono)};
+  --nightly-font-size-xs: #{map-get($nightly-typography, font-size-xs)};
+  --nightly-font-size-sm: #{map-get($nightly-typography, font-size-sm)};
+  --nightly-font-size-base: #{map-get($nightly-typography, font-size-base)};
+  --nightly-font-size-lg: #{map-get($nightly-typography, font-size-lg)};
+  --nightly-font-size-xl: #{map-get($nightly-typography, font-size-xl)};
+  --nightly-font-size-xxl: #{map-get($nightly-typography, font-size-xxl)};
+  --nightly-font-size-xxxl: #{map-get($nightly-typography, font-size-xxxl)};
+  --nightly-line-height-tight: #{map-get($nightly-typography, line-height-tight)};
+  --nightly-line-height-base: #{map-get($nightly-typography, line-height-base)};
+  --nightly-line-height-relaxed: #{map-get($nightly-typography, line-height-relaxed)};
+  --nightly-font-weight-light: #{map-get($nightly-typography, font-weight-light)};
+  --nightly-font-weight-normal: #{map-get($nightly-typography, font-weight-normal)};
+  --nightly-font-weight-medium: #{map-get($nightly-typography, font-weight-medium)};
+  --nightly-font-weight-semibold: #{map-get($nightly-typography, font-weight-semibold)};
+  --nightly-font-weight-bold: #{map-get($nightly-typography, font-weight-bold)};
+  
+  // Border radius tokens
+  --nightly-radius-none: #{map-get($nightly-border-radius, none)};
+  --nightly-radius-sm: #{map-get($nightly-border-radius, sm)};
+  --nightly-radius-base: #{map-get($nightly-border-radius, base)};
+  --nightly-radius-md: #{map-get($nightly-border-radius, md)};
+  --nightly-radius-lg: #{map-get($nightly-border-radius, lg)};
+  --nightly-radius-xl: #{map-get($nightly-border-radius, xl)};
+  --nightly-radius-full: #{map-get($nightly-border-radius, full)};
+  
+  // Transition tokens
+  --nightly-transition-fast: #{map-get($nightly-transitions, fast)};
+  --nightly-transition-base: #{map-get($nightly-transitions, base)};
+  --nightly-transition-slow: #{map-get($nightly-transitions, slow)};
+  --nightly-transition-bounce: #{map-get($nightly-transitions, bounce)};
+}
+
+// Dark theme overrides
+[data-nightly-theme="dark"] {
+  --nightly-bg-primary: #{map-get($nightly-dark, bg-primary)};
+  --nightly-bg-secondary: #{map-get($nightly-dark, bg-secondary)};
+  --nightly-bg-tertiary: #{map-get($nightly-dark, bg-tertiary)};
+  --nightly-bg-surface: #{map-get($nightly-dark, bg-surface)};
+  --nightly-bg-surface-hover: #{map-get($nightly-dark, bg-surface-hover)};
+  --nightly-bg-surface-pressed: #{map-get($nightly-dark, bg-surface-pressed)};
+  --nightly-bg-surface-selected: #{map-get($nightly-dark, bg-surface-selected)};
+  
+  --nightly-text-primary: #{map-get($nightly-dark, text-primary)};
+  --nightly-text-secondary: #{map-get($nightly-dark, text-secondary)};
+  --nightly-text-tertiary: #{map-get($nightly-dark, text-tertiary)};
+  --nightly-text-disabled: #{map-get($nightly-dark, text-disabled)};
+  --nightly-text-inverse: #{map-get($nightly-dark, text-inverse)};
+  
+  --nightly-border-primary: #{map-get($nightly-dark, border-primary)};
+  --nightly-border-secondary: #{map-get($nightly-dark, border-secondary)};
+  --nightly-border-focus: #{map-get($nightly-dark, border-focus)};
+  --nightly-border-critical: #{map-get($nightly-dark, border-critical)};
+  --nightly-border-success: #{map-get($nightly-dark, border-success)};
+  
+  --nightly-interactive-primary: #{map-get($nightly-dark, interactive-primary)};
+  --nightly-interactive-primary-hover: #{map-get($nightly-dark, interactive-primary-hover)};
+  --nightly-interactive-primary-pressed: #{map-get($nightly-dark, interactive-primary-pressed)};
+  --nightly-interactive-secondary: #{map-get($nightly-dark, interactive-secondary)};
+  --nightly-interactive-secondary-hover: #{map-get($nightly-dark, interactive-secondary-hover)};
+  --nightly-interactive-secondary-pressed: #{map-get($nightly-dark, interactive-secondary-pressed)};
+  
+  --nightly-critical: #{map-get($nightly-dark, critical)};
+  --nightly-critical-hover: #{map-get($nightly-dark, critical-hover)};
+  --nightly-critical-pressed: #{map-get($nightly-dark, critical-pressed)};
+  --nightly-warning: #{map-get($nightly-dark, warning)};
+  --nightly-warning-hover: #{map-get($nightly-dark, warning-hover)};
+  --nightly-warning-pressed: #{map-get($nightly-dark, warning-pressed)};
+  --nightly-success: #{map-get($nightly-dark, success)};
+  --nightly-success-hover: #{map-get($nightly-dark, success-hover)};
+  --nightly-success-pressed: #{map-get($nightly-dark, success-pressed)};
+  
+  --nightly-shadow-base: #{map-get($nightly-dark, shadow-base)};
+  --nightly-shadow-deep: #{map-get($nightly-dark, shadow-deep)};
+  --nightly-shadow-inset: #{map-get($nightly-dark, shadow-inset)};
+}
