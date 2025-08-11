@@ -14,10 +14,7 @@ import {
     SelectControl,
     RangeControl,
     Button,
-    Notice,
-    Spinner,
-    Flex,
-    FlexItem
+    Notice
 } from '@wordpress/components';
 import useSettings from '../hooks/useSettings';
 
@@ -71,7 +68,7 @@ const App = () => {
         return (
             <div className="nightly-admin-loading">
                 <div style={{ textAlign: 'center', padding: '3rem' }}>
-                    <Spinner />
+                    <div className="nightly-spinner"></div>
                     <p style={{ marginTop: '1rem', color: '#666' }}>
                         {__('Loading settings...', 'nightly')}
                     </p>
@@ -157,10 +154,10 @@ const App = () => {
                                 step={50}
                             />
                             <div className="nightly-range-labels">
-                                <span>Instant</span>
-                                <span>Fast</span>
-                                <span>Medium</span>
-                                <span>Slow</span>
+                                <span>Instant (0ms)</span>
+                                <span>Fast (200ms)</span>
+                                <span>Medium (500ms)</span>
+                                <span>Slow (1000ms)</span>
                             </div>
                         </div>
 
@@ -171,15 +168,15 @@ const App = () => {
             {/* Save Button */}
             <Card style={{ marginTop: '1.5rem' }}>
                 <CardBody>
-                    <Flex justify="space-between" align="center">
-                        <FlexItem>
+                    <div className="nightly-save-section">
+                        <div className="nightly-save-info">
                             {hasChanges && (
-                                <span style={{ color: '#666', fontSize: '0.875rem' }}>
+                                <span className="nightly-unsaved-notice">
                                     {__('You have unsaved changes', 'nightly')}
                                 </span>
                             )}
-                        </FlexItem>
-                        <FlexItem>
+                        </div>
+                        <div className="nightly-save-button">
                             <Button
                                 variant="primary"
                                 onClick={handleSave}
@@ -188,8 +185,8 @@ const App = () => {
                             >
                                 {saving ? __('Saving...', 'nightly') : __('Save Settings', 'nightly')}
                             </Button>
-                        </FlexItem>
-                    </Flex>
+                        </div>
+                    </div>
                 </CardBody>
             </Card>
 

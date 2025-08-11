@@ -4,8 +4,6 @@
  * @package Nightly
  */
 
-@import 'tokens';
-
 // =============================================================================
 // ADMIN APP LAYOUT
 // =============================================================================
@@ -43,7 +41,13 @@
   padding: 3rem;
   text-align: center;
   
-  .components-spinner {
+  .nightly-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #007cba;
+    border-radius: 50%;
+    animation: nightly-spin 1s linear infinite;
     margin: 0 auto 1rem;
   }
   
@@ -54,6 +58,11 @@
   }
 }
 
+@keyframes nightly-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 // =============================================================================
 // SETTINGS GRID
 // =============================================================================
@@ -61,7 +70,7 @@
 .nightly-settings-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .nightly-setting-item {
@@ -73,17 +82,20 @@
     font-weight: 500;
     color: #1e1e1e;
     margin-bottom: 0.5rem;
+    font-size: 0.875rem;
   }
   
   .components-base-control__help {
     color: #757575;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     margin-top: 0.5rem;
+    line-height: 1.4;
   }
   
   .components-toggle-control {
     .components-toggle-control__label {
       font-weight: 500;
+      font-size: 0.875rem;
     }
   }
   
@@ -91,6 +103,7 @@
     min-height: 40px;
     border-radius: 6px;
     border: 1px solid #ddd;
+    font-size: 0.875rem;
     
     &:focus {
       border-color: #007cba;
@@ -117,16 +130,15 @@
       border-radius: 50%;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
-    .components-range-control__marks {
-      margin-top: 0.5rem;
-    }
-    
-    .components-range-control__mark {
-      color: #757575;
-      font-size: 0.75rem;
-    }
   }
+}
+
+.nightly-range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #757575;
 }
 
 // =============================================================================
@@ -145,6 +157,12 @@
     h2, h3 {
       margin: 0;
       color: #1e1e1e;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    
+    h3 {
+      font-size: 1rem;
     }
   }
   
@@ -165,6 +183,7 @@
     font-weight: 500;
     padding: 0.5rem 1rem;
     min-height: 40px;
+    font-size: 0.875rem;
     
     &:hover:not(:disabled) {
       background: #005a87;
@@ -208,6 +227,13 @@
 // =============================================================================
 
 .nightly-usage-instructions {
+  p {
+    margin: 0 0 1rem 0;
+    color: #1e1e1e;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  
   ul {
     margin: 0;
     padding-left: 1.5rem;
@@ -215,6 +241,8 @@
     li {
       margin-bottom: 0.75rem;
       line-height: 1.5;
+      font-size: 0.875rem;
+      color: #1e1e1e;
       
       &:last-child {
         margin-bottom: 0;
@@ -249,10 +277,14 @@
       padding: 1rem;
     }
   }
+  
+  .nightly-settings-grid {
+    gap: 1.5rem;
+  }
 }
 
 // =============================================================================
-// DARK MODE SUPPORT
+// DARK MODE SUPPORT (for WordPress admin dark mode)
 // =============================================================================
 
 @media (prefers-color-scheme: dark) {
@@ -299,13 +331,17 @@
     }
     
     .nightly-usage-instructions {
-      ul li {
+      p, ul li {
         color: #d0d0d0;
         
         strong {
           color: #f0f0f0;
         }
       }
+    }
+    
+    .nightly-range-labels {
+      color: #a0a0a0;
     }
   }
 }
