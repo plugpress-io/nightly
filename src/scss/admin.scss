@@ -1,347 +1,270 @@
 /**
- * Admin Interface Styles
+ * Admin Interface Styles with Tailwind CSS
  *
  * @package Nightly
  */
 
-// =============================================================================
-// ADMIN APP LAYOUT
-// =============================================================================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.nightly-admin-app {
-  max-width: 800px;
-  margin: 0;
-  padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
-
-.nightly-admin-header {
-  margin-bottom: 2rem;
-  
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2rem;
-    font-weight: 600;
-    color: #1e1e1e;
+/* WordPress admin compatibility and resets */
+.appearance_page_nightly {
+  /* Reset WordPress admin layout constraints */
+  #wpcontent {
+    padding-left: 0;
+    margin-left: 0;
   }
   
-  p {
+  /* Ensure Tailwind box-sizing takes precedence */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  
+  /* Reset WordPress admin form styling that might conflict */
+  .form-table th,
+  .form-table td {
+    padding: 0;
+    border: none;
+    background: none;
+  }
+  
+  /* Reset WordPress admin button styling for our components */
+  .button,
+  .button-primary,
+  .button-secondary {
+    all: unset;
+  }
+  
+  /* Ensure proper font inheritance */
+  body,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+  
+  /* Reset WordPress admin notice styling within our container */
+  .notice {
     margin: 0;
-    color: #757575;
-    font-size: 1rem;
-    line-height: 1.5;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
   }
 }
 
-// =============================================================================
-// LOADING STATE
-// =============================================================================
-
-.nightly-admin-loading {
-  padding: 3rem;
-  text-align: center;
+/* Custom component styles */
+@layer components {
+  /* Main admin container */
+  .nightly-admin-container {
+    @apply min-h-screen bg-gray-50;
+  }
   
+  /* Header component */
+  .nightly-header {
+    @apply bg-white shadow-sm border-b border-gray-200;
+  }
+  
+  .nightly-header-content {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .nightly-header-inner {
+    @apply flex justify-between items-center py-6;
+  }
+  
+  .nightly-header-title {
+    @apply flex items-center space-x-3;
+  }
+  
+  .nightly-header-actions {
+    @apply flex items-center space-x-4;
+  }
+  
+  /* Settings card component */
+  .nightly-card {
+    @apply bg-white shadow-sm rounded-lg border border-gray-200;
+  }
+  
+  .nightly-card-header {
+    @apply px-6 py-4 border-b border-gray-200;
+  }
+  
+  .nightly-card-body {
+    @apply px-6 py-6 space-y-6;
+  }
+  
+  /* Position grid component */
+  .nightly-position-grid {
+    @apply grid grid-cols-3 gap-2 w-32 h-24 border border-gray-300 rounded-lg p-2 bg-gray-50;
+  }
+
+  .nightly-position-button {
+    @apply w-full h-full border border-gray-300 rounded bg-white cursor-pointer transition-all duration-200 ease-in-out hover:bg-blue-50 hover:border-blue-300 hover:scale-105;
+  }
+
+  .nightly-position-button.active {
+    @apply bg-blue-100 border-blue-500 shadow-sm;
+  }
+  
+  /* Toggle control styling */
+  .nightly-toggle-control {
+    @apply space-y-2;
+  }
+  
+  /* Loading spinner */
   .nightly-spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid #e0e0e0;
-    border-top: 3px solid #007cba;
-    border-radius: 50%;
-    animation: nightly-spin 1s linear infinite;
-    margin: 0 auto 1rem;
+    @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
   }
   
-  p {
-    color: #757575;
-    font-size: 0.875rem;
-    margin: 0;
+  /* Notice components */
+  .nightly-notice {
+    @apply p-4 rounded-md border;
+  }
+  
+  .nightly-notice-error {
+    @apply bg-red-50 border-red-200 text-red-800;
+  }
+  
+  .nightly-notice-success {
+    @apply bg-green-50 border-green-200 text-green-800;
+  }
+  
+  .nightly-notice-warning {
+    @apply bg-yellow-50 border-yellow-200 text-yellow-800;
+  }
+  
+  .nightly-notice-info {
+    @apply bg-blue-50 border-blue-200 text-blue-800;
+  }
+  
+  /* Button components */
+  .nightly-button {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+  
+  .nightly-button-primary {
+    @apply text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500;
+  }
+  
+  .nightly-button-secondary {
+    @apply text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus:ring-blue-500;
+  }
+  
+  .nightly-button-disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+  
+  /* Form elements */
+  .nightly-form-group {
+    @apply space-y-2;
+  }
+  
+  .nightly-form-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  
+  .nightly-form-help {
+    @apply text-xs text-gray-500;
   }
 }
 
-@keyframes nightly-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-// =============================================================================
-// SETTINGS GRID
-// =============================================================================
-
-.nightly-settings-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.nightly-setting-item {
-  .components-base-control {
-    margin-bottom: 0;
+/* Additional utilities */
+@layer utilities {
+  /* Border utilities */
+  .border-3 {
+    border-width: 3px;
   }
-  
-  .components-base-control__label {
-    font-weight: 500;
-    color: #1e1e1e;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+
+  /* Animation utilities */
+  .animate-spin {
+    animation: spin 1s linear infinite;
   }
-  
-  .components-base-control__help {
-    color: #757575;
-    font-size: 0.8125rem;
-    margin-top: 0.5rem;
-    line-height: 1.4;
-  }
-  
-  .components-toggle-control {
-    .components-toggle-control__label {
-      font-weight: 500;
-      font-size: 0.875rem;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
   }
   
-  .components-select-control__input {
-    min-height: 40px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 0.875rem;
-    
-    &:focus {
-      border-color: #007cba;
-      box-shadow: 0 0 0 1px #007cba;
-    }
+  /* WordPress admin specific utilities */
+  .wp-admin-reset {
+    all: unset;
+    box-sizing: border-box;
   }
   
-  .components-range-control {
-    .components-range-control__wrapper {
-      margin-top: 1rem;
-    }
-    
-    .components-range-control__track {
-      background: #ddd;
-      height: 4px;
-      border-radius: 2px;
-    }
-    
-    .components-range-control__thumb {
-      background: #007cba;
-      border: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-  }
-}
-
-.nightly-range-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: #757575;
-}
-
-// =============================================================================
-// CARDS
-// =============================================================================
-
-.components-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  
-  .components-card__header {
-    padding: 1.5rem 1.5rem 0;
-    border-bottom: none;
-    
-    h2, h3 {
-      margin: 0;
-      color: #1e1e1e;
-      font-size: 1.125rem;
-      font-weight: 600;
-    }
-    
-    h3 {
-      font-size: 1rem;
-    }
+  /* Focus utilities for accessibility */
+  .focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
   }
   
-  .components-card__body {
-    padding: 1.5rem;
+  /* Text utilities */
+  .text-wp-blue {
+    color: #007cba;
   }
-}
-
-// =============================================================================
-// BUTTONS
-// =============================================================================
-
-.components-button {
-  &.is-primary {
-    background: #007cba;
+  
+  .bg-wp-blue {
+    background-color: #007cba;
+  }
+  
+  .border-wp-blue {
     border-color: #007cba;
-    border-radius: 6px;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    min-height: 40px;
-    font-size: 0.875rem;
-    
-    &:hover:not(:disabled) {
-      background: #005a87;
-      border-color: #005a87;
-    }
-    
-    &:focus:not(:disabled) {
-      box-shadow: 0 0 0 2px #007cba;
-    }
-    
-    &:disabled {
-      opacity: 0.6;
-    }
+  }
+  
+  /* Spacing utilities for WordPress admin */
+  .wp-admin-spacing {
+    margin: 20px 0;
   }
 }
 
-// =============================================================================
-// NOTICES
-// =============================================================================
-
-.components-notice {
-  margin-bottom: 1.5rem;
-  border-radius: 6px;
-  
-  &.is-error {
-    border-left-color: #d63638;
+/* Range slider styling */
+.appearance_page_nightly {
+  .slider {
+    @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
   }
   
-  .components-notice__content {
-    margin: 0;
-    font-size: 0.875rem;
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
   }
   
-  .components-notice__dismiss {
-    padding: 0.5rem;
+  .slider::-webkit-slider-thumb:hover {
+    background: #005a87;
+    transform: scale(1.1);
   }
-}
 
-// =============================================================================
-// USAGE INSTRUCTIONS
-// =============================================================================
-
-.nightly-usage-instructions {
-  p {
-    margin: 0 0 1rem 0;
-    color: #1e1e1e;
-    font-size: 0.875rem;
-    line-height: 1.5;
+  .slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #007cba;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
   }
   
-  ul {
-    margin: 0;
-    padding-left: 1.5rem;
-    
-    li {
-      margin-bottom: 0.75rem;
-      line-height: 1.5;
-      font-size: 0.875rem;
-      color: #1e1e1e;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-      
-      strong {
-        color: #1e1e1e;
-        font-weight: 600;
-      }
-    }
-  }
-}
-
-// =============================================================================
-// RESPONSIVE DESIGN
-// =============================================================================
-
-@media (max-width: 768px) {
-  .nightly-admin-app {
-    padding: 1rem;
+  .slider::-moz-range-thumb:hover {
+    background: #005a87;
+    transform: scale(1.1);
   }
   
-  .nightly-admin-header {
-    h1 {
-      font-size: 1.5rem;
-    }
-  }
-  
-  .components-card {
-    .components-card__header,
-    .components-card__body {
-      padding: 1rem;
-    }
-  }
-  
-  .nightly-settings-grid {
-    gap: 1.5rem;
-  }
-}
-
-// =============================================================================
-// DARK MODE SUPPORT (for WordPress admin dark mode)
-// =============================================================================
-
-@media (prefers-color-scheme: dark) {
-  .nightly-admin-app {
-    .nightly-admin-header {
-      h1 {
-        color: #f0f0f0;
-      }
-      
-      p {
-        color: #a0a0a0;
-      }
-    }
-    
-    .components-card {
-      background: #2c2c2c;
-      border-color: #404040;
-      
-      .components-card__header {
-        h2, h3 {
-          color: #f0f0f0;
-        }
-      }
-    }
-    
-    .nightly-setting-item {
-      .components-base-control__label {
-        color: #f0f0f0;
-      }
-      
-      .components-base-control__help {
-        color: #a0a0a0;
-      }
-      
-      .components-select-control__input {
-        background: #404040;
-        border-color: #606060;
-        color: #f0f0f0;
-        
-        &:focus {
-          border-color: #007cba;
-        }
-      }
-    }
-    
-    .nightly-usage-instructions {
-      p, ul li {
-        color: #d0d0d0;
-        
-        strong {
-          color: #f0f0f0;
-        }
-      }
-    }
-    
-    .nightly-range-labels {
-      color: #a0a0a0;
-    }
+  .slider:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 }

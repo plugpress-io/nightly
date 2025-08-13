@@ -5,7 +5,6 @@
 node_modules
 logs
 artifact
-build
 coverage
 # **/*__premium_only*
 

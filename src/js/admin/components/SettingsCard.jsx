@@ -1,150 +1,143 @@
 /**
- * Settings Card Component - Polaris Inspired
+ * SettingsCard Component
+ * 
+ * Clean card-based layout component for settings sections
  *
  * @package Nightly
  */
 
 import { __ } from '@wordpress/i18n';
-import Toggle from './Toggle';
-import SaveButton from './SaveButton';
 
-const SettingsCard = ({
-    settings,
-    onSettingChange,
-    onSave,
-    hasChanges,
-    saving
+const SettingsCard = ({ 
+    title, 
+    description, 
+    children, 
+    loading = false,
+    saving = false,
+    error = null,
+    className = '',
+    headerActions = null
 }) => {
-    const {
-        auto_inject = false,
-        floating_position = 'bottom-right',
-        respect_system_preference = true,
-        transition_duration = 200
-    } = settings;
-
-    // Position options for floating toggle
-    const positionOptions = [
-        { value: 'bottom-right', label: __('Bottom Right', 'nightly') },
-        { value: 'bottom-left', label: __('Bottom Left', 'nightly') },
-        { value: 'top-right', label: __('Top Right', 'nightly') },
-        { value: 'top-left', label: __('Top Left', 'nightly') }
-    ];
-
-    // Duration options for transitions
-    const durationOptions = [
-        { value: 150, label: __('Fast (150ms)', 'nightly') },
-        { value: 200, label: __('Normal (200ms)', 'nightly') },
-        { value: 300, label: __('Slow (300ms)', 'nightly') },
-        { value: 0, label: __('No Animation', 'nightly') }
-    ];
-
     return (
-        <div className="nightly-settings-card">
-            <div className="nightly-card-header">
-                <h2 className="nightly-card-title">
-                    {__('Dark Mode Settings', 'nightly')}
-                </h2>
-                <p className="nightly-card-description">
-                    {__('Configure how the dark mode toggle appears and behaves on your website.', 'nightly')}
-                </p>
+        <div className={`relative bg-white shadow-sm rounded-lg border border-gray-200 ${className}`}>
+            {/* Card Header */}
+            <div className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                        <h2 className="text-lg font-medium text-gray-900">
+                            {title}
+                        </h2>
+                        {description && (
+                            <p className="mt-1 text-sm text-gray-600">
+                                {description}
+                            </p>
+                        )}
+                    </div>
+                    {headerActions && (
+                        <div className="ml-4 flex-shrink-0">
+                            {headerActions}
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <div className="nightly-card-content">
-                {/* Auto-injection setting */}
-                <div className="nightly-setting-group">
-                    <div className="nightly-setting-header">
-                        <label className="nightly-setting-label">
-                            {__('Auto-inject floating toggle', 'nightly')}
-                        </label>
-                        <Toggle
-                            checked={auto_inject}
-                            onChange={(checked) => onSettingChange('auto_inject', checked)}
-                            disabled={saving}
-                            ariaLabel={__('Enable auto-injection of floating toggle', 'nightly')}
-                        />
-                    </div>
-                    <p className="nightly-setting-description">
-                        {__('Automatically display a floating dark mode toggle for classic themes. Block themes should use the Nightly block instead.', 'nightly')}
-                    </p>
-                </div>
-
-                {/* Floating position setting - only show if auto_inject is enabled */}
-                {auto_inject && (
-                    <div className="nightly-setting-group">
-                        <label className="nightly-setting-label" htmlFor="floating-position">
-                            {__('Floating toggle position', 'nightly')}
-                        </label>
-                        <select
-                            id="floating-position"
-                            className="nightly-select"
-                            value={floating_position}
-                            onChange={(e) => onSettingChange('floating_position', e.target.value)}
-                            disabled={saving}
-                        >
-                            {positionOptions.map(option => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                        <p className="nightly-setting-description">
-                            {__('Choose where the floating toggle appears on your website.', 'nightly')}
-                        </p>
+            {/* Card Content */}
+            <div className="px-6 py-6">
+                {/* Error State */}
+                {error && (
+                    <div className="mb-6 border-l-4 border-red-200 bg-red-50 p-4">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <svg 
+                                    className="h-5 w-5 text-red-400" 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    viewBox="0 0 20 20" 
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path 
+                                        fillRule="evenodd" 
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" 
+                                        clipRule="evenodd" 
+                                    />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <p className="text-sm text-red-800">
+                                    {error}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                {/* System preference setting */}
-                <div className="nightly-setting-group">
-                    <div className="nightly-setting-header">
-                        <label className="nightly-setting-label">
-                            {__('Respect system preference', 'nightly')}
-                        </label>
-                        <Toggle
-                            checked={respect_system_preference}
-                            onChange={(checked) => onSettingChange('respect_system_preference', checked)}
-                            disabled={saving}
-                            ariaLabel={__('Respect user system dark mode preference', 'nightly')}
-                        />
+                {/* Loading State */}
+                {loading ? (
+                    <div className="flex items-center justify-center py-8">
+                        <div className="flex items-center space-x-3">
+                            <svg 
+                                className="animate-spin h-6 w-6 text-gray-400" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                fill="none" 
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <circle 
+                                    className="opacity-25" 
+                                    cx="12" 
+                                    cy="12" 
+                                    r="10" 
+                                    stroke="currentColor" 
+                                    strokeWidth="4"
+                                />
+                                <path 
+                                    className="opacity-75" 
+                                    fill="currentColor" 
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                />
+                            </svg>
+                            <span className="text-sm text-gray-500">
+                                {__('Loading...', 'nightly')}
+                            </span>
+                        </div>
                     </div>
-                    <p className="nightly-setting-description">
-                        {__('Automatically detect and use the user\'s system dark mode preference on first visit.', 'nightly')}
-                    </p>
-                </div>
+                ) : (
+                    /* Content */
+                    <div className="space-y-6">
+                        {children}
+                    </div>
+                )}
 
-                {/* Transition duration setting */}
-                <div className="nightly-setting-group">
-                    <label className="nightly-setting-label" htmlFor="transition-duration">
-                        {__('Animation speed', 'nightly')}
-                    </label>
-                    <select
-                        id="transition-duration"
-                        className="nightly-select"
-                        value={transition_duration}
-                        onChange={(e) => onSettingChange('transition_duration', parseInt(e.target.value, 10))}
-                        disabled={saving}
-                    >
-                        {durationOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                    <p className="nightly-setting-description">
-                        {__('Control how fast the theme transition animation plays.', 'nightly')}
-                    </p>
-                </div>
-            </div>
-
-            <div className="nightly-card-footer">
-                <SaveButton
-                    onClick={onSave}
-                    disabled={!hasChanges}
-                    loading={saving}
-                />
-                {hasChanges && (
-                    <p className="nightly-unsaved-changes">
-                        {__('You have unsaved changes.', 'nightly')}
-                    </p>
+                {/* Saving Overlay */}
+                {saving && (
+                    <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
+                        <div className="flex items-center space-x-3">
+                            <svg 
+                                className="animate-spin h-6 w-6 text-blue-600" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                fill="none" 
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <circle 
+                                    className="opacity-25" 
+                                    cx="12" 
+                                    cy="12" 
+                                    r="10" 
+                                    stroke="currentColor" 
+                                    strokeWidth="4"
+                                />
+                                <path 
+                                    className="opacity-75" 
+                                    fill="currentColor" 
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                />
+                            </svg>
+                            <span className="text-sm font-medium text-gray-900">
+                                {__('Saving settings...', 'nightly')}
+                            </span>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

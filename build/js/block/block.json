@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nightly/toggle",
+  "version": "1.0.0",
+  "title": "Nightly",
+  "category": "widgets",
+  "icon": "admin-appearance",
+  "description": "A dark mode toggle button for your website.",
+  "keywords": [
+    "dark",
+    "mode",
+    "toggle",
+    "theme",
+    "nightly"
+  ],
+  "textdomain": "nightly",
+  "attributes": {
+    "buttonText": {
+      "type": "string",
+      "default": "Toggle Dark Mode"
+    },
+    "showIcon": {
+      "type": "boolean",
+      "default": true
+    },
+    "alignment": {
+      "type": "string",
+      "default": "left"
+    },
+    "customClassName": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": [
+      "left",
+      "center",
+      "right"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    },
+    "typography": {
+      "fontSize": true,
+      "lineHeight": true
+    },
+    "color": {
+      "text": true,
+      "background": true
+    }
+  }
+}

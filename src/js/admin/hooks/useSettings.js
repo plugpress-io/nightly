@@ -19,7 +19,12 @@ const useSettings = () => {
         auto_inject: false,
         floating_position: 'bottom-right',
         respect_system_preference: true,
-        transition_duration: 200
+        transition_duration: 200,
+        // DarkReader-inspired settings
+        intensity: 0.8,
+        contrast: 1.0,
+        brightness: 0.9,
+        sepia: 0.1
     };
 
     // Load settings from API
@@ -33,25 +38,11 @@ const useSettings = () => {
                 method: 'GET'
             });
 
-            // Extract settings from response
-            const settingsData = response.settings || defaultSettings;
-            setSettings(settingsData);
+            setSettings(response.settings || defaultSettings);
 
         } catch (err) {
             console.error('Failed to load settings:', err);
-            
-            // Set error message based on error type
-            let errorMessage = __('Failed to load settings. Please try again.', 'nightly');
-            
-            if (err.code === 'rest_forbidden') {
-                errorMessage = __('You do not have permission to manage plugin settings.', 'nightly');
-            } else if (err.message && typeof err.message === 'string') {
-                errorMessage = err.message;
-            }
-            
-            setError(errorMessage);
-            
-            // Use default settings as fallback
+            setError(__('Failed to load settings. Using defaults.', 'nightly'));
             setSettings(defaultSettings);
         } finally {
             setLoading(false);
@@ -64,81 +55,35 @@ const useSettings = () => {
             setSaving(true);
             setError(null);
 
-            // Validate settings before sending
-            const validatedSettings = validateSettings(newSettings);
-
             const response = await apiFetch({
                 path: '/nightly/v1/settings',
                 method: 'POST',
-                data: validatedSettings
+                data: newSettings
             });
 
-            // Update local settings with response
-            const updatedSettings = response.settings || validatedSettings;
-            setSettings(updatedSettings);
-
-            return updatedSettings;
+            setSettings(response.settings);
+            return response.settings;
 
         } catch (err) {
             console.error('Failed to save settings:', err);
-            
-            // Set error message based on error type
-            let errorMessage = __('Failed to save settings. Please try again.', 'nightly');
-            
-            if (err.code === 'rest_forbidden') {
-                errorMessage = __('You do not have permission to save plugin settings.', 'nightly');
-            } else if (err.code === 'validation_failed') {
-                // Handle validation errors
-                if (err.data && err.data.errors && Array.isArray(err.data.errors)) {
-                    errorMessage = err.data.errors.join(' ');
-                } else {
-                    errorMessage = __('Settings validation failed. Please check your input.', 'nightly');
-                }
-            } else if (err.message && typeof err.message === 'string') {
-                errorMessage = err.message;
-            }
-            
-            setError(errorMessage);
+            setError(__('Failed to save settings. Please try again.', 'nightly'));
             throw err;
         } finally {
             setSaving(false);
         }
     };
 
-    // Validate settings before saving
-    const validateSettings = (settings) => {
-        const validated = { ...settings };
 
-        // Validate auto_inject
-        if (typeof validated.auto_inject !== 'boolean') {
-            validated.auto_inject = Boolean(validated.auto_inject);
-        }
-
-        // Validate floating_position
-        const validPositions = ['bottom-right', 'bottom-left', 'top-right', 'top-left'];
-        if (!validPositions.includes(validated.floating_position)) {
-            validated.floating_position = 'bottom-right';
-        }
-
-        // Validate respect_system_preference
-        if (typeof validated.respect_system_preference !== 'boolean') {
-            validated.respect_system_preference = Boolean(validated.respect_system_preference);
-        }
-
-        // Validate transition_duration
-        const duration = parseInt(validated.transition_duration, 10);
-        if (isNaN(duration) || duration < 0 || duration > 1000) {
-            validated.transition_duration = 200;
-        } else {
-            validated.transition_duration = duration;
-        }
-
-        return validated;
-    };
 
     // Clear error state
     const clearError = () => {
         setError(null);
+    };
+
+    // Retry mechanism for failed operations
+    const retryLoadSettings = async () => {
+        clearError();
+        await loadSettings();
     };
 
     // Load settings on mount
@@ -153,6 +98,7 @@ const useSettings = () => {
         error,
         saveSettings,
         loadSettings,
+        retryLoadSettings,
         clearError
     };
 };

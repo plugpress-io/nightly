@@ -2,6 +2,13 @@
 /**
  * Main Nightly Plugin Class
  *
+ * This is the core orchestrator class that initializes and manages all plugin components.
+ * It follows the single responsibility principle by delegating specific functionality
+ * to specialized classes (Block, Admin, API) while handling the overall plugin lifecycle.
+ *
+ * The class is designed to be lightweight and efficient, only loading components when
+ * needed and optimizing asset loading based on context.
+ *
  * @package Nightly
  * @since 1.0.0
  */
@@ -15,6 +22,18 @@ if (!defined('ABSPATH')) {
 
 /**
  * Main plugin class that orchestrates all plugin functionality
+ * 
+ * This class serves as the central hub for the plugin, managing:
+ * - Component initialization (Block, Admin, API)
+ * - Asset loading and optimization
+ * - WordPress integration hooks
+ * - Theme support and compatibility
+ * 
+ * Design principles:
+ * - Single responsibility: Each method has one clear purpose
+ * - Performance first: Assets load only when needed
+ * - Clean code: Easy to read and maintain
+ * - Extensible: Easy to add new features
  */
 class Nightly {
     
@@ -69,19 +88,26 @@ class Nightly {
     
     /**
      * Initialize plugin components
+     * 
+     * Initializes components for both theme types:
+     * - Block: Always initialized (works for both classic and FSE themes)
+     * - Admin: Always initialized (FSE themes can use it for global floating toggle)
+     * - API: Always initialized (needed for block and admin)
      */
     private function init_components() {
-        // Initialize block functionality
+        // Initialize block functionality (always needed)
         $this->block = new Block();
         $this->block->init();
         
-        // Initialize admin interface (only in admin)
+        // Initialize admin interface for both theme types
+        // Classic themes: Full settings interface
+        // FSE themes: Global floating toggle configuration
         if (is_admin()) {
             $this->admin = new Admin();
             $this->admin->init();
         }
         
-        // Initialize API
+        // Initialize API (needed for both block and admin functionality)
         $this->api = new API();
         $this->api->init();
     }
@@ -119,16 +145,29 @@ class Nightly {
     
     /**
      * Enqueue frontend assets with performance optimizations
+     * 
+     * Implements conditional loading, cache busting, and performance hints
+     * for optimal Core Web Vitals scores.
      */
     public function enqueue_frontend_assets() {
         // Only load if we need frontend functionality
-        if ($this->should_load_frontend_assets()) {
-            // Get file modification time for cache busting
+        if (!$this->should_load_frontend_assets()) {
+            return;
+        }
+        
+        try {
+            // Get file paths and verify they exist
             $js_file = NIGHTLY_PLUGIN_DIR . 'build/frontend/index.js';
             $css_file = NIGHTLY_PLUGIN_DIR . 'build/frontend/index.css';
             
-            $js_version = file_exists($js_file) ? filemtime($js_file) : $this->version;
-            $css_version = file_exists($css_file) ? filemtime($css_file) : $this->version;
+            if (!file_exists($js_file) || !file_exists($css_file)) {
+                $this->log_error('Frontend assets not found. Please run npm run build.');
+                return;
+            }
+            
+            // Use file modification time for cache busting
+            $js_version = filemtime($js_file);
+            $css_version = filemtime($css_file);
             
             // Enqueue JavaScript with optimized loading
             wp_enqueue_script(
@@ -161,25 +200,45 @@ class Nightly {
             }, 1);
             
             // Localize script with minimal settings
-            $settings = $this->get_optimized_frontend_settings();
+            $settings = array(
+                'respectSystemPreference' => $this->get_setting('respect_system_preference', true),
+                'transitionDuration' => (int) $this->get_setting('transition_duration', 200),
+                'autoInject' => (bool) $this->get_setting('auto_inject', false),
+                'floatingPosition' => $this->get_setting('floating_position', 'bottom-right'),
+                'isClassicTheme' => !wp_is_block_theme(),
+                'version' => $this->version,
+                // DarkReader-inspired settings
+                'intensity' => (float) $this->get_setting('intensity', 0.8),
+                'contrast' => (float) $this->get_setting('contrast', 1.0),
+                'brightness' => (float) $this->get_setting('brightness', 0.9),
+                'sepia' => (float) $this->get_setting('sepia', 0.1)
+            );
             wp_localize_script('nightly-frontend', 'nightlySettings', $settings);
             
-            // Add performance monitoring data
+            // Add performance monitoring data in debug mode
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 wp_localize_script('nightly-frontend', 'nightlyPerf', array(
                     'debug' => true,
-                    'startTime' => microtime(true)
+                    'startTime' => microtime(true),
+                    'version' => $this->version
                 ));
             }
+            
+        } catch (Exception $e) {
+            $this->log_error('Failed to enqueue frontend assets: ' . $e->getMessage());
         }
     }
     
     /**
      * Enqueue admin assets with performance optimizations
+     * 
+     * Loads admin assets for both classic and FSE themes on the Nightly admin page.
+     * FSE themes can use the admin interface for global floating toggle configuration.
      */
     public function enqueue_admin_assets($hook) {
-        // Only load on our admin page
+        // Only load on our admin page (both classic and FSE themes)
         if ($hook === 'appearance_page_nightly') {
+            error_log("Nightly: Loading admin assets for hook: " . $hook);
             // Get file modification time for cache busting
             $js_file = NIGHTLY_PLUGIN_DIR . 'build/admin/index.js';
             $css_file = NIGHTLY_PLUGIN_DIR . 'build/admin/index.css';
@@ -187,11 +246,11 @@ class Nightly {
             $js_version = file_exists($js_file) ? filemtime($js_file) : $this->version;
             $css_version = file_exists($css_file) ? filemtime($css_file) : $this->version;
             
-            // Enqueue admin JavaScript
+            // Enqueue admin JavaScript with all required dependencies
             wp_enqueue_script(
                 'nightly-admin',
                 NIGHTLY_PLUGIN_URL . 'build/admin/index.js',
-                array('wp-element', 'wp-api-fetch', 'wp-i18n'),
+                array('wp-element', 'wp-api-fetch', 'wp-i18n', 'wp-components'),
                 $js_version,
                 true
             );
@@ -242,25 +301,58 @@ class Nightly {
     
     /**
      * Check if frontend assets should be loaded
+     * 
+     * Performance optimization: Only load assets when actually needed.
+     * This reduces page load time and improves Core Web Vitals scores.
      */
     private function should_load_frontend_assets() {
-        // Load if we have blocks on the page
+        $auto_inject = $this->get_setting('auto_inject', false);
+        
+        // Debug logging
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $this->log_info('Asset loading check', array(
+                'auto_inject' => $auto_inject,
+                'is_front_page' => is_front_page(),
+                'is_home' => is_home(),
+                'current_url' => $_SERVER['REQUEST_URI'] ?? 'unknown'
+            ));
+        }
+        
+        // Always load in debug mode for easier development
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            return true;
+        }
+        
+        // Load if auto-inject is enabled for any theme type
+        // This should work on ALL pages when enabled
+        if ($auto_inject) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                $this->log_info('Loading assets due to auto-inject enabled');
+            }
+            return true;
+        }
+        
+        // Load if we have Nightly blocks on the current page
         if (has_block('nightly/toggle')) {
             return true;
         }
         
-        // Load if auto-inject is enabled for classic themes
-        if (!wp_is_block_theme() && $this->get_setting('auto_inject', false)) {
-            return true;
-        }
-        
-        // Load if there are any toggle buttons in the content (shortcode, manual implementation)
+        // Load if there are manual toggle implementations in the content
         global $post;
-        if ($post && (strpos($post->post_content, 'data-nightly-toggle') !== false || 
-                      strpos($post->post_content, '[nightly-toggle]') !== false)) {
+        if ($post && (
+            strpos($post->post_content, 'data-nightly-toggle') !== false || 
+            strpos($post->post_content, '[nightly-toggle]') !== false ||
+            strpos($post->post_content, 'nightly-toggle-button') !== false
+        )) {
             return true;
         }
         
+        // Check if any widgets contain toggles (for classic themes)
+        if (is_active_widget(false, false, 'nightly_toggle_widget')) {
+            return true;
+        }
+        
+        // Don't load assets if not needed
         return false;
     }
     
@@ -274,20 +366,59 @@ class Nightly {
     
     /**
      * Maybe add floating toggle to footer
+     * 
+     * Now works for both classic and FSE themes when auto-inject is enabled.
+     * Includes debugging to help identify issues on inner pages.
      */
     public function maybe_add_floating_toggle() {
-        // Only add if auto-inject is enabled and we're on a classic theme
-        if (!wp_is_block_theme() && $this->get_setting('auto_inject', false)) {
-            // Check if there are already toggle buttons on the page
+        $auto_inject = $this->get_setting('auto_inject', false);
+        
+        // Debug logging
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            $this->log_info('Floating toggle check', array(
+                'auto_inject' => $auto_inject,
+                'is_front_page' => is_front_page(),
+                'is_home' => is_home(),
+                'current_url' => $_SERVER['REQUEST_URI'] ?? 'unknown'
+            ));
+        }
+        
+        // Add if auto-inject is enabled for any theme type
+        if ($auto_inject) {
+            // For floating toggle, we want it to appear on ALL pages when enabled
+            // Only skip if there are actual Nightly blocks on the current page
             global $post;
-            if ($post && (has_block('nightly/toggle', $post) || 
-                         strpos($post->post_content, 'data-nightly-toggle') !== false)) {
-                // Don't add floating toggle if there are already toggles
-                return;
+            $has_nightly_blocks = false;
+            
+            if ($post) {
+                $has_nightly_blocks = has_block('nightly/toggle', $post);
+                
+                // Debug logging
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    $this->log_info('Toggle detection', array(
+                        'post_id' => $post->ID ?? 'none',
+                        'has_nightly_blocks' => $has_nightly_blocks,
+                        'post_type' => $post->post_type ?? 'none'
+                    ));
+                }
             }
             
-            // Add a placeholder that JavaScript will replace with the actual toggle
-            echo '<div id="nightly-floating-toggle-placeholder" style="display: none;" data-auto-inject="true"></div>';
+            // Only skip if there are actual Nightly blocks (not manual toggles)
+            // This ensures floating toggle appears on pages without blocks
+            if (!$has_nightly_blocks) {
+                // Add a placeholder that JavaScript will replace with the actual toggle
+                echo '<div id="nightly-floating-toggle-placeholder" style="display: none;" data-auto-inject="true"></div>';
+                
+                // Debug logging
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    $this->log_info('Floating toggle placeholder added');
+                }
+            } else {
+                // Debug logging
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    $this->log_info('Floating toggle skipped - Nightly blocks found on page');
+                }
+            }
         }
     }
     
@@ -327,5 +458,39 @@ class Nightly {
      */
     public function get_version() {
         return $this->version;
+    }
+    
+    /**
+     * Log error messages for debugging
+     * 
+     * Only logs in debug mode to avoid cluttering production logs.
+     * 
+     * @param string $message Error message to log
+     * @param array $context Additional context data
+     */
+    private function log_error($message, $context = array()) {
+        if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+            $log_message = 'Nightly Plugin: ' . $message;
+            if (!empty($context)) {
+                $log_message .= ' Context: ' . wp_json_encode($context);
+            }
+            error_log($log_message);
+        }
+    }
+    
+    /**
+     * Log info messages for debugging
+     * 
+     * @param string $message Info message to log
+     * @param array $context Additional context data
+     */
+    private function log_info($message, $context = array()) {
+        if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+            $log_message = 'Nightly Plugin Info: ' . $message;
+            if (!empty($context)) {
+                $log_message .= ' Context: ' . wp_json_encode($context);
+            }
+            error_log($log_message);
+        }
     }
 }

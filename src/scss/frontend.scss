@@ -1,5 +1,5 @@
 /**
- * Frontend Styles
+ * Frontend Styles - DarkReader Inspired Minimal CSS
  *
  * @package Nightly
  */
@@ -7,12 +7,42 @@
 @import 'tokens';
 
 // =============================================================================
-// THEME SWITCHING STYLES
+// MINIMAL BASE STYLES
 // =============================================================================
 
-// Basic theme transition
-html {
-  transition: background-color 0.2s ease, color 0.2s ease;
+// Only essential styles - dark mode is now handled dynamically via JavaScript
+// This approach is more developer-friendly and works universally across themes
+
+// Debug: Add a visible test element to verify theme switching (only in development)
+.nightly-debug-indicator {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  padding: 10px;
+  background: #ff0000;
+  color: #ffffff;
+  font-size: 12px;
+  z-index: 9999;
+  border-radius: 4px;
+  display: none; // Hidden by default
+}
+
+// Show debug indicator only when explicitly enabled
+body.nightly-debug .nightly-debug-indicator {
+  display: block;
+}
+
+[data-nightly-theme="dark"] .nightly-debug-indicator {
+  background: #00ff00;
+  color: #000000;
+}
+
+[data-nightly-theme="dark"] .nightly-debug-indicator::after {
+  content: " (DARK MODE ACTIVE)";
+}
+
+[data-nightly-theme="light"] .nightly-debug-indicator::after {
+  content: " (LIGHT MODE ACTIVE)";
 }
 
 // =============================================================================
@@ -20,80 +50,157 @@ html {
 // =============================================================================
 
 .nightly-toggle-button {
+  // Reset button styles first
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  // Apply our custom styles
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   padding: 0.75rem 1rem;
   background: var(--nightly-bg-surface);
   border: 1px solid var(--nightly-border-primary);
   border-radius: 0.5rem;
   color: var(--nightly-text-primary);
-  cursor: pointer;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.5;
-  text-decoration: none;
   transition: all 0.2s ease;
-  
-  // Minimum touch target
+
+  // Accessibility - minimum touch target
   min-width: 44px;
   min-height: 44px;
-  
-  &:hover {
+
+  // Ensure button type is set properly
+  &[type="button"] {
+    cursor: pointer;
+  }
+
+  // Hover state
+  &:hover:not(:disabled) {
     background: var(--nightly-bg-surface-hover);
     border-color: var(--nightly-border-secondary);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
-  &:focus {
+
+  // Focus state - critical for accessibility
+  &:focus:not(:disabled) {
     outline: 2px solid var(--nightly-border-focus);
     outline-offset: 2px;
+    background: var(--nightly-bg-surface-hover);
   }
-  
-  &:active {
-    background: var(--nightly-bg-surface-pressed);
+
+  // Active/pressed state
+  &:active:not(:disabled) {
     transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: var(--nightly-bg-surface-pressed);
   }
-  
+
+  // Disabled state
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  // Pressed state for toggle functionality
   &[aria-pressed="true"] {
-    background: var(--nightly-interactive-primary);
-    color: var(--nightly-text-inverse);
+    background: var(--nightly-bg-surface-selected);
     border-color: var(--nightly-interactive-primary);
-    
-    &:hover {
-      background: var(--nightly-interactive-primary-hover);
-      border-color: var(--nightly-interactive-primary-hover);
-    }
   }
 }
 
-.nightly-toggle-icon {
+// =============================================================================
+// TOGGLE SWITCH STYLES
+// =============================================================================
+
+.nightly-toggle-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nightly-toggle-track {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background: #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nightly-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
-  font-size: 1rem;
-  
-  .nightly-icon-light {
-    display: block;
+
+  .nightly-icon {
+    width: 14px;
+    height: 14px;
+    transition: all 0.3s ease;
   }
-  
-  .nightly-icon-dark {
-    display: none;
+
+  .nightly-icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+    color: #f59e0b;
+  }
+
+  .nightly-icon-moon {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+    color: #6366f1;
   }
 }
 
-// Show dark icon when in dark mode
-[data-nightly-theme="dark"] .nightly-toggle-icon {
-  .nightly-icon-light {
-    display: none;
+// Dark mode / checked state
+.nightly-toggle-switch.is-checked,
+[data-nightly-theme="dark"] .nightly-toggle-switch {
+  .nightly-toggle-track {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
   }
-  
-  .nightly-icon-dark {
-    display: block;
+
+  .nightly-toggle-thumb {
+    transform: translateX(24px);
+    background: #1e293b;
+
+    .nightly-icon-sun {
+      opacity: 0;
+      transform: rotate(-180deg) scale(0.8);
+    }
+
+    .nightly-icon-moon {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+      color: #fbbf24;
+    }
   }
 }
 
@@ -122,15 +229,15 @@ html {
 
 .nightly-toggle-block {
   margin: 1rem 0;
-  
+
   &.align-left {
     text-align: left;
   }
-  
+
   &.align-center {
     text-align: center;
   }
-  
+
   &.align-right {
     text-align: right;
   }
@@ -150,54 +257,76 @@ html {
   height: 3.5rem;
   padding: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   .nightly-toggle-text {
     display: none;
   }
-  
-  .nightly-toggle-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 1.25rem;
+
+  .nightly-toggle-switch {
+    .nightly-toggle-track {
+      width: 40px;
+      height: 20px;
+      border-radius: 10px;
+    }
+
+    .nightly-toggle-thumb {
+      width: 16px;
+      height: 16px;
+      top: 2px;
+      left: 2px;
+
+      .nightly-icon {
+        width: 12px;
+        height: 12px;
+      }
+    }
   }
-  
+
+  &.is-checked .nightly-toggle-switch .nightly-toggle-thumb,
+  &[data-nightly-theme="dark"] .nightly-toggle-switch .nightly-toggle-thumb {
+    transform: translateX(20px);
+  }
+
   &.position-bottom-left {
     left: 1.5rem;
     right: auto;
   }
-  
+
   &.position-top-right {
     top: 1.5rem;
     bottom: auto;
   }
-  
+
   &.position-top-left {
     top: 1.5rem;
     left: 1.5rem;
     right: auto;
     bottom: auto;
   }
-  
+
   @media (max-width: 768px) {
     bottom: 1rem;
     right: 1rem;
     width: 3rem;
     height: 3rem;
-    
+
     .nightly-toggle-icon {
       width: 1.25rem;
       height: 1.25rem;
       font-size: 1rem;
     }
-    
+
     &.position-bottom-left {
       left: 1rem;
     }
-    
+
     &.position-top-right {
       top: 1rem;
     }
-    
+
     &.position-top-left {
       top: 1rem;
       left: 1rem;
@@ -210,16 +339,28 @@ html {
 // =============================================================================
 
 :root {
+  // Background colors
+  --nightly-bg-primary: #ffffff;
+  --nightly-bg-secondary: #f8f9fa;
   --nightly-bg-surface: #ffffff;
   --nightly-bg-surface-hover: #f8f9fa;
   --nightly-bg-surface-pressed: #e9ecef;
+  --nightly-bg-surface-selected: #e7f3ff;
+
+  // Border colors
   --nightly-border-primary: #dee2e6;
   --nightly-border-secondary: #adb5bd;
   --nightly-border-focus: #0d6efd;
+
+  // Text colors
   --nightly-text-primary: #212529;
+  --nightly-text-secondary: #6c757d;
   --nightly-text-inverse: #ffffff;
+
+  // Interactive colors
   --nightly-interactive-primary: #0d6efd;
   --nightly-interactive-primary-hover: #0b5ed7;
+  --nightly-interactive-secondary: #6c757d;
 }
 
 // =============================================================================
@@ -227,16 +368,28 @@ html {
 // =============================================================================
 
 [data-nightly-theme="dark"] {
+  // Background colors
+  --nightly-bg-primary: #1a1a1a;
+  --nightly-bg-secondary: #2d2d2d;
   --nightly-bg-surface: #343a40;
   --nightly-bg-surface-hover: #495057;
   --nightly-bg-surface-pressed: #6c757d;
+  --nightly-bg-surface-selected: #1e3a5f;
+
+  // Border colors
   --nightly-border-primary: #495057;
   --nightly-border-secondary: #6c757d;
-  --nightly-border-focus: #0d6efd;
+  --nightly-border-focus: #4dabf7;
+
+  // Text colors
   --nightly-text-primary: #f8f9fa;
+  --nightly-text-secondary: #adb5bd;
   --nightly-text-inverse: #212529;
-  --nightly-interactive-primary: #0d6efd;
-  --nightly-interactive-primary-hover: #3d8bfd;
+
+  // Interactive colors
+  --nightly-interactive-primary: #4dabf7;
+  --nightly-interactive-primary-hover: #74c0fc;
+  --nightly-interactive-secondary: #adb5bd;
 }
 
 // =============================================================================
@@ -244,11 +397,12 @@ html {
 // =============================================================================
 
 @media (prefers-reduced-motion: reduce) {
+
   html,
   .nightly-toggle-button {
     transition: none !important;
   }
-  
+
   .nightly-toggle-button:hover {
     transform: none !important;
   }
@@ -269,12 +423,12 @@ html {
     background: ButtonFace;
     color: ButtonText;
     border-color: ButtonText;
-    
+
     &:hover {
       background: Highlight;
       color: HighlightText;
     }
-    
+
     &:focus {
       outline: 2px solid Highlight;
     }

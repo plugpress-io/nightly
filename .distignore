@@ -2,6 +2,7 @@
 /.git
 /.github
 /node_modules
+/.kiro
 
 .distignore
 .DS_Store
@@ -17,3 +18,8 @@ composer.lock
 phpcs.xml.dist
 Gruntfile.js
 webpack.config.js
+*.html
+test-page.html
+integration-test.html
+admin-test.html
+README.md

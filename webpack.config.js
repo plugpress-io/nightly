@@ -11,6 +11,8 @@ module.exports = {
 	output: {
 		...defaultConfig.output,
 		path: path.resolve(__dirname, 'build'),
+		// Optimize chunk loading
+		chunkFilename: '[name].[contenthash].js',
 	},
 
 	resolve: {
@@ -20,4 +22,34 @@ module.exports = {
 			'@': path.resolve(__dirname, 'src/js'),
 		},
 	},
+
+	// Performance optimizations
+	optimization: {
+		...defaultConfig.optimization,
+		// Split chunks for better caching
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendors',
+					chunks: 'all',
+				},
+			},
+		},
+	},
+
+	// Development optimizations
+	...(process.env.NODE_ENV === 'development' && {
+		devtool: 'eval-source-map',
+	}),
+
+	// Production optimizations
+	...(process.env.NODE_ENV === 'production' && {
+		devtool: false,
+		performance: {
+			maxAssetSize: 250000,
+			maxEntrypointSize: 250000,
+			hints: 'warning',
+		},
+	}),
 };

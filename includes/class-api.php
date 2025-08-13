@@ -2,6 +2,9 @@
 /**
  * REST API Endpoints Class
  *
+ * Simplified and clean API implementation following "code is poetry" principles.
+ * Handles settings management with clear, focused methods.
+ *
  * @package Nightly
  */
 
@@ -14,6 +17,9 @@ if (!defined('ABSPATH')) {
 
 /**
  * Handles REST API endpoints for settings management
+ * 
+ * This class provides a clean, simple interface for managing plugin settings
+ * through WordPress REST API. Each method has a single responsibility.
  */
 class API {
     
@@ -33,6 +39,8 @@ class API {
     
     /**
      * Initialize API functionality
+     * 
+     * Simple initialization - just register routes when REST API is ready.
      */
     public function init() {
         add_action('rest_api_init', array($this, 'register_routes'));
@@ -40,152 +48,62 @@ class API {
     
     /**
      * Register REST API routes
+     * 
+     * Simple route registration - just GET and POST.
      */
     public function register_routes() {
-        // Settings endpoint
+        // Main settings endpoint - handles both GET and POST
         register_rest_route($this->namespace, '/settings', array(
             array(
                 'methods' => \WP_REST_Server::READABLE,
                 'callback' => array($this, 'get_settings'),
-                'permission_callback' => array($this, 'check_permissions'),
-                'args' => array(),
+                'permission_callback' => array($this, 'can_manage_settings'),
             ),
             array(
                 'methods' => \WP_REST_Server::EDITABLE,
                 'callback' => array($this, 'update_settings'),
-                'permission_callback' => array($this, 'check_permissions'),
-                'args' => $this->get_settings_schema(),
+                'permission_callback' => array($this, 'can_manage_settings'),
             ),
-        ));
-        
-        // Settings schema endpoint
-        register_rest_route($this->namespace, '/settings/schema', array(
-            'methods' => \WP_REST_Server::READABLE,
-            'callback' => array($this, 'get_settings_schema'),
-            'permission_callback' => array($this, 'check_permissions'),
         ));
     }
     
     /**
-     * Check permissions for API access
-     *
-     * @param \WP_REST_Request $request Request object.
-     * @return bool|WP_Error True if user has permission, WP_Error otherwise.
+     * Check if current user can manage plugin settings
+     * 
+     * Simple permission check.
      */
-    public function check_permissions($request) {
-        // Check if user is logged in
-        if (!is_user_logged_in()) {
-            return new \WP_Error(
-                'rest_not_logged_in',
-                __('You are not currently logged in.', 'nightly'),
-                array('status' => 401)
-            );
-        }
-        
-        // Check if user can manage options (admin capability)
-        if (!current_user_can('manage_options')) {
-            return new \WP_Error(
-                'rest_forbidden',
-                __('Sorry, you are not allowed to manage plugin settings.', 'nightly'),
-                array('status' => 403)
-            );
-        }
-        
-        // Verify nonce for additional security
-        $nonce = $request->get_header('X-WP-Nonce');
-        if (!wp_verify_nonce($nonce, 'wp_rest')) {
-            return new \WP_Error(
-                'rest_cookie_invalid_nonce',
-                __('Cookie nonce is invalid.', 'nightly'),
-                array('status' => 403)
-            );
-        }
-        
-        return true;
+    public function can_manage_settings($request) {
+        return current_user_can('manage_options');
     }
     
     /**
      * Get plugin settings
-     *
-     * @param \WP_REST_Request $request Request object.
-     * @return \WP_REST_Response|WP_Error Response object or WP_Error on failure.
      */
     public function get_settings($request) {
-        try {
-            $settings = $this->get_default_settings();
-            $saved_settings = get_option($this->option_name, array());
-            
-            // Merge with saved settings
-            $settings = array_merge($settings, $saved_settings);
-            
-            // Add additional context
-            $response_data = array(
-                'settings' => $settings,
-                'is_block_theme' => wp_is_block_theme(),
-                'plugin_version' => NIGHTLY_VERSION,
-            );
-            
-            return new \WP_REST_Response($response_data, 200);
-            
-        } catch (Exception $e) {
-            return new \WP_Error(
-                'settings_retrieval_failed',
-                __('Failed to retrieve settings.', 'nightly'),
-                array('status' => 500)
-            );
-        }
+        $defaults = $this->get_default_settings();
+        $saved = get_option($this->option_name, array());
+        $settings = array_merge($defaults, $saved);
+        
+        return array('settings' => $settings);
     }
     
     /**
      * Update plugin settings
-     *
-     * @param \WP_REST_Request $request Request object.
-     * @return \WP_REST_Response|WP_Error Response object or WP_Error on failure.
      */
     public function update_settings($request) {
-        try {
-            $new_settings = $request->get_json_params();
-            
-            // Validate and sanitize settings
-            $validated_settings = $this->validate_settings($new_settings);
-            
-            if (is_wp_error($validated_settings)) {
-                return $validated_settings;
-            }
-            
-            // Get current settings
-            $current_settings = get_option($this->option_name, $this->get_default_settings());
-            
-            // Merge with new settings
-            $updated_settings = array_merge($current_settings, $validated_settings);
-            
-            // Update the option
-            $update_result = update_option($this->option_name, $updated_settings);
-            
-            if ($update_result === false) {
-                return new \WP_Error(
-                    'settings_update_failed',
-                    __('Failed to update settings.', 'nightly'),
-                    array('status' => 500)
-                );
-            }
-            
-            // Return updated settings
-            $response_data = array(
-                'settings' => $updated_settings,
-                'message' => __('Settings updated successfully.', 'nightly'),
-                'updated_at' => current_time('mysql'),
-            );
-            
-            return new \WP_REST_Response($response_data, 200);
-            
-        } catch (Exception $e) {
-            return new \WP_Error(
-                'settings_update_error',
-                __('An error occurred while updating settings.', 'nightly'),
-                array('status' => 500)
-            );
-        }
+        $new_settings = $request->get_json_params();
+        
+        // Simple validation
+        $validated = $this->validate_settings($new_settings);
+        
+        // Merge with current settings
+        $current = get_option($this->option_name, $this->get_default_settings());
+        $updated = array_merge($current, $validated);
+        
+        // Save the settings
+        update_option($this->option_name, $updated);
+        
+        return array('settings' => $updated);
     }
     
     /**
@@ -195,130 +113,61 @@ class API {
      */
     private function get_default_settings() {
         return array(
+            // General settings
             'auto_inject' => false,
             'floating_position' => 'bottom-right',
             'respect_system_preference' => true,
             'transition_duration' => 200,
+            // DarkReader-inspired design settings
+            'intensity' => 0.8,
+            'contrast' => 1.0,
+            'brightness' => 0.9,
+            'sepia' => 0.1,
         );
     }
     
     /**
-     * Validate and sanitize settings
-     *
-     * @param array $settings Settings to validate.
-     * @return array|WP_Error Validated settings or WP_Error on failure.
+     * Simple validation
      */
     private function validate_settings($settings) {
-        if (!is_array($settings)) {
-            return new \WP_Error(
-                'invalid_settings_format',
-                __('Settings must be provided as an object.', 'nightly'),
-                array('status' => 400)
-            );
-        }
-        
         $validated = array();
-        $errors = array();
         
-        // Validate auto_inject
+        // Just sanitize and validate ranges - keep it simple
         if (isset($settings['auto_inject'])) {
-            if (!is_bool($settings['auto_inject'])) {
-                $errors[] = __('auto_inject must be a boolean value.', 'nightly');
-            } else {
-                $validated['auto_inject'] = $settings['auto_inject'];
-            }
+            $validated['auto_inject'] = (bool) $settings['auto_inject'];
         }
         
-        // Validate floating_position
         if (isset($settings['floating_position'])) {
             $valid_positions = array('bottom-right', 'bottom-left', 'top-right', 'top-left');
-            if (!in_array($settings['floating_position'], $valid_positions, true)) {
-                $errors[] = sprintf(
-                    __('floating_position must be one of: %s', 'nightly'),
-                    implode(', ', $valid_positions)
-                );
-            } else {
-                $validated['floating_position'] = sanitize_text_field($settings['floating_position']);
-            }
+            $validated['floating_position'] = in_array($settings['floating_position'], $valid_positions) 
+                ? $settings['floating_position'] : 'bottom-right';
         }
         
-        // Validate respect_system_preference
         if (isset($settings['respect_system_preference'])) {
-            if (!is_bool($settings['respect_system_preference'])) {
-                $errors[] = __('respect_system_preference must be a boolean value.', 'nightly');
-            } else {
-                $validated['respect_system_preference'] = $settings['respect_system_preference'];
-            }
+            $validated['respect_system_preference'] = (bool) $settings['respect_system_preference'];
         }
         
-        // Validate transition_duration
         if (isset($settings['transition_duration'])) {
-            $duration = intval($settings['transition_duration']);
-            if ($duration < 0 || $duration > 2000) {
-                $errors[] = __('transition_duration must be between 0 and 2000 milliseconds.', 'nightly');
-            } else {
-                $validated['transition_duration'] = $duration;
-            }
+            $validated['transition_duration'] = max(0, min(2000, intval($settings['transition_duration'])));
         }
         
-        // Return errors if any
-        if (!empty($errors)) {
-            return new \WP_Error(
-                'validation_failed',
-                __('Settings validation failed.', 'nightly'),
-                array(
-                    'status' => 400,
-                    'errors' => $errors,
-                )
-            );
+        if (isset($settings['intensity'])) {
+            $validated['intensity'] = max(0, min(1, floatval($settings['intensity'])));
+        }
+        
+        if (isset($settings['contrast'])) {
+            $validated['contrast'] = max(0.5, min(2, floatval($settings['contrast'])));
+        }
+        
+        if (isset($settings['brightness'])) {
+            $validated['brightness'] = max(0.3, min(1.5, floatval($settings['brightness'])));
+        }
+        
+        if (isset($settings['sepia'])) {
+            $validated['sepia'] = max(0, min(1, floatval($settings['sepia'])));
         }
         
         return $validated;
     }
-    
-    /**
-     * Get settings schema for validation
-     *
-     * @return array Settings schema.
-     */
-    public function get_settings_schema() {
-        return array(
-            'auto_inject' => array(
-                'description' => __('Enable automatic injection of floating toggle for classic themes.', 'nightly'),
-                'type' => 'boolean',
-                'default' => false,
-                'sanitize_callback' => 'rest_sanitize_boolean',
-                'validate_callback' => 'rest_validate_request_arg',
-            ),
-            'floating_position' => array(
-                'description' => __('Position of the floating toggle button.', 'nightly'),
-                'type' => 'string',
-                'default' => 'bottom-right',
-                'enum' => array('bottom-right', 'bottom-left', 'top-right', 'top-left'),
-                'sanitize_callback' => 'sanitize_text_field',
-                'validate_callback' => function($param, $request, $key) {
-                    $valid_positions = array('bottom-right', 'bottom-left', 'top-right', 'top-left');
-                    return in_array($param, $valid_positions, true);
-                },
-            ),
-            'respect_system_preference' => array(
-                'description' => __('Respect user\'s system color scheme preference.', 'nightly'),
-                'type' => 'boolean',
-                'default' => true,
-                'sanitize_callback' => 'rest_sanitize_boolean',
-                'validate_callback' => 'rest_validate_request_arg',
-            ),
-            'transition_duration' => array(
-                'description' => __('Duration of theme transition animation in milliseconds.', 'nightly'),
-                'type' => 'integer',
-                'default' => 200,
-                'minimum' => 0,
-                'maximum' => 2000,
-                'sanitize_callback' => 'absint',
-                'validate_callback' => function($param, $request, $key) {
-                    return is_numeric($param) && $param >= 0 && $param <= 2000;
-                },
-            ),
-        );
-    }
+
 }

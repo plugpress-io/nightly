@@ -15,7 +15,22 @@
  * Requires PHP: 7.4
  * Network: false
  *
+ * Nightly is a modern dark mode toggle plugin that follows WordPress best practices.
+ * It provides both a Gutenberg block for content editors and an automatic floating
+ * toggle for classic themes. The plugin uses CSS custom properties for smooth theme
+ * transitions and respects user system preferences.
+ *
+ * Key Features:
+ * - Gutenberg block for flexible placement
+ * - Automatic floating toggle for classic themes
+ * - System preference detection
+ * - Smooth CSS transitions
+ * - Full accessibility support
+ * - Performance optimized
+ * - Clean, maintainable code
+ *
  * @package Nightly
+ * @since 1.0.0
  */
 
 // Prevent direct access
@@ -65,23 +80,59 @@ add_action('plugins_loaded', 'nightly_init');
 // Activation hook
 register_activation_hook(__FILE__, 'nightly_activate');
 function nightly_activate() {
-    // Set default options
+    // Check WordPress version compatibility
+    if (version_compare(get_bloginfo('version'), '5.0', '<')) {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_die(__('Nightly requires WordPress 5.0 or higher.', 'nightly'));
+    }
+    
+    // Check PHP version compatibility
+    if (version_compare(PHP_VERSION, '7.4', '<')) {
+        deactivate_plugins(plugin_basename(__FILE__));
+        wp_die(__('Nightly requires PHP 7.4 or higher.', 'nightly'));
+    }
+    
+    // Set default options only if they don't exist
     $default_settings = array(
         'auto_inject' => false,
         'floating_position' => 'bottom-right',
         'respect_system_preference' => true,
-        'transition_duration' => 200
+        'transition_duration' => 200,
+        // DarkReader-inspired settings
+        'intensity' => 0.8,
+        'contrast' => 1.0,
+        'brightness' => 0.9,
+        'sepia' => 0.1
     );
     
     add_option('nightly_settings', $default_settings);
     
-    // Flush rewrite rules if needed
+    // Set activation timestamp for analytics
+    add_option('nightly_activated_at', current_time('mysql'));
+    
+    // Set plugin version for future migrations
+    add_option('nightly_version', NIGHTLY_VERSION);
+    
+    // Clear any cached data
+    if (function_exists('wp_cache_flush')) {
+        wp_cache_flush();
+    }
+    
+    // Flush rewrite rules
     flush_rewrite_rules();
 }
 
 // Deactivation hook
 register_deactivation_hook(__FILE__, 'nightly_deactivate');
 function nightly_deactivate() {
+    // Clear any cached data
+    if (function_exists('wp_cache_flush')) {
+        wp_cache_flush();
+    }
+    
     // Flush rewrite rules
     flush_rewrite_rules();
+    
+    // Note: We don't delete settings on deactivation
+    // Users might want to reactivate and keep their settings
 }
