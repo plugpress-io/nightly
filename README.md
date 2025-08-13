@@ -71,26 +71,6 @@ You can also add toggles manually in your theme templates:
 - **Respect system preference**: Honor user's system dark mode setting
 - **Transition duration**: Customize the theme switching animation speed
 
-### CSS Custom Properties
-
-The plugin uses CSS custom properties for theming. You can customize colors in your theme:
-
-```css
-:root {
-  --nightly-bg-primary: #ffffff;
-  --nightly-text-primary: #202223;
-  --nightly-border-primary: #e1e3e5;
-  /* ... more properties */
-}
-
-[data-nightly-theme="dark"] {
-  --nightly-bg-primary: #1a1a1a;
-  --nightly-text-primary: #f6f6f7;
-  --nightly-border-primary: #33363a;
-  /* ... dark variants */
-}
-```
-
 ## Development
 
 ### Requirements
