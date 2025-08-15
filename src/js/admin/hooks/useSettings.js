@@ -9,98 +9,105 @@ import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 
 const useSettings = () => {
-    const [settings, setSettings] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState(null);
+	const [settings, setSettings] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [saving, setSaving] = useState(false);
+	const [error, setError] = useState(null);
 
-    // Default settings fallback
-    const defaultSettings = {
-        auto_inject: false,
-        floating_position: 'bottom-right',
-        respect_system_preference: true,
-        transition_duration: 200,
-        // DarkReader-inspired settings
-        intensity: 0.8,
-        contrast: 1.0,
-        brightness: 0.9,
-        sepia: 0.1
-    };
+	// Default settings fallback
+	const defaultSettings = {
+		auto_inject: false,
+		floating_position: 'bottom-right',
+		respect_system_preference: true,
+		mode: 'dark',
+		transition_duration: 200,
+		ignore_selectors: '',
 
-    // Load settings from API
-    const loadSettings = async () => {
-        try {
-            setLoading(true);
-            setError(null);
+		// Reader mode settings
+		reader_intensity: 0.05,
+		reader_contrast: 1.15,
+		reader_brightness: 0.98,
+		reader_sepia: 0.15,
 
-            const response = await apiFetch({
-                path: '/nightly/v1/settings',
-                method: 'GET'
-            });
+		// Legacy filter settings (no longer used for dark mode)
+		intensity: 0.88,
+		contrast: 1.05,
+		brightness: 0.85,
+		sepia: 0.05,
+	};
 
-            setSettings(response.settings || defaultSettings);
+	// Load settings from API
+	const loadSettings = async () => {
+		try {
+			setLoading(true);
+			setError(null);
 
-        } catch (err) {
-            console.error('Failed to load settings:', err);
-            setError(__('Failed to load settings. Using defaults.', 'nightly'));
-            setSettings(defaultSettings);
-        } finally {
-            setLoading(false);
-        }
-    };
+			const response = await apiFetch({
+				path: '/nightly/v1/settings',
+				method: 'GET',
+			});
 
-    // Save settings to API
-    const saveSettings = async (newSettings) => {
-        try {
-            setSaving(true);
-            setError(null);
+			setSettings(response.settings || defaultSettings);
+		} catch (err) {
+			console.error('Failed to load settings:', err);
+			setError(__('Failed to load settings. Using defaults.', 'nightly'));
+			setSettings(defaultSettings);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-            const response = await apiFetch({
-                path: '/nightly/v1/settings',
-                method: 'POST',
-                data: newSettings
-            });
+	// Save settings to API
+	const saveSettings = async (newSettings) => {
+		try {
+			setSaving(true);
+			setError(null);
 
-            setSettings(response.settings);
-            return response.settings;
+			const response = await apiFetch({
+				path: '/nightly/v1/settings',
+				method: 'POST',
+				data: newSettings,
+			});
 
-        } catch (err) {
-            console.error('Failed to save settings:', err);
-            setError(__('Failed to save settings. Please try again.', 'nightly'));
-            throw err;
-        } finally {
-            setSaving(false);
-        }
-    };
+			setSettings(response.settings);
+			return response.settings;
+		} catch (err) {
+			console.error('Failed to save settings:', err);
+			setError(
+				__('Failed to save settings. Please try again.', 'nightly')
+			);
+			throw err;
+		} finally {
+			setSaving(false);
+		}
+	};
 
+	// Clear error state
+	const clearError = () => {
+		setError(null);
+	};
 
+	// Retry mechanism for failed operations
+	const retryLoadSettings = async () => {
+		clearError();
+		await loadSettings();
+	};
 
-    // Clear error state
-    const clearError = () => {
-        setError(null);
-    };
+	// Load settings on mount
+	useEffect(() => {
+		loadSettings();
+	}, []);
 
-    // Retry mechanism for failed operations
-    const retryLoadSettings = async () => {
-        clearError();
-        await loadSettings();
-    };
-
-    // Load settings on mount
-    useEffect(() => {
-        loadSettings();
-    }, []);
-
-    return {
-        settings,
-        loading,
-        saving,
-        error,
-        saveSettings,
-        loadSettings,
-        retryLoadSettings,
-        clearError
-    };
+	return {
+		settings,
+		loading,
+		saving,
+		error,
+		saveSettings,
+		loadSettings,
+		retryLoadSettings,
+		clearError,
+	};
 };
 
 export default useSettings;

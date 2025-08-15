@@ -1,41 +1,5 @@
-/**
- * Frontend Styles - DarkReader Inspired Minimal CSS
- *
- * @package Nightly
- */
 
 @import 'tokens';
-
-// =============================================================================
-// MINIMAL BASE STYLES
-// =============================================================================
-
-// Only essential styles - dark mode is now handled dynamically via JavaScript
-// This approach is more developer-friendly and works universally across themes
-
-// Debug: Add a visible test element to verify theme switching (only in development)
-.nightly-debug-indicator {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  padding: 10px;
-  background: #ff0000;
-  color: #ffffff;
-  font-size: 12px;
-  z-index: 9999;
-  border-radius: 4px;
-  display: none; // Hidden by default
-}
-
-// Show debug indicator only when explicitly enabled
-body.nightly-debug .nightly-debug-indicator {
-  display: block;
-}
-
-[data-nightly-theme="dark"] .nightly-debug-indicator {
-  background: #00ff00;
-  color: #000000;
-}
 
 [data-nightly-theme="dark"] .nightly-debug-indicator::after {
   content: " (DARK MODE ACTIVE)";
@@ -50,7 +14,6 @@ body.nightly-debug .nightly-debug-indicator {
 // =============================================================================
 
 .nightly-toggle-button {
-  // Reset button styles first
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -61,53 +24,49 @@ body.nightly-debug .nightly-debug-indicator {
   font: inherit;
   color: inherit;
   text-align: inherit;
+  // Reset button styles first
   text-decoration: none;
   cursor: pointer;
 
-  // Apply our custom styles
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: var(--nightly-bg-surface);
-  border: 1px solid var(--nightly-border-primary);
+  background: transparent;
+  border: transparent;
   border-radius: 0.5rem;
-  color: var(--nightly-text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.5;
-  transition: all 0.2s ease;
+  color: transparent;
 
-  // Accessibility - minimum touch target
   min-width: 44px;
+  // Apply our custom styles
   min-height: 44px;
 
-  // Ensure button type is set properly
   &[type="button"] {
     cursor: pointer;
   }
 
-  // Hover state
   &:hover:not(:disabled) {
-    background: var(--nightly-bg-surface-hover);
+    background: transparent;
     border-color: var(--nightly-border-secondary);
+  // Accessibility - minimum touch target
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
+  // Ensure button type is set properly
 
   // Focus state - critical for accessibility
   &:focus:not(:disabled) {
     outline: 2px solid var(--nightly-border-focus);
+  // Hover state
     outline-offset: 2px;
-    background: var(--nightly-bg-surface-hover);
+    background: transparent;
   }
 
   // Active/pressed state
   &:active:not(:disabled) {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background: var(--nightly-bg-surface-pressed);
+    background: transparent;
   }
 
   // Disabled state
@@ -120,7 +79,7 @@ body.nightly-debug .nightly-debug-indicator {
 
   // Pressed state for toggle functionality
   &[aria-pressed="true"] {
-    background: var(--nightly-bg-surface-selected);
+    background: transparent;
     border-color: var(--nightly-interactive-primary);
   }
 }
@@ -165,6 +124,7 @@ body.nightly-debug .nightly-debug-indicator {
     transition: all 0.3s ease;
   }
 
+  // Theme toggle icons
   .nightly-icon-sun {
     opacity: 1;
     transform: rotate(0deg) scale(1);
@@ -177,9 +137,23 @@ body.nightly-debug .nightly-debug-indicator {
     transform: rotate(180deg) scale(0.8);
     color: #6366f1;
   }
+
+  // Mode toggle icons
+  .nightly-icon-reader {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+    color: #3b82f6;
+  }
+
+  .nightly-icon-dark {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+    color: #8b5cf6;
+  }
 }
 
-// Dark mode / checked state
+// Dark mode / checked state for theme toggles
 .nightly-toggle-switch.is-checked,
 [data-nightly-theme="dark"] .nightly-toggle-switch {
   .nightly-toggle-track {
@@ -191,6 +165,7 @@ body.nightly-debug .nightly-debug-indicator {
     transform: translateX(24px);
     background: #1e293b;
 
+    // Theme toggle transitions
     .nightly-icon-sun {
       opacity: 0;
       transform: rotate(-180deg) scale(0.8);
@@ -201,12 +176,39 @@ body.nightly-debug .nightly-debug-indicator {
       transform: rotate(0deg) scale(1);
       color: #fbbf24;
     }
+
+    // Mode toggle transitions
+    .nightly-icon-reader {
+      opacity: 0;
+      transform: rotate(-180deg) scale(0.8);
+    }
+
+    .nightly-icon-dark {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+      color: #c084fc;
+    }
   }
 }
 
 .nightly-toggle-text {
   font-weight: 500;
   white-space: nowrap;
+}
+
+// Dark theme adjustments for mode indicator
+[data-nightly-theme="dark"] .nightly-mode-indicator {
+  &.mode-reader {
+    background-color: #1e3a8a;
+    color: #bfdbfe;
+    border-color: #3b82f6;
+  }
+
+  &.mode-dark {
+    background-color: #581c87;
+    color: #ddd6fe;
+    border-color: #8b5cf6;
+  }
 }
 
 // Screen reader only content
@@ -240,6 +242,53 @@ body.nightly-debug .nightly-debug-indicator {
 
   &.align-right {
     text-align: right;
+  }
+}
+
+// Block editor preview styles
+.nightly-block-preview {
+  padding: 1.5rem;
+  border: 2px dashed #e5e7eb;
+  border-radius: 0.5rem;
+  background: #f9fafb;
+  text-align: center;
+
+  .nightly-block-description {
+    margin: 0 0 1rem 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+
+  .nightly-block-help {
+    margin: 1rem 0 0 0;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  .nightly-toggle-button {
+    margin: 0 auto;
+  }
+}
+
+// Button variations for better display
+.nightly-toggle-button {
+  &.with-text {
+    padding: 0.75rem 1.25rem;
+    
+    .nightly-toggle-text {
+      margin-left: 0.75rem;
+    }
+  }
+
+  &.switch-only {
+    padding: 0.5rem;
+    min-width: auto;
+    
+    .nightly-toggle-switch {
+      margin: 0;
+    }
   }
 }
 
@@ -406,6 +455,66 @@ body.nightly-debug .nightly-debug-indicator {
   .nightly-toggle-button:hover {
     transform: none !important;
   }
+}
+
+// =============================================================================
+// DARK MODE LOGO & IMAGE UTILITIES
+// =============================================================================
+
+/* Logo swapping utilities */
+.nightly-logo-light {
+  display: block;
+}
+
+.nightly-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .nightly-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .nightly-logo-dark {
+  display: block;
+}
+
+/* Image inversion utility for content images */
+[data-theme="dark"] .dm-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Preserve original colors utility */
+[data-theme="dark"] .dm-preserve {
+  filter: none !important;
+  background-color: initial !important;
+  color: initial !important;
+}
+
+[data-theme="dark"] .nightly-ignore,
+[data-theme="dark"] .nightly-ignore *,
+[data-nightly-theme="dark"] .nightly-ignore,
+[data-nightly-theme="dark"] .nightly-ignore * {
+  /* Reset all dark mode styling */
+  background-color: initial !important;
+  color: initial !important;
+  border-color: initial !important;
+  fill: initial !important;
+  stroke: initial !important;
+  filter: none !important;
+  box-shadow: initial !important;
+  text-shadow: initial !important;
+  outline-color: initial !important;
+}
+
+/* Common logo selectors that might need inversion */
+[data-theme="dark"] .logo img[src*="logo-light"],
+[data-theme="dark"] .site-logo img[src*="logo-light"] {
+  display: none;
+}
+
+[data-theme="dark"] .logo img[src*="logo-dark"],
+[data-theme="dark"] .site-logo img[src*="logo-dark"] {
+  display: block;
 }
 
 // =============================================================================

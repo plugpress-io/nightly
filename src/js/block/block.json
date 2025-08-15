@@ -10,21 +10,17 @@
   "keywords": ["dark", "mode", "toggle", "theme", "nightly"],
   "textdomain": "nightly",
   "attributes": {
-    "buttonText": {
+    "toggleType": {
       "type": "string",
-      "default": "Toggle Dark Mode"
+      "default": "theme"
     },
-    "showIcon": {
+    "mode": {
+      "type": "string",
+      "default": "dark"
+    },
+    "showText": {
       "type": "boolean",
       "default": true
-    },
-    "alignment": {
-      "type": "string",
-      "default": "left"
-    },
-    "customClassName": {
-      "type": "string",
-      "default": ""
     }
   },
   "supports": {
@@ -33,14 +29,6 @@
     "spacing": {
       "margin": true,
       "padding": true
-    },
-    "typography": {
-      "fontSize": true,
-      "lineHeight": true
-    },
-    "color": {
-      "text": true,
-      "background": true
     }
   }
 }
