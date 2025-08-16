@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Nightly — Dark Mode Toggle
  * Plugin URI: https://plugpress.io/
- * Description: A lightweight WordPress plugin that provides a minimal dark mode toggle functionality for websites. Includes a custom Gutenberg block and React-based admin interface.
+ * Description: A lightweight WordPress plugin that provides a minimal dark mode toggle functionality for websites.
  * Version: 1.0.1
  * Author: PlugPress
  * Author URI: https://plugpress.io/
