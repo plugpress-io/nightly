@@ -24,3 +24,6 @@ test-page.html
 integration-test.html
 admin-test.html
 README.md
+tailwind.config.js
+postcss.config.js
+*.zip
