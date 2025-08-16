@@ -3,7 +3,7 @@ Contributors: badhonrocks, plugpressco
 Tags: dark mode, night mode, dark theme, light mode, toggle, accessibility, gutenberg, block, FSE, classic themes
 Requires at least: 5.0
 Requires PHP: 7.4
-Tested up to: 6.4
+Tested up to: 6.8
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
