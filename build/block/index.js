@@ -1,1 +1,603 @@
-(()=>{"use strict";const e=window.wp.blocks,t=window.wp.i18n,l=window.React,n=window.wp.blockEditor,o=window.wp.components,r=window.wp.element,a=JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"nightly/toggle","version":"1.0.0","title":"Nightly","category":"widgets","icon":"admin-appearance","description":"A dark mode toggle button for your website.","keywords":["dark","mode","toggle","theme","nightly"],"textdomain":"nightly","attributes":{"toggleType":{"type":"string","default":"theme"},"mode":{"type":"string","default":"dark"},"showText":{"type":"boolean","default":true}},"supports":{"html":false,"align":["left","center","right"],"spacing":{"margin":true,"padding":true}}}');(0,e.registerBlockType)(a.name,{...a,edit:function({attributes:e,setAttributes:a}){const[i,g]=(0,r.useState)("light"),[s,h]=(0,r.useState)(e.mode||"dark"),c=(0,n.useBlockProps)({className:"nightly-toggle-block","data-nightly-theme":i,"data-nightly-mode":s}),d=()=>{g("light"===i?"dark":"light")};return(0,l.createElement)(l.Fragment,null,(0,l.createElement)(n.InspectorControls,null,(0,l.createElement)(o.PanelBody,{title:(0,t.__)("Toggle Settings","nightly"),initialOpen:!0},(0,l.createElement)(o.SelectControl,{label:(0,t.__)("Toggle Type","nightly"),value:e.toggleType||"theme",options:[{label:(0,t.__)("Theme Toggle (Light/Dark)","nightly"),value:"theme"},{label:(0,t.__)("Mode Toggle (Reader/Dark)","nightly"),value:"mode"}],onChange:e=>{a({toggleType:e})},help:(0,t.__)("Choose what the toggle controls","nightly")}),"mode"===e.toggleType&&(0,l.createElement)(o.SelectControl,{label:(0,t.__)("Default Mode","nightly"),value:e.mode||"dark",options:[{label:(0,t.__)("Reader Mode (Gentle)","nightly"),value:"reader"},{label:(0,t.__)("Dark Mode (Full)","nightly"),value:"dark"}],onChange:e=>{h(e),a({mode:e})},help:(0,t.__)("Reader mode provides gentle adjustments for comfortable reading, while dark mode provides full color conversion","nightly")}),(0,l.createElement)(o.ToggleControl,{label:(0,t.__)("Show Text Label","nightly"),checked:!1!==e.showText,onChange:e=>{a({showText:e})},help:(0,t.__)("Display text alongside the toggle switch","nightly")}))),(0,l.createElement)("div",{...c},(0,l.createElement)("div",{className:"nightly-block-preview"},(0,l.createElement)("p",{className:"nightly-block-description"},(0,t.__)("Preview your toggle button:","nightly")),(()=>{const n="nightly-toggle-button "+(e.showText?"with-text":"switch-only");return(0,l.createElement)("button",{type:"button",className:n,onClick:d,"aria-pressed":"dark"===i?"true":"false","aria-label":"theme"===e.toggleType?(0,t.__)("Toggle between light and dark theme","nightly"):(0,t.__)("Toggle between reader and dark mode","nightly")},(0,l.createElement)("span",{className:"nightly-toggle-switch "+("dark"===i?"is-checked":""),"aria-hidden":"true"},(0,l.createElement)("span",{className:"nightly-toggle-track"},(0,l.createElement)("span",{className:"nightly-toggle-thumb"},"theme"===e.toggleType?(0,l.createElement)(l.Fragment,null,(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-sun",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none"},(0,l.createElement)("circle",{cx:"12",cy:"12",r:"4",stroke:"currentColor",strokeWidth:"2"}),(0,l.createElement)("path",{d:"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 6.34L4.93 4.93M19.07 19.07l-1.41-1.41",stroke:"currentColor",strokeWidth:"2"})),(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-moon",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none"},(0,l.createElement)("path",{d:"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z",stroke:"currentColor",strokeWidth:"2",fill:"currentColor"}))):(0,l.createElement)(l.Fragment,null,(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-reader",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none"},(0,l.createElement)("path",{d:"M4 19.5A2.5 2.5 0 0 1 6.5 17H20",stroke:"currentColor",strokeWidth:"2"}),(0,l.createElement)("path",{d:"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",stroke:"currentColor",strokeWidth:"2"})),(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-dark",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none"},(0,l.createElement)("circle",{cx:"12",cy:"12",r:"10",stroke:"currentColor",strokeWidth:"2",fill:"currentColor"})))))),e.showText&&(0,l.createElement)("span",{className:"nightly-toggle-text"},"theme"===e.toggleType?(0,t.__)("Dark Mode","nightly"):"reader"===s?(0,t.__)("Reader Mode","nightly"):(0,t.__)("Dark Mode","nightly")),"mode"===e.toggleType&&(0,l.createElement)("span",{className:`nightly-mode-indicator mode-${s}`},"reader"===s?(0,t.__)("Reader","nightly"):(0,t.__)("Dark","nightly")),(0,l.createElement)("span",{className:"screen-reader-text"},(0,t.__)("Preview only - toggle to see appearance","nightly")))})(),(0,l.createElement)("p",{className:"nightly-block-help"},"theme"===e.toggleType?(0,t.__)("This button will toggle between light and dark themes on your website.","nightly"):(0,t.__)("This button will toggle between reader mode (gentle) and dark mode (full conversion).","nightly")))))},save:function({attributes:e}){const t=n.useBlockProps.save({className:"nightly-toggle-block"}),o=e.toggleType||"theme",r=!1!==e.showText,a=e.mode||"dark";return(0,l.createElement)("div",{...t},(()=>{const e="nightly-toggle-button "+(r?"with-text":"switch-only");return(0,l.createElement)("button",{type:"button",className:e,"data-nightly-toggle":o,"aria-pressed":"false","aria-label":"theme"===o?"Toggle between light and dark theme":"Toggle between reader and dark mode",title:"theme"===o?"Toggle dark theme":"Toggle mode"},(0,l.createElement)("span",{className:"nightly-toggle-switch","aria-hidden":"true"},(0,l.createElement)("span",{className:"nightly-toggle-track"},(0,l.createElement)("span",{className:"nightly-toggle-thumb"},"theme"===o?(0,l.createElement)(l.Fragment,null,(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-sun",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg"},(0,l.createElement)("circle",{cx:"12",cy:"12",r:"4",stroke:"currentColor",strokeWidth:"2"}),(0,l.createElement)("path",{d:"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 6.34L4.93 4.93M19.07 19.07l-1.41-1.41",stroke:"currentColor",strokeWidth:"2"})),(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-moon",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg"},(0,l.createElement)("path",{d:"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z",stroke:"currentColor",strokeWidth:"2",fill:"currentColor"}))):(0,l.createElement)(l.Fragment,null,(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-reader",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg"},(0,l.createElement)("path",{d:"M4 19.5A2.5 2.5 0 0 1 6.5 17H20",stroke:"currentColor",strokeWidth:"2"}),(0,l.createElement)("path",{d:"M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",stroke:"currentColor",strokeWidth:"2"})),(0,l.createElement)("svg",{className:"nightly-icon nightly-icon-dark",width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",xmlns:"http://www.w3.org/2000/svg"},(0,l.createElement)("circle",{cx:"12",cy:"12",r:"10",stroke:"currentColor",strokeWidth:"2",fill:"currentColor"})))))),r&&(0,l.createElement)("span",{className:"nightly-toggle-text"},"theme"===o?"Dark Mode":"Toggle Mode"),"mode"===o&&(0,l.createElement)("span",{className:`nightly-mode-indicator mode-${a}`},"reader"===a?"Reader":"Dark"),(0,l.createElement)("span",{className:"screen-reader-text nightly-sr-state"},"Current: light theme, ",a," mode"))})())}})})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/js/block/block.json":
+/*!*********************************!*\
+  !*** ./src/js/block/block.json ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"nightly/toggle","version":"1.0.0","title":"Nightly","category":"design","icon":"visibility","description":"A dark mode toggle button for your website.","keywords":["dark","mode","toggle","theme","nightly"],"textdomain":"nightly","attributes":{"toggleType":{"type":"string","default":"theme"},"mode":{"type":"string","default":"custom"},"showText":{"type":"boolean","default":true},"buttonText":{"type":"string","default":"Toggle Theme"},"buttonStyle":{"type":"string","default":"rounded"},"buttonSize":{"type":"string","default":"medium"},"backgroundColor":{"type":"string","default":"#333333"},"backgroundColorHover":{"type":"string","default":"#555555"},"backgroundColorActive":{"type":"string","default":"#79c0ff"},"textColor":{"type":"string","default":"#ffffff"},"textColorHover":{"type":"string","default":"#ffffff"},"borderColor":{"type":"string","default":"transparent"},"borderWidth":{"type":"number","default":0},"borderRadius":{"type":"number","default":50},"fontSize":{"type":"number","default":16},"fontWeight":{"type":"string","default":"500"},"paddingTop":{"type":"number","default":12},"paddingBottom":{"type":"number","default":12},"paddingLeft":{"type":"number","default":16},"paddingRight":{"type":"number","default":16},"marginTop":{"type":"number","default":0},"marginBottom":{"type":"number","default":0},"marginLeft":{"type":"number","default":0},"marginRight":{"type":"number","default":0},"boxShadow":{"type":"string","default":"0 2px 4px rgba(0,0,0,0.1)"},"boxShadowHover":{"type":"string","default":"0 4px 8px rgba(0,0,0,0.15)"}},"supports":{"html":false,"align":["left","center","right"],"spacing":{"margin":true,"padding":true},"color":{"background":true,"text":true,"gradients":true},"typography":{"fontSize":true,"fontWeight":true,"lineHeight":true},"border":{"color":true,"width":true,"radius":true},"inserter":true,"multiple":true,"reusable":true}}');
+
+/***/ }),
+
+/***/ "./src/js/block/edit.js":
+/*!******************************!*\
+  !*** ./src/js/block/edit.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Edit)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+
+/**
+ * Block Edit Component
+ */
+function Edit({
+  attributes,
+  setAttributes
+}) {
+  const [previewTheme, setPreviewTheme] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)('light');
+  const {
+    buttonText,
+    buttonStyle,
+    buttonSize,
+    backgroundColor,
+    backgroundColorHover,
+    backgroundColorActive,
+    textColor,
+    textColorHover,
+    borderColor,
+    borderWidth,
+    borderRadius,
+    fontSize,
+    fontWeight,
+    paddingTop,
+    paddingBottom,
+    paddingLeft,
+    paddingRight,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    boxShadow,
+    boxShadowHover
+  } = attributes;
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)({
+    className: 'nightly-toggle-block'
+  });
+
+  // Handle preview toggle
+  const handlePreviewToggle = () => {
+    setPreviewTheme(previewTheme === 'light' ? 'dark' : 'light');
+  };
+
+  // Generate inline styles for the button
+  const buttonStyles = {
+    backgroundColor: backgroundColor,
+    color: textColor,
+    borderColor: borderColor,
+    borderWidth: `${borderWidth}px`,
+    borderRadius: `${borderRadius}%`,
+    fontSize: `${fontSize}px`,
+    fontWeight: fontWeight,
+    padding: `${paddingTop}px ${paddingRight}px ${paddingBottom}px ${paddingLeft}px`,
+    margin: `${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px`,
+    boxShadow: boxShadow
+  };
+
+  // Generate hover styles
+  const hoverStyles = `
+		.nightly-toggle-button:hover {
+			background-color: ${backgroundColorHover} !important;
+			color: ${textColorHover} !important;
+			box-shadow: ${boxShadowHover} !important;
+		}
+	`;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Settings', 'nightly'),
+    initialOpen: true
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Text', 'nightly'),
+    value: buttonText,
+    onChange: value => setAttributes({
+      buttonText: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Style', 'nightly'),
+    value: buttonStyle,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rounded', 'nightly'),
+      value: 'rounded'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Square', 'nightly'),
+      value: 'square'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Pill', 'nightly'),
+      value: 'pill'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Circle', 'nightly'),
+      value: 'circle'
+    }],
+    onChange: value => setAttributes({
+      buttonStyle: value
+    })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Size', 'nightly'),
+    value: buttonSize,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Small', 'nightly'),
+      value: 'small'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Medium', 'nightly'),
+      value: 'medium'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Large', 'nightly'),
+      value: 'large'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Extra Large', 'nightly'),
+      value: 'xlarge'
+    }],
+    onChange: value => setAttributes({
+      buttonSize: value
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Colors', 'nightly'),
+    initialOpen: false
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: backgroundColor,
+    onChange: color => setAttributes({
+      backgroundColor: color
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Background Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: backgroundColorHover,
+    onChange: color => setAttributes({
+      backgroundColorHover: color
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Active Background Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: backgroundColorActive,
+    onChange: color => setAttributes({
+      backgroundColorActive: color
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: textColor,
+    onChange: color => setAttributes({
+      textColor: color
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Text Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: textColorHover,
+    onChange: color => setAttributes({
+      textColorHover: color
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "components-base-control"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "components-base-control__label"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Color', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.ColorPalette, {
+    value: borderColor,
+    onChange: color => setAttributes({
+      borderColor: color
+    })
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Typography', 'nightly'),
+    initialOpen: false
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Size (px)', 'nightly'),
+    value: fontSize,
+    onChange: value => setAttributes({
+      fontSize: value
+    }),
+    min: 12,
+    max: 48,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Font Weight', 'nightly'),
+    value: fontWeight,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Normal', 'nightly'),
+      value: '400'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Medium', 'nightly'),
+      value: '500'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Semi Bold', 'nightly'),
+      value: '600'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Bold', 'nightly'),
+      value: '700'
+    }],
+    onChange: value => setAttributes({
+      fontWeight: value
+    })
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Spacing', 'nightly'),
+    initialOpen: false
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Top (px)', 'nightly'),
+    value: paddingTop,
+    onChange: value => setAttributes({
+      paddingTop: value
+    }),
+    min: 0,
+    max: 50,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Bottom (px)', 'nightly'),
+    value: paddingBottom,
+    onChange: value => setAttributes({
+      paddingBottom: value
+    }),
+    min: 0,
+    max: 50,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Left (px)', 'nightly'),
+    value: paddingLeft,
+    onChange: value => setAttributes({
+      paddingLeft: value
+    }),
+    min: 0,
+    max: 50,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Right (px)', 'nightly'),
+    value: paddingRight,
+    onChange: value => setAttributes({
+      paddingRight: value
+    }),
+    min: 0,
+    max: 50,
+    step: 1
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border & Shadow', 'nightly'),
+    initialOpen: false
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Width (px)', 'nightly'),
+    value: borderWidth,
+    onChange: value => setAttributes({
+      borderWidth: value
+    }),
+    min: 0,
+    max: 10,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Radius (%)', 'nightly'),
+    value: borderRadius,
+    onChange: value => setAttributes({
+      borderRadius: value
+    }),
+    min: 0,
+    max: 50,
+    step: 1
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Box Shadow', 'nightly'),
+    value: boxShadow,
+    onChange: value => setAttributes({
+      boxShadow: value
+    }),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('CSS box-shadow value (e.g., 0 2px 4px rgba(0,0,0,0.1))', 'nightly')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.TextControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Box Shadow', 'nightly'),
+    value: boxShadowHover,
+    onChange: value => setAttributes({
+      boxShadowHover: value
+    }),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('CSS box-shadow value for hover state', 'nightly')
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, hoverStyles), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    className: `nightly-toggle-button nightly-button-${buttonStyle} nightly-button-${buttonSize}`,
+    onClick: handlePreviewToggle,
+    "aria-pressed": previewTheme === 'dark' ? 'true' : 'false',
+    "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Toggle dark mode', 'nightly'),
+    style: buttonStyles
+  }, buttonStyle === 'circle' ? '🌙' : buttonText)));
+}
+
+/***/ }),
+
+/***/ "./src/js/block/save.js":
+/*!******************************!*\
+  !*** ./src/js/block/save.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Save)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
+
+/**
+ * Block Save Component
+ *
+ * @package Nightly
+ */
+
+
+
+/**
+ * Block Save Component
+ */
+function Save({
+  attributes
+}) {
+  const {
+    buttonText,
+    buttonStyle,
+    buttonSize,
+    backgroundColor,
+    backgroundColorHover,
+    backgroundColorActive,
+    textColor,
+    textColorHover,
+    borderColor,
+    borderWidth,
+    borderRadius,
+    fontSize,
+    fontWeight,
+    paddingTop,
+    paddingBottom,
+    paddingLeft,
+    paddingRight,
+    marginTop,
+    marginBottom,
+    marginLeft,
+    marginRight,
+    boxShadow,
+    boxShadowHover
+  } = attributes;
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
+    className: 'nightly-toggle-block'
+  });
+
+  // Generate inline styles for the button
+  const buttonStyles = {
+    backgroundColor: backgroundColor,
+    color: textColor,
+    borderColor: borderColor,
+    borderWidth: `${borderWidth}px`,
+    borderRadius: `${borderRadius}%`,
+    fontSize: `${fontSize}px`,
+    fontWeight: fontWeight,
+    padding: `${paddingTop}px ${paddingRight}px ${paddingBottom}px ${paddingLeft}px`,
+    margin: `${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px`,
+    boxShadow: boxShadow
+  };
+
+  // Generate hover styles
+  const hoverStyles = `
+		.nightly-toggle-button:hover {
+			background-color: ${backgroundColorHover} !important;
+			color: ${textColorHover} !important;
+			box-shadow: ${boxShadowHover} !important;
+		}
+	`;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...blockProps
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("style", null, hoverStyles), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    className: `nightly-toggle-button nightly-button-${buttonStyle} nightly-button-${buttonSize}`,
+    "data-nightly-toggle": attributes.toggleType || 'theme',
+    "data-nightly-mode": attributes.mode || 'custom',
+    "aria-pressed": "false",
+    "aria-label": "Toggle dark mode",
+    style: buttonStyles
+  }, buttonStyle === 'circle' ? '🌙' : buttonText));
+}
+
+/***/ }),
+
+/***/ "./src/scss/block.scss":
+/*!*****************************!*\
+  !*** ./src/scss/block.scss ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "@wordpress/block-editor":
+/*!*************************************!*\
+  !*** external ["wp","blockEditor"] ***!
+  \*************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["blockEditor"];
+
+/***/ }),
+
+/***/ "@wordpress/blocks":
+/*!********************************!*\
+  !*** external ["wp","blocks"] ***!
+  \********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["blocks"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/***/ ((module) => {
+
+module.exports = window["React"];
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
+/*!*******************************!*\
+  !*** ./src/js/block/index.js ***!
+  \*******************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./edit */ "./src/js/block/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./save */ "./src/js/block/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./block.json */ "./src/js/block/block.json");
+/* harmony import */ var _scss_block_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../scss/block.scss */ "./src/scss/block.scss");
+/**
+ * Block Editor Entry Point
+ *
+ * @package Nightly
+ */
+
+
+
+
+
+
+
+
+/**
+ * Register the Nightly block
+ */
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_4__.name, {
+  ..._block_json__WEBPACK_IMPORTED_MODULE_4__,
+  edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
+});
+})();
+
+/******/ })()
+;
+//# sourceMappingURL=index.js.map

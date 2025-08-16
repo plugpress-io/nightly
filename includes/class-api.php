@@ -125,22 +125,42 @@ class API
             'auto_inject' => false,
             'floating_position' => 'bottom-right',
             'floating_bg_color' => '#333333',
+            'floating_width' => '3.5rem',
+            'floating_height' => '3.5rem',
             'respect_system_preference' => true,
+            'theme' => 'light',
             'mode' => 'manual',
             'transition_duration' => 200,
             'ignore_selectors' => '',
+
+            // Floating button design settings
+            'floating_button_style' => 'rounded',
+            'floating_button_size' => 'medium',
+            'floating_bg_color' => '#333333',
+            'floating_bg_color_hover' => '#555555',
+            'floating_bg_color_active' => '#79c0ff',
+            'floating_icon_color' => '#ffffff',
+            'floating_icon_color_hover' => '#ffffff',
+            'floating_border_color' => 'transparent',
+            'floating_border_width' => 0,
+            'floating_border_radius' => 50,
+            'floating_icon_size' => 24,
+            'floating_icon_type' => 'sun-moon',
+            'floating_custom_icon' => '🌙',
+            'floating_padding_top' => 12,
+            'floating_padding_bottom' => 12,
+            'floating_padding_left' => 16,
+            'floating_padding_right' => 16,
+            'floating_box_shadow' => '0 2px 4px rgba(0,0,0,0.1)',
+            'floating_box_shadow_hover' => '0 4px 8px rgba(0,0,0,0.15)',
+            'floating_width' => '3.5rem',
+            'floating_height' => '3.5rem',
 
             // Auto mode settings (formerly reader mode)
             'auto_intensity' => 0.05,
             'auto_contrast' => 1.15,
             'auto_brightness' => 0.98,
             'auto_sepia' => 0.15,
-
-            // Legacy filter settings (no longer used for dark mode)
-            'intensity' => 0.88,
-            'contrast' => 1.05,
-            'brightness' => 0.85,
-            'sepia' => 0.05,
         );
     }
 
@@ -169,8 +189,119 @@ class API
                 ? $color : '#333333';
         }
 
+        if (isset($settings['floating_width'])) {
+            $width = sanitize_text_field($settings['floating_width']);
+            $validated['floating_width'] = preg_match('/^[0-9.]+(?:px|rem|em|%)?$/', $width)
+                ? $width : '3.5rem';
+        }
+
+        if (isset($settings['floating_height'])) {
+            $height = sanitize_text_field($settings['floating_height']);
+            $validated['floating_height'] = preg_match('/^[0-9.]+(?:px|rem|em|%)?$/', $height)
+                ? $height : '3.5rem';
+        }
+
+        // Validate floating button design settings
+        if (isset($settings['floating_button_style'])) {
+            $valid_styles = array('rounded', 'square', 'pill', 'circle');
+            $validated['floating_button_style'] = in_array($settings['floating_button_style'], $valid_styles)
+                ? $settings['floating_button_style'] : 'rounded';
+        }
+
+        if (isset($settings['floating_button_size'])) {
+            $valid_sizes = array('small', 'medium', 'large', 'xlarge');
+            $validated['floating_button_size'] = in_array($settings['floating_button_size'], $valid_sizes)
+                ? $settings['floating_button_size'] : 'medium';
+        }
+
+        if (isset($settings['floating_bg_color_hover'])) {
+            $color = sanitize_text_field($settings['floating_bg_color_hover']);
+            $validated['floating_bg_color_hover'] = preg_match('/^#[a-fA-F0-9]{6}$/', $color)
+                ? $color : '#555555';
+        }
+
+        if (isset($settings['floating_bg_color_active'])) {
+            $color = sanitize_text_field($settings['floating_bg_color_active']);
+            $validated['floating_bg_color_active'] = preg_match('/^#[a-fA-F0-9]{6}$/', $color)
+                ? $color : '#79c0ff';
+        }
+
+        if (isset($settings['floating_icon_color'])) {
+            $color = sanitize_text_field($settings['floating_icon_color']);
+            $validated['floating_icon_color'] = preg_match('/^#[a-fA-F0-9]{6}$/', $color)
+                ? $color : '#ffffff';
+        }
+
+        if (isset($settings['floating_icon_color_hover'])) {
+            $color = sanitize_text_field($settings['floating_icon_color_hover']);
+            $validated['floating_icon_color_hover'] = preg_match('/^#[a-fA-F0-9]{6}$/', $color)
+                ? $color : '#ffffff';
+        }
+
+        if (isset($settings['floating_border_color'])) {
+            $color = sanitize_text_field($settings['floating_border_color']);
+            // Allow 'transparent' or hex colors
+            if ($color === 'transparent' || preg_match('/^#[a-fA-F0-9]{6}$/', $color)) {
+                $validated['floating_border_color'] = $color;
+            } else {
+                $validated['floating_border_color'] = 'transparent';
+            }
+        }
+
+        if (isset($settings['floating_border_width'])) {
+            $validated['floating_border_width'] = max(0, min(10, intval($settings['floating_border_width'])));
+        }
+
+        if (isset($settings['floating_border_radius'])) {
+            $validated['floating_border_radius'] = max(0, min(50, intval($settings['floating_border_radius'])));
+        }
+
+        if (isset($settings['floating_icon_size'])) {
+            $validated['floating_icon_size'] = max(16, min(48, intval($settings['floating_icon_size'])));
+        }
+
+        if (isset($settings['floating_icon_type'])) {
+            $valid_icon_types = array('moon', 'sun', 'sun-moon', 'custom');
+            $validated['floating_icon_type'] = in_array($settings['floating_icon_type'], $valid_icon_types)
+                ? $settings['floating_icon_type'] : 'moon';
+        }
+
+        if (isset($settings['floating_custom_icon'])) {
+            $validated['floating_custom_icon'] = sanitize_textarea_field($settings['floating_custom_icon']);
+        }
+
+        if (isset($settings['floating_padding_top'])) {
+            $validated['floating_padding_top'] = max(0, min(50, intval($settings['floating_padding_top'])));
+        }
+
+        if (isset($settings['floating_padding_bottom'])) {
+            $validated['floating_padding_bottom'] = max(0, min(50, intval($settings['floating_padding_bottom'])));
+        }
+
+        if (isset($settings['floating_padding_left'])) {
+            $validated['floating_padding_left'] = max(0, min(50, intval($settings['floating_padding_left'])));
+        }
+
+        if (isset($settings['floating_padding_right'])) {
+            $validated['floating_padding_right'] = max(0, min(50, intval($settings['floating_padding_right'])));
+        }
+
+        if (isset($settings['floating_box_shadow'])) {
+            $validated['floating_box_shadow'] = sanitize_text_field($settings['floating_box_shadow']);
+        }
+
+        if (isset($settings['floating_box_shadow_hover'])) {
+            $validated['floating_box_shadow_hover'] = sanitize_text_field($settings['floating_box_shadow_hover']);
+        }
+
         if (isset($settings['respect_system_preference'])) {
             $validated['respect_system_preference'] = (bool) $settings['respect_system_preference'];
+        }
+
+        if (isset($settings['theme'])) {
+            $valid_themes = array('light', 'dark');
+            $validated['theme'] = in_array($settings['theme'], $valid_themes)
+                ? $settings['theme'] : 'light';
         }
 
         if (isset($settings['mode'])) {

@@ -17,7 +17,7 @@ const TabNavigation = ({ activeTab, onTabChange, saving }) => {
                         activeTab === tab.id
                             ? 'bg-slate-200'
                             : ''
-                    } px-3 py-1 font-medium text-base transition-colors duration-200 rounded-lg`}
+                    } px-3 py-1 font-medium text-sm transition-colors duration-200 rounded-lg`}
                 >
                     {tab.label}
                 </button>

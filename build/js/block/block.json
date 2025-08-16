@@ -4,8 +4,8 @@
   "name": "nightly/toggle",
   "version": "1.0.0",
   "title": "Nightly",
-  "category": "widgets",
-  "icon": "admin-appearance",
+  "category": "design",
+  "icon": "visibility",
   "description": "A dark mode toggle button for your website.",
   "keywords": [
     "dark",
@@ -22,11 +22,103 @@
     },
     "mode": {
       "type": "string",
-      "default": "dark"
+      "default": "custom"
     },
     "showText": {
       "type": "boolean",
       "default": true
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "Toggle Theme"
+    },
+    "buttonStyle": {
+      "type": "string",
+      "default": "rounded"
+    },
+    "buttonSize": {
+      "type": "string",
+      "default": "medium"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#333333"
+    },
+    "backgroundColorHover": {
+      "type": "string",
+      "default": "#555555"
+    },
+    "backgroundColorActive": {
+      "type": "string",
+      "default": "#79c0ff"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "textColorHover": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "borderColor": {
+      "type": "string",
+      "default": "transparent"
+    },
+    "borderWidth": {
+      "type": "number",
+      "default": 0
+    },
+    "borderRadius": {
+      "type": "number",
+      "default": 50
+    },
+    "fontSize": {
+      "type": "number",
+      "default": 16
+    },
+    "fontWeight": {
+      "type": "string",
+      "default": "500"
+    },
+    "paddingTop": {
+      "type": "number",
+      "default": 12
+    },
+    "paddingBottom": {
+      "type": "number",
+      "default": 12
+    },
+    "paddingLeft": {
+      "type": "number",
+      "default": 16
+    },
+    "paddingRight": {
+      "type": "number",
+      "default": 16
+    },
+    "marginTop": {
+      "type": "number",
+      "default": 0
+    },
+    "marginBottom": {
+      "type": "number",
+      "default": 0
+    },
+    "marginLeft": {
+      "type": "number",
+      "default": 0
+    },
+    "marginRight": {
+      "type": "number",
+      "default": 0
+    },
+    "boxShadow": {
+      "type": "string",
+      "default": "0 2px 4px rgba(0,0,0,0.1)"
+    },
+    "boxShadowHover": {
+      "type": "string",
+      "default": "0 4px 8px rgba(0,0,0,0.15)"
     }
   },
   "supports": {
@@ -39,6 +131,24 @@
     "spacing": {
       "margin": true,
       "padding": true
-    }
+    },
+    "color": {
+      "background": true,
+      "text": true,
+      "gradients": true
+    },
+    "typography": {
+      "fontSize": true,
+      "fontWeight": true,
+      "lineHeight": true
+    },
+    "border": {
+      "color": true,
+      "width": true,
+      "radius": true
+    },
+    "inserter": true,
+    "multiple": true,
+    "reusable": true
   }
 }

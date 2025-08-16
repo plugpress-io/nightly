@@ -20,7 +20,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const AdminHeader = () => {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-full border-b border-gray-100"
+    className: "w-full bg-white border-b border-gray-200"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mx-auto flex items-center justify-between px-6 py-3"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -115,8 +115,35 @@ const App = () => {
     try {
       await saveSettings(localSettings);
       setHasChanges(false);
+
+      // Also update localStorage to sync with frontend
+      updateLocalStorageFromSettings(localSettings);
     } catch (err) {
       console.error('Failed to save settings:', err);
+    }
+  };
+
+  // Update localStorage to sync with frontend
+  const updateLocalStorageFromSettings = newSettings => {
+    try {
+      // Update theme and mode preferences in localStorage
+      if (newSettings.mode) {
+        localStorage.setItem('nightly-mode-preference', newSettings.mode);
+      }
+
+      // If there's a theme setting, update it too
+      if (newSettings.theme) {
+        localStorage.setItem('nightly-theme-preference', newSettings.theme);
+      }
+
+      // Dispatch a custom event to notify frontend of settings change
+      window.dispatchEvent(new CustomEvent('nightlySettingsChanged', {
+        detail: {
+          settings: newSettings
+        }
+      }));
+    } catch (error) {
+      // Silently handle localStorage errors in production
     }
   };
   if (loading) {
@@ -135,14 +162,14 @@ const App = () => {
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, error)));
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "min-h-screen bg-gray-50"
+    className: "min-h-screen"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AdminHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
     hasChanges: hasChanges,
     saving: saving,
     onSave: handleSave,
     version: "1.0.0"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-full max-w-[908px] mx-auto p-6"
+    className: "w-full max-w-[908px] mx-auto pt-10"
   }, error && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Notice, {
@@ -167,7 +194,7 @@ const App = () => {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "lg:col-span-2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bg-white rounded-b-sm rounded-t-none shadow-sm border border-gray-200 border-t-0"
+    className: "bg-white border border-gray-200 rounded-lg"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "p-6"
   }, activeTab === 'general' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_GeneralTab__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -200,6 +227,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
@@ -234,6 +264,86 @@ const ColorPicker = ({
 }), help && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
   className: "text-xs text-gray-500"
 }, help));
+
+// Size Input Component
+const SizeInput = ({
+  label,
+  value,
+  onChange,
+  help,
+  disabled = false
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "space-y-2"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "flex items-center justify-between"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+  className: "text-sm font-medium text-gray-700"
+}, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  className: "px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded font-mono"
+}, value)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  type: "text",
+  value: value,
+  onChange: e => onChange(e.target.value),
+  disabled: disabled,
+  className: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed",
+  placeholder: "3.5rem"
+}), help && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  className: "text-xs text-gray-500"
+}, help));
+
+// Range Control Component
+const RangeControl = ({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  help,
+  disabled = false
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "space-y-2"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "flex items-center justify-between"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+  className: "text-sm font-medium text-gray-700"
+}, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  className: "px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded"
+}, value)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  type: "range",
+  min: min,
+  max: max,
+  step: step,
+  value: value,
+  onChange: e => onChange(parseFloat(e.target.value)),
+  disabled: disabled,
+  className: "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+}), help && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  className: "text-xs text-gray-500"
+}, help));
+
+// Text Input Component
+const TextInput = ({
+  label,
+  value,
+  onChange,
+  help,
+  placeholder,
+  disabled = false
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "space-y-2"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+  className: "text-sm font-medium text-gray-700"
+}, label), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  type: "text",
+  value: value,
+  onChange: e => onChange(e.target.value),
+  placeholder: placeholder,
+  disabled: disabled,
+  className: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+}), help && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  className: "text-xs text-gray-500"
+}, help));
 const DesignTab = ({
   localSettings,
   handleSettingChange,
@@ -242,16 +352,198 @@ const DesignTab = ({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "space-y-8"
   }, localSettings.auto_inject ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "space-y-4"
+    className: "space-y-8"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
-    className: "text-lg font-medium text-gray-900"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Floating Button', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    className: "text-lg font-medium text-gray-900 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Settings', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Style', 'nightly'),
+    value: localSettings.floating_button_style || 'rounded',
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rounded', 'nightly'),
+      value: 'rounded'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Square', 'nightly'),
+      value: 'square'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Pill', 'nightly'),
+      value: 'pill'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Circle', 'nightly'),
+      value: 'circle'
+    }],
+    onChange: value => handleSettingChange('floating_button_style', value),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button Size', 'nightly'),
+    value: localSettings.floating_button_size || 'medium',
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Small', 'nightly'),
+      value: 'small'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Medium', 'nightly'),
+      value: 'medium'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Large', 'nightly'),
+      value: 'large'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Extra Large', 'nightly'),
+      value: 'xlarge'
+    }],
+    onChange: value => handleSettingChange('floating_button_size', value),
+    disabled: saving
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "text-lg font-medium text-gray-900 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Colors', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background Color', 'nightly'),
     value: localSettings.floating_bg_color || '#333333',
     onChange: value => handleSettingChange('floating_bg_color', value),
-    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Choose the background color for the floating toggle button', 'nightly'),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Main button background color', 'nightly'),
     disabled: saving
-  })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Background Color', 'nightly'),
+    value: localSettings.floating_bg_color_hover || '#555555',
+    onChange: value => handleSettingChange('floating_bg_color_hover', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color on hover', 'nightly'),
+    disabled: saving
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Active Background Color', 'nightly'),
+    value: localSettings.floating_bg_color_active || '#79c0ff',
+    onChange: value => handleSettingChange('floating_bg_color_active', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color when dark mode is active', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Color', 'nightly'),
+    value: localSettings.floating_icon_color || '#ffffff',
+    onChange: value => handleSettingChange('floating_icon_color', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon color', 'nightly'),
+    disabled: saving
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Icon Color', 'nightly'),
+    value: localSettings.floating_icon_color_hover || '#ffffff',
+    onChange: value => handleSettingChange('floating_icon_color_hover', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon color on hover', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ColorPicker, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Color', 'nightly'),
+    value: localSettings.floating_border_color || 'transparent',
+    onChange: value => handleSettingChange('floating_border_color', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button border color', 'nightly'),
+    disabled: saving
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "text-lg font-medium text-gray-900 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Spacing', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Top (px)', 'nightly'),
+    value: localSettings.floating_padding_top || 12,
+    onChange: value => handleSettingChange('floating_padding_top', value),
+    min: 0,
+    max: 50,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Top padding', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Bottom (px)', 'nightly'),
+    value: localSettings.floating_padding_bottom || 12,
+    onChange: value => handleSettingChange('floating_padding_bottom', value),
+    min: 0,
+    max: 50,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Bottom padding', 'nightly'),
+    disabled: saving
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Left (px)', 'nightly'),
+    value: localSettings.floating_padding_left || 16,
+    onChange: value => handleSettingChange('floating_padding_left', value),
+    min: 0,
+    max: 50,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Left padding', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Padding Right (px)', 'nightly'),
+    value: localSettings.floating_padding_right || 16,
+    onChange: value => handleSettingChange('floating_padding_right', value),
+    min: 0,
+    max: 50,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Right padding', 'nightly'),
+    disabled: saving
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "text-lg font-medium text-gray-900 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border & Shadow', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Width (px)', 'nightly'),
+    value: localSettings.floating_border_width || 0,
+    onChange: value => handleSettingChange('floating_border_width', value),
+    min: 0,
+    max: 10,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border thickness', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Border Radius (%)', 'nightly'),
+    value: localSettings.floating_border_radius || 50,
+    onChange: value => handleSettingChange('floating_border_radius', value),
+    min: 0,
+    max: 50,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Corner roundness', 'nightly'),
+    disabled: saving
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextInput, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Box Shadow', 'nightly'),
+    value: localSettings.floating_box_shadow || '0 2px 4px rgba(0,0,0,0.1)',
+    onChange: value => handleSettingChange('floating_box_shadow', value),
+    placeholder: "0 2px 4px rgba(0,0,0,0.1)",
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('CSS box-shadow value (e.g., 0 2px 4px rgba(0,0,0,0.1))', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(TextInput, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hover Box Shadow', 'nightly'),
+    value: localSettings.floating_box_shadow_hover || '0 4px 8px rgba(0,0,0,0.15)',
+    onChange: value => handleSettingChange('floating_box_shadow_hover', value),
+    placeholder: "0 4px 8px rgba(0,0,0,0.15)",
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('CSS box-shadow value for hover state', 'nightly'),
+    disabled: saving
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "text-lg font-medium text-gray-900 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Size Settings', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SizeInput, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Width', 'nightly'),
+    value: localSettings.floating_width || '3.5rem',
+    onChange: value => handleSettingChange('floating_width', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button width (e.g., 3.5rem, 56px)', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(SizeInput, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Height', 'nightly'),
+    value: localSettings.floating_height || '3.5rem',
+    onChange: value => handleSettingChange('floating_height', value),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Button height (e.g., 3.5rem, 56px)', 'nightly'),
+    disabled: saving
+  })))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-center py-12"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-gray-400 mb-4"
@@ -379,7 +671,53 @@ const GeneralTab = ({
     value: localSettings.floating_position || 'bottom-right',
     onChange: value => handleSettingChange('floating_position', value),
     disabled: saving
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }), localSettings.auto_inject && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+    className: "text-md font-medium text-gray-800 border-b pb-2"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Settings', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Size (px)', 'nightly'),
+    value: localSettings.floating_icon_size || 24,
+    onChange: value => handleSettingChange('floating_icon_size', value),
+    min: 12,
+    max: 48,
+    step: 1,
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon size in pixels', 'nightly'),
+    disabled: saving
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon Type', 'nightly'),
+    value: localSettings.floating_icon_type || 'moon',
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Moon', 'nightly'),
+      value: 'moon'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Sun', 'nightly'),
+      value: 'sun'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Sun/Moon', 'nightly'),
+      value: 'sun-moon'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom', 'nightly'),
+      value: 'custom'
+    }],
+    onChange: value => handleSettingChange('floating_icon_type', value),
+    disabled: saving
+  })), localSettings.floating_icon_type === 'custom' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "text-sm font-medium text-gray-700"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom Icon (Emoji or Unicode)', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "text",
+    value: localSettings.floating_custom_icon || '🌙',
+    onChange: e => handleSettingChange('floating_custom_icon', e.target.value),
+    placeholder: "\uD83C\uDF19",
+    disabled: saving,
+    className: "w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-xs text-gray-500"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enter an emoji or unicode character', 'nightly'))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "space-y-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "text-lg font-medium text-gray-900"
@@ -403,7 +741,7 @@ const GeneralTab = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "text-lg font-medium text-gray-900"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dark Mode Type', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-1 gap-4 sm:grid-cols-2"
+    className: "grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -448,12 +786,62 @@ const GeneralTab = ({
     className: `h-5 w-5 rounded-full border flex items-center justify-center ${localSettings.mode === 'manual' ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`
   }, localSettings.mode === 'manual' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "h-2 w-2 rounded-full bg-white"
+  }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "space-y-4"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "text-lg font-medium text-gray-900"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default Theme', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "radio",
+    name: "theme",
+    value: "light",
+    checked: localSettings.theme === 'light',
+    onChange: e => handleSettingChange('theme', e.target.value),
+    disabled: saving,
+    className: "sr-only"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "flex flex-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "flex flex-col"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "block text-sm font-medium text-gray-900"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Light Theme', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "mt-1 flex items-center text-sm text-gray-500"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default light appearance', 'nightly')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `h-5 w-5 rounded-full border flex items-center justify-center ${localSettings.theme === 'light' ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`
+  }, localSettings.theme === 'light' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "h-2 w-2 rounded-full bg-white"
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    className: "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "radio",
+    name: "theme",
+    value: "dark",
+    checked: localSettings.theme === 'dark',
+    onChange: e => handleSettingChange('theme', e.target.value),
+    disabled: saving,
+    className: "sr-only"
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "flex flex-1"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "flex flex-col"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "block text-sm font-medium text-gray-900"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dark Theme', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "mt-1 flex items-center text-sm text-gray-500"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default dark appearance', 'nightly')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: `h-5 w-5 rounded-full border flex items-center justify-center ${localSettings.theme === 'dark' ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`
+  }, localSettings.theme === 'dark' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    className: "h-2 w-2 rounded-full bg-white"
   }))))), localSettings.mode === 'auto' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "space-y-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "text-lg font-medium text-gray-900"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Auto Mode Settings', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "grid grid-cols-1 gap-6 sm:grid-cols-2"
+    className: "grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Intensity', 'nightly'),
     value: localSettings.auto_intensity || 0.05,
@@ -543,14 +931,12 @@ const PreviewPanel = ({
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "lg:col-span-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "bg-white rounded-sm shadow-sm border border-gray-200 sticky top-6"
+    className: "bg-white border border-gray-200 rounded-lg sticky top-4"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "p-4 border-b border-gray-200"
+    className: "p-6"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
-    className: "text-lg font-medium text-gray-900"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Preview', 'nightly'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "p-4"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm font-medium text-gray-900"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Preview', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "relative bg-gray-100 rounded border overflow-hidden aspect-[16/10]"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "bg-white border-b p-3"
@@ -571,21 +957,37 @@ const PreviewPanel = ({
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "h-2 bg-gray-200 rounded w-2/3"
   })), localSettings.auto_inject && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "absolute w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs",
+    className: `absolute border-2 border-white shadow-lg flex items-center justify-center text-white text-xs nightly-button-${localSettings.floating_button_style || 'rounded'} nightly-button-${localSettings.floating_button_size || 'medium'}`,
     style: {
       backgroundColor: localSettings.floating_bg_color || '#333333',
-      bottom: '8px',
+      color: localSettings.floating_icon_color || '#ffffff',
+      borderColor: localSettings.floating_border_color || 'transparent',
+      borderWidth: `${localSettings.floating_border_width || 0}px`,
+      borderRadius: localSettings.floating_button_style === 'circle' ? '50%' : localSettings.floating_button_style === 'pill' ? '50px' : localSettings.floating_button_style === 'square' ? '0' : '8px',
+      width: localSettings.floating_width || '3.5rem',
+      height: localSettings.floating_height || '3.5rem',
+      fontSize: `${localSettings.floating_icon_size || 24}px`,
+      padding: `${localSettings.floating_padding_top || 12}px ${localSettings.floating_padding_right || 16}px ${localSettings.floating_padding_bottom || 12}px ${localSettings.floating_padding_left || 16}px`,
+      boxShadow: localSettings.floating_box_shadow || '0 2px 4px rgba(0,0,0,0.1)',
+      bottom: localSettings.floating_position?.includes('top') ? 'auto' : '8px',
       right: localSettings.floating_position?.includes('left') ? 'auto' : '8px',
       left: localSettings.floating_position?.includes('left') ? '8px' : 'auto',
       top: localSettings.floating_position?.includes('top') ? '8px' : 'auto'
     }
-  }, "\uD83C\uDF19")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, localSettings.floating_icon_type === 'custom' ? localSettings.floating_custom_icon || '🌙' : localSettings.floating_icon_type === 'sun' ? '☀️' : localSettings.floating_icon_type === 'sun-moon' ? localSettings.mode === 'auto' ? '☀️' : '🌙' // Show sun for auto mode, moon for manual
+  : '🌙')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mt-4 space-y-2"
   }, localSettings.auto_inject ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-600"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Position:', 'nightly')), " ", localSettings.floating_position || 'bottom-right'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-600"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Color:', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Style:', 'nightly')), " ", localSettings.floating_button_style || 'rounded'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Size:', 'nightly')), " ", localSettings.floating_button_size || 'medium'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Icon:', 'nightly')), " ", localSettings.floating_icon_type || 'moon'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background:', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "ml-2 inline-flex items-center space-x-1"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "w-3 h-3 rounded border",
@@ -594,7 +996,9 @@ const PreviewPanel = ({
     }
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", {
     className: "text-xs"
-  }, localSettings.floating_bg_color || '#333333')))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, localSettings.floating_bg_color || '#333333'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "text-sm text-gray-600"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("strong", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Dimensions:', 'nightly')), " ", localSettings.floating_width || '3.5rem', " \xD7 ", localSettings.floating_height || '3.5rem')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-500 italic"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable floating toggle to see preview', 'nightly')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-sm text-gray-600"
@@ -674,7 +1078,7 @@ const TabNavigation = ({
     key: tab.id,
     onClick: () => onTabChange(tab.id),
     disabled: saving,
-    className: `${activeTab === tab.id ? 'bg-slate-200' : ''} px-3 py-1 font-medium text-base transition-colors duration-200 rounded-lg`
+    className: `${activeTab === tab.id ? 'bg-slate-200' : ''} px-3 py-1 font-medium text-sm transition-colors duration-200 rounded-lg`
   }, tab.label)));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TabNavigation);
@@ -717,9 +1121,32 @@ const useSettings = () => {
     auto_inject: false,
     floating_position: 'bottom-right',
     respect_system_preference: true,
-    mode: 'dark',
+    theme: 'light',
+    mode: 'manual',
     transition_duration: 200,
     ignore_selectors: '',
+    // Floating button design settings
+    floating_button_style: 'rounded',
+    floating_button_size: 'medium',
+    floating_bg_color: '#333333',
+    floating_bg_color_hover: '#555555',
+    floating_bg_color_active: '#79c0ff',
+    floating_icon_color: '#ffffff',
+    floating_icon_color_hover: '#ffffff',
+    floating_border_color: 'transparent',
+    floating_border_width: 0,
+    floating_border_radius: 50,
+    floating_icon_size: 24,
+    floating_icon_type: 'sun-moon',
+    floating_custom_icon: '🌙',
+    floating_padding_top: 12,
+    floating_padding_bottom: 12,
+    floating_padding_left: 16,
+    floating_padding_right: 16,
+    floating_box_shadow: '0 2px 4px rgba(0,0,0,0.1)',
+    floating_box_shadow_hover: '0 4px 8px rgba(0,0,0,0.15)',
+    floating_width: '3.5rem',
+    floating_height: '3.5rem',
     // Reader mode settings
     reader_intensity: 0.05,
     reader_contrast: 1.15,

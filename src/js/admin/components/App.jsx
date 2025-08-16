@@ -57,8 +57,34 @@ const App = () => {
         try {
             await saveSettings(localSettings);
             setHasChanges(false);
+            
+            // Also update localStorage to sync with frontend
+            updateLocalStorageFromSettings(localSettings);
+            
         } catch (err) {
             console.error('Failed to save settings:', err);
+        }
+    };
+
+    // Update localStorage to sync with frontend
+    const updateLocalStorageFromSettings = (newSettings) => {
+        try {
+            // Update theme and mode preferences in localStorage
+            if (newSettings.mode) {
+                localStorage.setItem('nightly-mode-preference', newSettings.mode);
+            }
+            
+            // If there's a theme setting, update it too
+            if (newSettings.theme) {
+                localStorage.setItem('nightly-theme-preference', newSettings.theme);
+            }
+            
+            // Dispatch a custom event to notify frontend of settings change
+            window.dispatchEvent(new CustomEvent('nightlySettingsChanged', {
+                detail: { settings: newSettings }
+            }));
+        } catch (error) {
+            // Silently handle localStorage errors in production
         }
     };
 
@@ -82,7 +108,7 @@ const App = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen">
             <AdminHeader
                 hasChanges={hasChanges}
                 saving={saving}
@@ -90,7 +116,7 @@ const App = () => {
                 version="1.0.0"
             />
             
-            <div className="w-full max-w-[908px] mx-auto p-6">
+            <div className="w-full max-w-[908px] mx-auto pt-10">
                 {error && (
                     <div className="mb-6">
                         <Notice status="error" onRemove={clearError}>
@@ -124,7 +150,7 @@ const App = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
                     {/* Settings Panel */}
                     <div className="lg:col-span-2">
-                        <div className="bg-white rounded-b-sm rounded-t-none shadow-sm border border-gray-200 border-t-0">
+                        <div className="bg-white border border-gray-200 rounded-lg">
                             <div className="p-6">
                                 {activeTab === 'general' && (
                                     <GeneralTab 

@@ -9,267 +9,161 @@
 @import 'base';
 
 // =============================================================================
-// BASE BLOCK STYLES
+// BASE BLOCK STYLES - Clean and Minimal
 // =============================================================================
 
 .wp-block-nightly-toggle {
   // Base block container
-  margin: var(--nightly-space-md) 0;
-  
-  // Ensure proper font family inheritance
-  font-family: var(--nightly-font-family-base);
+  margin: 1rem 0;
+  font-family: inherit;
   
   // Block alignment support
-  &.alignleft {
-    text-align: left;
-  }
+  &.alignleft { text-align: left; }
+  &.aligncenter { text-align: center; }
+  &.alignright { text-align: right; }
+  &.alignwide, &.alignfull { margin: 1rem auto; }
   
-  &.aligncenter {
-    text-align: center;
-  }
-  
-  &.alignright {
-    text-align: right;
-  }
-  
-  &.alignwide,
-  &.alignfull {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  // Block toggle button styles
+  // Block toggle button - inline, not floating
   .nightly-toggle-button {
-    @include button-secondary;
-    @include touch-target(44px);
-    @include focus-management;
-    @include button-states-accessible;
-    
-    // Icon and text layout
+    // Base button styles
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: var(--nightly-space-xs);
+    justify-content: center;
+    position: relative; // Ensure it's not floating
+    text-decoration: none;
+    outline: none;
     
-    .nightly-toggle-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      
-      // Ensure icons are hidden from screen readers
-      &[aria-hidden="true"] {
-        pointer-events: none;
-      }
-      
-      // Theme-based icon visibility
-      .nightly-icon-light {
-        display: block;
-      }
-      
-      .nightly-icon-dark {
-        display: none;
-      }
+    // Focus state
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(121, 192, 255, 0.3);
     }
     
-    // Dark theme icon switching
-    [data-nightly-theme="dark"] & {
-      .nightly-toggle-icon {
-        .nightly-icon-light {
-          display: none;
-        }
-        
-        .nightly-icon-dark {
-          display: block;
-        }
-      }
+    // Active state
+    &:active {
+      transform: translateY(1px);
     }
+  }
+
+  // Button Style Variations
+  .nightly-button-rounded {
+    border-radius: 8px;
+  }
+
+  .nightly-button-square {
+    border-radius: 0;
+  }
+
+  .nightly-button-pill {
+    border-radius: 50px;
+  }
+
+  .nightly-button-circle {
+    border-radius: 50%;
+    aspect-ratio: 1;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  // Button Size Variations
+  .nightly-button-small {
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 14px;
+  }
+
+  .nightly-button-medium {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .nightly-button-large {
+    min-width: 56px;
+    min-height: 56px;
+    font-size: 18px;
+  }
+
+  .nightly-button-xlarge {
+    min-width: 72px;
+    min-height: 72px;
+    font-size: 20px;
+  }
+
+  // Hover effects
+  .nightly-toggle-button:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+
+  // Active state for toggle functionality
+  .nightly-toggle-button[aria-pressed="true"] {
+    position: relative;
     
-    // Enhanced focus states with better visibility
-    &:focus,
-    &.nightly-focused {
-      @include focus-ring-enhanced;
-      z-index: 1;
-      
-      // Enhanced focus ring for better visibility
-      box-shadow: 0 0 0 4px rgba(0, 132, 96, 0.2);
-      
-      @include high-contrast {
-        box-shadow: 0 0 0 4px Highlight;
-      }
-      
-      @include forced-colors {
-        box-shadow: 0 0 0 4px Highlight;
-      }
-    }
-    
-    // High contrast enhancements
-    &.nightly-high-contrast-focus {
-      @include high-contrast {
-        border-width: 3px;
-        
-        &:focus,
-        &.nightly-focused {
-          outline: 4px solid Highlight;
-          outline-offset: 3px;
-          box-shadow: 0 0 0 6px Highlight;
-        }
-      }
-      
-      @include forced-colors {
-        border-width: 3px;
-        
-        &:focus,
-        &.nightly-focused {
-          outline: 4px solid Highlight;
-          outline-offset: 3px;
-          box-shadow: 0 0 0 6px Highlight;
-        }
-      }
-    }
-    
-    // Reduced motion support
-    @include reduced-motion {
-      transition: none;
+    &::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 8px;
+      height: 8px;
+      background: #4CAF50;
+      border-radius: 50%;
+      border: 2px solid #fff;
     }
   }
 }
 
-// Block editor specific styles
-.editor-styles-wrapper .wp-block-nightly-toggle {
-  // Ensure proper styling in the block editor
-  font-family: var(--nightly-font-family-base);
-  
-  .nightly-toggle-button {
-    // Editor preview styling
-    &.is-toggled {
-      background-color: var(--nightly-interactive-primary);
-      color: var(--nightly-text-inverse);
-      border-color: var(--nightly-interactive-primary);
-    }
-  }
-  
-  .nightly-editor-notice {
-    margin-top: var(--nightly-space-xs);
-    font-size: var(--nightly-font-size-xs);
-    color: var(--nightly-text-secondary);
-    font-style: italic;
-    
-    // Ensure editor notice is accessible
-    &[role="note"] {
-      padding: var(--nightly-space-xs);
-      border-left: 3px solid var(--nightly-border-secondary);
-      
-      @include high-contrast {
-        border-left-color: Highlight;
-      }
-      
-      @include forced-colors {
-        border-left-color: Highlight;
-      }
-    }
-  }
-}
-
-// =============================================================================
-// BLOCK ACCESSIBILITY ENHANCEMENTS
-// =============================================================================
-
-// Screen reader content for blocks
+// Screen reader content
 .wp-block-nightly-toggle {
   .screen-reader-text {
-    @include sr-only;
-  }
-  
-  .nightly-sr-state {
-    @include sr-only;
-  }
-  
-  .nightly-toggle-description {
-    @include sr-only;
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
   }
 }
 
-// High contrast mode enhancements for blocks
-.nightly-high-contrast {
-  .wp-block-nightly-toggle {
-    .nightly-toggle-button {
-      @include forced-colors {
-        background: ButtonFace;
-        color: ButtonText;
-        border-color: ButtonText;
-        
-        &:hover {
-          background: Highlight;
-          color: HighlightText;
-          border-color: Highlight;
-        }
-        
-        &:focus {
-          outline: 3px solid Highlight;
-          outline-offset: 2px;
-        }
-        
-        &[aria-pressed="true"] {
-          background: Highlight;
-          color: HighlightText;
-          border-color: Highlight;
-        }
-        
-        &:disabled {
-          background: GrayText;
-          color: HighlightText;
-          border-color: GrayText;
-        }
-      }
-    }
-  }
-}
-
-// Touch device optimizations for blocks
+// Touch device optimizations
 @media (hover: none) and (pointer: coarse) {
-  .wp-block-nightly-toggle {
-    .nightly-toggle-button {
-      @include touch-target(48px);
-      
-      // Larger tap targets on mobile
-      padding: var(--nightly-space-sm) var(--nightly-space-md);
-    }
+  .wp-block-nightly-toggle .nightly-toggle-button {
+    min-width: 48px;
+    min-height: 48px;
   }
 }
 
-// Reduced motion preferences for blocks
-@include reduced-motion {
-  .wp-block-nightly-toggle {
-    .nightly-toggle-button {
-      transition: none !important;
-      animation: none !important;
-    }
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .wp-block-nightly-toggle .nightly-toggle-button {
+    transition: none !important;
+    transform: none !important;
   }
 }
 
-// Print styles for blocks
-@media print {
-  .wp-block-nightly-toggle {
-    .screen-reader-text,
-    .nightly-sr-state,
-    .nightly-toggle-description {
-      display: none !important;
-    }
+// High contrast mode
+@media (prefers-contrast: high) {
+  .wp-block-nightly-toggle .nightly-toggle-button {
+    border-width: 2px;
     
-    .nightly-toggle-button {
-      background: transparent !important;
-      color: black !important;
-      border: 1px solid black !important;
-      
-      &::after {
-        content: " (Dark mode toggle)";
-        font-size: 0.8em;
-      }
-      
-      .nightly-toggle-icon {
-        display: none !important;
-      }
+    &:focus {
+      outline: 3px solid;
+      outline-offset: 2px;
     }
+  }
+}
+
+// Print styles
+@media print {
+  .wp-block-nightly-toggle .nightly-toggle-button {
+    background: #f0f0f0 !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
   }
 }

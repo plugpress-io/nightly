@@ -30,48 +30,69 @@ export class NightlyCore {
 	}
 
 	initialize() {
-		console.log('Nightly Debug - Initializing NightlyCore');
+		// Ensure DOM is ready before proceeding
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', () => {
+				this.initializeCore();
+			});
+		} else {
+			this.initializeCore();
+		}
+	}
+
+	initializeCore() {
 		this.loadSavedSettings();
 		this.setupDynamicStyleInjection();
 		this.setupSystemPreferenceListener();
 		this.bindEvents();
-		console.log('Nightly Debug - NightlyCore initialized');
+
+		// Add a fallback check to ensure theme persistence
+		setTimeout(() => {
+			this.verifyThemePersistence();
+		}, 100);
+	}
+
+	verifyThemePersistence() {
+		const savedTheme = localStorage.getItem('nightly-theme-preference');
+		const currentTheme = this.getCurrentTheme();
+
+		// If there's a mismatch, restore the saved theme
+		if (savedTheme && savedTheme !== currentTheme) {
+			this.setTheme(savedTheme);
+		}
 	}
 
 	loadSavedSettings() {
 		const savedTheme = this.getSavedTheme();
 		const savedMode = this.getSavedMode();
 
-		this.setTheme(savedTheme);
+		// Set mode FIRST to avoid double CSS application
 		this.setMode(savedMode);
+
+		// Then set theme (which will apply styles with the correct mode)
+		this.setTheme(savedTheme);
 	}
 
 	getSavedTheme() {
 		const saved = localStorage.getItem('nightly-theme-preference');
-		console.log(
-			'Nightly Debug - Loading saved theme from localStorage:',
-			saved
-		);
-		if (saved) return saved;
 
+		// If user has saved a theme preference, use it regardless of system preference
+		if (saved) {
+			return saved;
+		}
+
+		// Only use system preference if no saved theme exists
 		if (this.options.respectSystemPreference) {
 			const systemPref = this.getSystemPreference();
-			console.log('Nightly Debug - Using system preference:', systemPref);
 			return systemPref;
 		}
-		console.log('Nightly Debug - Using default theme:', this.themes.LIGHT);
+
 		return this.themes.LIGHT;
 	}
 
 	getSavedMode() {
 		const saved = localStorage.getItem('nightly-mode-preference');
 		const mode = saved || this.options.mode;
-		console.log(
-			'Nightly Debug - Loading saved mode from localStorage:',
-			saved,
-			'-> using:',
-			mode
-		);
 		return mode;
 	}
 
@@ -87,12 +108,10 @@ export class NightlyCore {
 
 	saveTheme(theme) {
 		localStorage.setItem('nightly-theme-preference', theme);
-		console.log('Nightly Debug - Theme saved to localStorage:', theme);
 	}
 
 	saveMode(mode) {
 		localStorage.setItem('nightly-mode-preference', mode);
-		console.log('Nightly Debug - Mode saved to localStorage:', mode);
 	}
 
 	getCurrentTheme() {
@@ -110,18 +129,24 @@ export class NightlyCore {
 	}
 
 	setTheme(theme) {
-		console.log('Nightly Debug - Setting theme to:', theme);
+		// Set the attribute first
 		document.documentElement.setAttribute('data-nightly-theme', theme);
-		document.documentElement.setAttribute('data-theme', theme);
 
 		// Always save theme to localStorage
 		this.saveTheme(theme);
 
-		if (theme === this.themes.DARK) {
-			console.log('Nightly Debug - Theme is dark, applying styles');
+		// Only apply styles if mode is also set (to avoid applying styles twice)
+		const currentMode = this.getCurrentMode();
+		if (currentMode && theme === this.themes.DARK) {
 			this.applyDynamicStyles();
+		} else if (theme === this.themes.DARK) {
+			// styles will be applied when mode is set
+		} else {
+			// Remove dark styles if switching to light
+			this.removeDarkStyles();
 		}
 
+		// Dispatch change event
 		this.dispatchChangeEvent();
 	}
 
@@ -131,6 +156,7 @@ export class NightlyCore {
 		// Always save mode to localStorage
 		this.saveMode(mode);
 
+		// Apply styles if theme is dark (regardless of previous mode)
 		if (this.getCurrentTheme() === this.themes.DARK) {
 			this.applyDynamicStyles();
 		}
@@ -216,13 +242,7 @@ export class NightlyCore {
 		// Make sure document.head exists
 		if (document.head) {
 			document.head.appendChild(this.styleElement);
-			console.log(
-				'Nightly Debug - Style element created and added to head'
-			);
 		} else {
-			console.error(
-				'Nightly Debug - document.head not available, waiting for DOM ready'
-			);
 			// If head isn't ready, wait for DOM
 			if (document.readyState === 'loading') {
 				document.addEventListener('DOMContentLoaded', () => {
@@ -241,15 +261,11 @@ export class NightlyCore {
 
 	applyDynamicStyles() {
 		const mode = this.getCurrentMode();
+		const theme = this.getCurrentTheme();
 		const css = this.generateDynamicCSS(mode);
-		console.log('Nightly Debug - Applying CSS for mode:', mode);
-		console.log('Nightly Debug - Generated CSS:', css);
 
 		// Make sure styleElement exists before using it
 		if (!this.styleElement) {
-			console.warn(
-				'Nightly Debug - Style element not found, recreating...'
-			);
 			this.setupDynamicStyleInjection();
 		}
 
@@ -257,14 +273,12 @@ export class NightlyCore {
 		if (this.styleElement) {
 			try {
 				this.styleElement.textContent = css;
-				console.log('Nightly Debug - CSS applied successfully');
 			} catch (error) {
-				console.error('Nightly Debug - Error applying CSS:', error);
 				// Try alternative method
 				this.styleElement.innerHTML = css;
 			}
 		} else {
-			console.error('Nightly Debug - Could not create style element');
+			console.error('Nightly: Could not create style element');
 		}
 	}
 
@@ -286,59 +300,59 @@ export class NightlyCore {
 		} else {
 			// Super Specific Dark Mode - Override Everything
 			return `
-				html[data-theme="dark"] {
+				html[data-nightly-theme="dark"] {
 					color-scheme: dark !important;
 				}
 				
-				html[data-theme="dark"] body,
-				html[data-theme="dark"] body.astra-theme,
-				html[data-theme="dark"].astra-theme body {
+				html[data-nightly-theme="dark"] body,
+				html[data-nightly-theme="dark"] body.astra-theme,
+				html[data-nightly-theme="dark"].astra-theme body {
 					background: #0d1117 !important;
 					background-color: #0d1117 !important;
 					color: #e6edf3 !important;
 				}
 				
-				html[data-theme="dark"] *,
-				html[data-theme="dark"] h1,
-				html[data-theme="dark"] h2,
-				html[data-theme="dark"] h3,
-				html[data-theme="dark"] h4,
-				html[data-theme="dark"] h5,
-				html[data-theme="dark"] h6,
-				html[data-theme="dark"] p,
-				html[data-theme="dark"] span,
-				html[data-theme="dark"] div,
-				html[data-theme="dark"] li,
-				html[data-theme="dark"] .entry-title,
-				html[data-theme="dark"] .entry-content {
+				html[data-nightly-theme="dark"] *,
+				html[data-nightly-theme="dark"] h1,
+				html[data-nightly-theme="dark"] h2,
+				html[data-nightly-theme="dark"] h3,
+				html[data-nightly-theme="dark"] h4,
+				html[data-nightly-theme="dark"] h5,
+				html[data-nightly-theme="dark"] h6,
+				html[data-nightly-theme="dark"] p,
+				html[data-nightly-theme="dark"] span,
+				html[data-nightly-theme="dark"] div,
+				html[data-nightly-theme="dark"] li,
+				html[data-nightly-theme="dark"] .entry-title,
+				html[data-nightly-theme="dark"] .entry-content {
 					color: #e6edf3 !important;
 					background: transparent !important;
 					background-color: transparent !important;
 				}
 				
-				html[data-theme="dark"] a,
-				html[data-theme="dark"] .entry-title a {
+				html[data-nightly-theme="dark"] a,
+				html[data-nightly-theme="dark"] .entry-title a {
 					color: #79c0ff !important;
 				}
 				
-				html[data-theme="dark"] a:hover,
-				html[data-theme="dark"] .entry-title a:hover {
+				html[data-nightly-theme="dark"] a:hover,
+				html[data-nightly-theme="dark"] .entry-title a:hover {
 					color: #a5d6ff !important;
 				}
 				
-				html[data-theme="dark"] .site-header,
-				html[data-theme="dark"] .site-content,
-				html[data-theme="dark"] .site-footer,
-				html[data-theme="dark"] .ast-container,
-				html[data-theme="dark"] article,
-				html[data-theme="dark"] .ast-article-post,
-				html[data-theme="dark"] .ast-article-inner,
-				html[data-theme="dark"] .post-content,
-				html[data-theme="dark"] #content,
-				html[data-theme="dark"] #primary,
-				html[data-theme="dark"] .content-area,
-				html[data-theme="dark"] .site-main,
-				html[data-theme="dark"] #main {
+				html[data-nightly-theme="dark"] .site-header,
+				html[data-nightly-theme="dark"] .site-content,
+				html[data-nightly-theme="dark"] .site-footer,
+				html[data-nightly-theme="dark"] .ast-container,
+				html[data-nightly-theme="dark"] article,
+				html[data-nightly-theme="dark"] .ast-article-post,
+				html[data-nightly-theme="dark"] .ast-article-inner,
+				html[data-nightly-theme="dark"] .post-content,
+				html[data-nightly-theme="dark"] #content,
+				html[data-nightly-theme="dark"] #primary,
+				html[data-nightly-theme="dark"] .content-area,
+				html[data-nightly-theme="dark"] .site-main,
+				html[data-nightly-theme="dark"] #main {
 					background: #0d1117 !important;
 					background-color: #0d1117 !important;
 					color: #e6edf3 !important;
@@ -346,12 +360,19 @@ export class NightlyCore {
 					box-shadow: none !important;
 				}
 				
-				html[data-theme="dark"] .nightly-ignore,
-				html[data-theme="dark"] .nightly-ignore * {
+				html[data-nightly-theme="dark"] .nightly-ignore,
+				html[data-nightly-theme="dark"] .nightly-ignore * {
 					background: initial !important;
 					color: initial !important;
 				}
 			`;
+		}
+	}
+
+	removeDarkStyles() {
+		// Remove the style element that contains dark mode styles
+		if (this.styleElement) {
+			this.styleElement.textContent = '';
 		}
 	}
 

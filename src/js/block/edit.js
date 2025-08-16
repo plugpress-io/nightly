@@ -1,19 +1,52 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
+import {
+	useBlockProps,
+	InspectorControls,
+	ColorPalette,
+} from '@wordpress/block-editor';
+import {
+	PanelBody,
+	RangeControl,
+	SelectControl,
+	ToggleControl,
+	TextControl,
+} from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
 /**
  * Block Edit Component
  */
 export default function Edit({ attributes, setAttributes }) {
 	const [previewTheme, setPreviewTheme] = useState('light');
-	const [previewMode, setPreviewMode] = useState(attributes.mode || 'dark');
+
+	const {
+		buttonText,
+		buttonStyle,
+		buttonSize,
+		backgroundColor,
+		backgroundColorHover,
+		backgroundColorActive,
+		textColor,
+		textColorHover,
+		borderColor,
+		borderWidth,
+		borderRadius,
+		fontSize,
+		fontWeight,
+		paddingTop,
+		paddingBottom,
+		paddingLeft,
+		paddingRight,
+		marginTop,
+		marginBottom,
+		marginLeft,
+		marginRight,
+		boxShadow,
+		boxShadowHover,
+	} = attributes;
 
 	const blockProps = useBlockProps({
 		className: 'nightly-toggle-block',
-		'data-nightly-theme': previewTheme,
-		'data-nightly-mode': previewMode,
 	});
 
 	// Handle preview toggle
@@ -21,215 +54,270 @@ export default function Edit({ attributes, setAttributes }) {
 		setPreviewTheme(previewTheme === 'light' ? 'dark' : 'light');
 	};
 
-	// Handle mode change
-	const handleModeChange = (newMode) => {
-		setPreviewMode(newMode);
-		setAttributes({ mode: newMode });
+	// Generate inline styles for the button
+	const buttonStyles = {
+		backgroundColor: backgroundColor,
+		color: textColor,
+		borderColor: borderColor,
+		borderWidth: `${borderWidth}px`,
+		borderRadius: `${borderRadius}%`,
+		fontSize: `${fontSize}px`,
+		fontWeight: fontWeight,
+		padding: `${paddingTop}px ${paddingRight}px ${paddingBottom}px ${paddingLeft}px`,
+		margin: `${marginTop}px ${marginRight}px ${marginBottom}px ${marginLeft}px`,
+		boxShadow: boxShadow,
 	};
 
-	// Handle toggle type change
-	const handleToggleTypeChange = (newType) => {
-		setAttributes({ toggleType: newType });
-	};
-
-	// Handle show text change
-	const handleShowTextChange = (showText) => {
-		setAttributes({ showText });
-	};
-
-	// Create preview button
-	const createPreviewButton = () => {
-		const buttonClass = `nightly-toggle-button ${
-			attributes.showText ? 'with-text' : 'switch-only'
-		}`;
-
-		return (
-			<button
-				type="button"
-				className={buttonClass}
-				onClick={handlePreviewToggle}
-				aria-pressed={previewTheme === 'dark' ? 'true' : 'false'}
-				aria-label={
-					attributes.toggleType === 'theme'
-						? __('Toggle between light and dark theme', 'nightly')
-						: __('Toggle between reader and dark mode', 'nightly')
-				}
-			>
-				<span
-					className={`nightly-toggle-switch ${
-						previewTheme === 'dark' ? 'is-checked' : ''
-					}`}
-					aria-hidden="true"
-				>
-					<span className="nightly-toggle-track">
-						<span className="nightly-toggle-thumb">
-							{attributes.toggleType === 'theme' ? (
-								<>
-									<svg
-										className="nightly-icon nightly-icon-sun"
-										width="14"
-										height="14"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<circle
-											cx="12"
-											cy="12"
-											r="4"
-											stroke="currentColor"
-											strokeWidth="2"
-										/>
-										<path
-											d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 6.34L4.93 4.93M19.07 19.07l-1.41-1.41"
-											stroke="currentColor"
-											strokeWidth="2"
-										/>
-									</svg>
-									<svg
-										className="nightly-icon nightly-icon-moon"
-										width="14"
-										height="14"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<path
-											d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-											stroke="currentColor"
-											strokeWidth="2"
-											fill="currentColor"
-										/>
-									</svg>
-								</>
-							) : (
-								<>
-									<svg
-										className="nightly-icon nightly-icon-reader"
-										width="14"
-										height="14"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<path
-											d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
-											stroke="currentColor"
-											strokeWidth="2"
-										/>
-										<path
-											d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
-											stroke="currentColor"
-											strokeWidth="2"
-										/>
-									</svg>
-									<svg
-										className="nightly-icon nightly-icon-dark"
-										width="14"
-										height="14"
-										viewBox="0 0 24 24"
-										fill="none"
-									>
-										<circle
-											cx="12"
-											cy="12"
-											r="10"
-											stroke="currentColor"
-											strokeWidth="2"
-											fill="currentColor"
-										/>
-									</svg>
-								</>
-							)}
-						</span>
-					</span>
-				</span>
-
-				{attributes.showText && (
-					<span className="nightly-toggle-text">
-						{attributes.toggleType === 'theme'
-							? __('Dark Mode', 'nightly')
-							: previewMode === 'reader'
-							? __('Reader Mode', 'nightly')
-							: __('Dark Mode', 'nightly')}
-					</span>
-				)}
-
-				{attributes.toggleType === 'mode' && (
-					<span
-						className={`nightly-mode-indicator mode-${previewMode}`}
-					>
-						{previewMode === 'reader'
-							? __('Reader', 'nightly')
-							: __('Dark', 'nightly')}
-					</span>
-				)}
-
-				<span className="screen-reader-text">
-					{__('Preview only - toggle to see appearance', 'nightly')}
-				</span>
-			</button>
-		);
-	};
+	// Generate hover styles
+	const hoverStyles = `
+		.nightly-toggle-button:hover {
+			background-color: ${backgroundColorHover} !important;
+			color: ${textColorHover} !important;
+			box-shadow: ${boxShadowHover} !important;
+		}
+	`;
 
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={__('Toggle Settings', 'nightly')}
+					title={__('Button Settings', 'nightly')}
 					initialOpen={true}
 				>
-					<SelectControl
-						label={__('Toggle Type', 'nightly')}
-						value={attributes.toggleType || 'theme'}
-						options={[
-							{
-								label: __(
-									'Theme Toggle (Light/Dark)',
-									'nightly'
-								),
-								value: 'theme',
-							},
-							{
-								label: __(
-									'Mode Toggle (Reader/Dark)',
-									'nightly'
-								),
-								value: 'mode',
-							},
-						]}
-						onChange={handleToggleTypeChange}
-						help={__('Choose what the toggle controls', 'nightly')}
+					<TextControl
+						label={__('Button Text', 'nightly')}
+						value={buttonText}
+						onChange={(value) =>
+							setAttributes({ buttonText: value })
+						}
 					/>
 
-					{attributes.toggleType === 'mode' && (
-						<SelectControl
-							label={__('Default Mode', 'nightly')}
-							value={attributes.mode || 'dark'}
-							options={[
-								{
-									label: __(
-										'Reader Mode (Gentle)',
-										'nightly'
-									),
-									value: 'reader',
-								},
-								{
-									label: __('Dark Mode (Full)', 'nightly'),
-									value: 'dark',
-								},
-							]}
-							onChange={handleModeChange}
-							help={__(
-								'Reader mode provides gentle adjustments for comfortable reading, while dark mode provides full color conversion',
-								'nightly'
-							)}
-						/>
-					)}
+					<SelectControl
+						label={__('Button Style', 'nightly')}
+						value={buttonStyle}
+						options={[
+							{
+								label: __('Rounded', 'nightly'),
+								value: 'rounded',
+							},
+							{ label: __('Square', 'nightly'), value: 'square' },
+							{ label: __('Pill', 'nightly'), value: 'pill' },
+							{ label: __('Circle', 'nightly'), value: 'circle' },
+						]}
+						onChange={(value) =>
+							setAttributes({ buttonStyle: value })
+						}
+					/>
 
-					<ToggleControl
-						label={__('Show Text Label', 'nightly')}
-						checked={attributes.showText !== false}
-						onChange={handleShowTextChange}
+					<SelectControl
+						label={__('Button Size', 'nightly')}
+						value={buttonSize}
+						options={[
+							{ label: __('Small', 'nightly'), value: 'small' },
+							{ label: __('Medium', 'nightly'), value: 'medium' },
+							{ label: __('Large', 'nightly'), value: 'large' },
+							{
+								label: __('Extra Large', 'nightly'),
+								value: 'xlarge',
+							},
+						]}
+						onChange={(value) =>
+							setAttributes({ buttonSize: value })
+						}
+					/>
+				</PanelBody>
+
+				<PanelBody title={__('Colors', 'nightly')} initialOpen={false}>
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Background Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={backgroundColor}
+							onChange={(color) =>
+								setAttributes({ backgroundColor: color })
+							}
+						/>
+					</div>
+
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Hover Background Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={backgroundColorHover}
+							onChange={(color) =>
+								setAttributes({ backgroundColorHover: color })
+							}
+						/>
+					</div>
+
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Active Background Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={backgroundColorActive}
+							onChange={(color) =>
+								setAttributes({ backgroundColorActive: color })
+							}
+						/>
+					</div>
+
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Text Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={textColor}
+							onChange={(color) =>
+								setAttributes({ textColor: color })
+							}
+						/>
+					</div>
+
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Hover Text Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={textColorHover}
+							onChange={(color) =>
+								setAttributes({ textColorHover: color })
+							}
+						/>
+					</div>
+
+					<div className="components-base-control">
+						<label className="components-base-control__label">
+							{__('Border Color', 'nightly')}
+						</label>
+						<ColorPalette
+							value={borderColor}
+							onChange={(color) =>
+								setAttributes({ borderColor: color })
+							}
+						/>
+					</div>
+				</PanelBody>
+
+				<PanelBody
+					title={__('Typography', 'nightly')}
+					initialOpen={false}
+				>
+					<RangeControl
+						label={__('Font Size (px)', 'nightly')}
+						value={fontSize}
+						onChange={(value) => setAttributes({ fontSize: value })}
+						min={12}
+						max={48}
+						step={1}
+					/>
+
+					<SelectControl
+						label={__('Font Weight', 'nightly')}
+						value={fontWeight}
+						options={[
+							{ label: __('Normal', 'nightly'), value: '400' },
+							{ label: __('Medium', 'nightly'), value: '500' },
+							{ label: __('Semi Bold', 'nightly'), value: '600' },
+							{ label: __('Bold', 'nightly'), value: '700' },
+						]}
+						onChange={(value) =>
+							setAttributes({ fontWeight: value })
+						}
+					/>
+				</PanelBody>
+
+				<PanelBody title={__('Spacing', 'nightly')} initialOpen={false}>
+					<RangeControl
+						label={__('Padding Top (px)', 'nightly')}
+						value={paddingTop}
+						onChange={(value) =>
+							setAttributes({ paddingTop: value })
+						}
+						min={0}
+						max={50}
+						step={1}
+					/>
+					<RangeControl
+						label={__('Padding Bottom (px)', 'nightly')}
+						value={paddingBottom}
+						onChange={(value) =>
+							setAttributes({ paddingBottom: value })
+						}
+						min={0}
+						max={50}
+						step={1}
+					/>
+					<RangeControl
+						label={__('Padding Left (px)', 'nightly')}
+						value={paddingLeft}
+						onChange={(value) =>
+							setAttributes({ paddingLeft: value })
+						}
+						min={0}
+						max={50}
+						step={1}
+					/>
+					<RangeControl
+						label={__('Padding Right (px)', 'nightly')}
+						value={paddingRight}
+						onChange={(value) =>
+							setAttributes({ paddingRight: value })
+						}
+						min={0}
+						max={50}
+						step={1}
+					/>
+				</PanelBody>
+
+				<PanelBody
+					title={__('Border & Shadow', 'nightly')}
+					initialOpen={false}
+				>
+					<RangeControl
+						label={__('Border Width (px)', 'nightly')}
+						value={borderWidth}
+						onChange={(value) =>
+							setAttributes({ borderWidth: value })
+						}
+						min={0}
+						max={10}
+						step={1}
+					/>
+
+					<RangeControl
+						label={__('Border Radius (%)', 'nightly')}
+						value={borderRadius}
+						onChange={(value) =>
+							setAttributes({ borderRadius: value })
+						}
+						min={0}
+						max={50}
+						step={1}
+					/>
+
+					<TextControl
+						label={__('Box Shadow', 'nightly')}
+						value={boxShadow}
+						onChange={(value) =>
+							setAttributes({ boxShadow: value })
+						}
 						help={__(
-							'Display text alongside the toggle switch',
+							'CSS box-shadow value (e.g., 0 2px 4px rgba(0,0,0,0.1))',
+							'nightly'
+						)}
+					/>
+
+					<TextControl
+						label={__('Hover Box Shadow', 'nightly')}
+						value={boxShadowHover}
+						onChange={(value) =>
+							setAttributes({ boxShadowHover: value })
+						}
+						help={__(
+							'CSS box-shadow value for hover state',
 							'nightly'
 						)}
 					/>
@@ -237,23 +325,17 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<div className="nightly-block-preview">
-					<p className="nightly-block-description">
-						{__('Preview your toggle button:', 'nightly')}
-					</p>
-					{createPreviewButton()}
-					<p className="nightly-block-help">
-						{attributes.toggleType === 'theme'
-							? __(
-									'This button will toggle between light and dark themes on your website.',
-									'nightly'
-							  )
-							: __(
-									'This button will toggle between reader mode (gentle) and dark mode (full conversion).',
-									'nightly'
-							  )}
-					</p>
-				</div>
+				<style>{hoverStyles}</style>
+				<button
+					type="button"
+					className={`nightly-toggle-button nightly-button-${buttonStyle} nightly-button-${buttonSize}`}
+					onClick={handlePreviewToggle}
+					aria-pressed={previewTheme === 'dark' ? 'true' : 'false'}
+					aria-label={__('Toggle dark mode', 'nightly')}
+					style={buttonStyles}
+				>
+					{buttonStyle === 'circle' ? '🌙' : buttonText}
+				</button>
 			</div>
 		</>
 	);

@@ -75,6 +75,60 @@ const GeneralTab = ({ localSettings, handleSettingChange, saving }) => {
                         disabled={saving}
                     />
                 )}
+
+                {/* Icon Settings */}
+                {localSettings.auto_inject && (
+                    <div className="space-y-4">
+                        <h3 className="text-md font-medium text-gray-800 border-b pb-2">
+                            {__('Icon Settings', 'nightly')}
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <RangeControl
+                                label={__('Icon Size (px)', 'nightly')}
+                                value={localSettings.floating_icon_size || 24}
+                                onChange={(value) => handleSettingChange('floating_icon_size', value)}
+                                min={12}
+                                max={48}
+                                step={1}
+                                help={__('Icon size in pixels', 'nightly')}
+                                disabled={saving}
+                            />
+                            
+                            <SelectControl
+                                label={__('Icon Type', 'nightly')}
+                                value={localSettings.floating_icon_type || 'moon'}
+                                options={[
+                                    { label: __('Moon', 'nightly'), value: 'moon' },
+                                    { label: __('Sun', 'nightly'), value: 'sun' },
+                                    { label: __('Sun/Moon', 'nightly'), value: 'sun-moon' },
+                                    { label: __('Custom', 'nightly'), value: 'custom' }
+                                ]}
+                                onChange={(value) => handleSettingChange('floating_icon_type', value)}
+                                disabled={saving}
+                            />
+                        </div>
+                        
+                        {localSettings.floating_icon_type === 'custom' && (
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">
+                                    {__('Custom Icon (Emoji or Unicode)', 'nightly')}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={localSettings.floating_custom_icon || '🌙'}
+                                    onChange={(e) => handleSettingChange('floating_custom_icon', e.target.value)}
+                                    placeholder="🌙"
+                                    disabled={saving}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                />
+                                <p className="text-xs text-gray-500">
+                                    {__('Enter an emoji or unicode character', 'nightly')}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* System Settings */}
@@ -109,7 +163,7 @@ const GeneralTab = ({ localSettings, handleSettingChange, saving }) => {
                     {__('Dark Mode Type', 'nightly')}
                 </h2>
                 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
                     <label className="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
                         <input
                             type="radio"
@@ -166,6 +220,69 @@ const GeneralTab = ({ localSettings, handleSettingChange, saving }) => {
                 </div>
             </div>
 
+            {/* Theme Selection */}
+            <div className="space-y-4">
+                <h2 className="text-lg font-medium text-gray-900">
+                    {__('Default Theme', 'nightly')}
+                </h2>
+                
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
+                    <label className="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                        <input
+                            type="radio"
+                            name="theme"
+                            value="light"
+                            checked={localSettings.theme === 'light'}
+                            onChange={(e) => handleSettingChange('theme', e.target.value)}
+                            disabled={saving}
+                            className="sr-only"
+                        />
+                        <span className="flex flex-1">
+                            <span className="flex flex-col">
+                                <span className="block text-sm font-medium text-gray-900">
+                                    {__('Light Theme', 'nightly')}
+                                </span>
+                                <span className="mt-1 flex items-center text-sm text-gray-500">
+                                    {__('Default light appearance', 'nightly')}
+                                </span>
+                            </span>
+                        </span>
+                        <span className={`h-5 w-5 rounded-full border flex items-center justify-center ${localSettings.theme === 'light' ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`}>
+                            {localSettings.theme === 'light' && (
+                                <span className="h-2 w-2 rounded-full bg-white" />
+                            )}
+                        </span>
+                    </label>
+
+                    <label className="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none">
+                        <input
+                            type="radio"
+                            name="theme"
+                            value="dark"
+                            checked={localSettings.theme === 'dark'}
+                            onChange={(e) => handleSettingChange('theme', e.target.value)}
+                            disabled={saving}
+                            className="sr-only"
+                        />
+                        <span className="flex flex-1">
+                            <span className="flex flex-col">
+                                <span className="block text-sm font-medium text-gray-900">
+                                    {__('Dark Theme', 'nightly')}
+                                </span>
+                                <span className="mt-1 flex items-center text-sm text-gray-500">
+                                    {__('Default dark appearance', 'nightly')}
+                                </span>
+                            </span>
+                        </span>
+                        <span className={`h-5 w-5 rounded-full border flex items-center justify-center ${localSettings.theme === 'dark' ? 'bg-blue-600 border-blue-600' : 'border-gray-300'}`}>
+                            {localSettings.theme === 'dark' && (
+                                <span className="h-2 w-2 rounded-full bg-white" />
+                            )}
+                        </span>
+                    </label>
+                </div>
+            </div>
+
             {/* Auto Mode Settings */}
             {localSettings.mode === 'auto' && (
                 <div className="space-y-4">
@@ -173,7 +290,7 @@ const GeneralTab = ({ localSettings, handleSettingChange, saving }) => {
                         {__('Auto Mode Settings', 'nightly')}
                     </h2>
                     
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
                         <RangeControl
                             label={__('Intensity', 'nightly')}
                             value={localSettings.auto_intensity || 0.05}

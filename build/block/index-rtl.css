@@ -345,8 +345,8 @@
   }
 }
 .wp-block-nightly-toggle {
-  margin: var(--nightly-space-md) 0;
-  font-family: var(--nightly-font-family-base);
+  margin: 1rem 0;
+  font-family: inherit;
 }
 .wp-block-nightly-toggle.alignleft {
   text-align: right;
@@ -358,305 +358,91 @@
   text-align: left;
 }
 .wp-block-nightly-toggle.alignwide, .wp-block-nightly-toggle.alignfull {
-  margin-right: auto;
-  margin-left: auto;
+  margin: 1rem auto;
 }
 .wp-block-nightly-toggle .nightly-toggle-button {
-  justify-content: center;
-  gap: var(--nightly-space-sm);
-  padding: var(--nightly-space-sm) var(--nightly-space-md);
-  border: 1px solid transparent;
-  border-radius: var(--nightly-radius-base);
-  font-family: var(--nightly-font-family-base);
-  font-size: var(--nightly-font-size-sm);
-  font-weight: var(--nightly-font-weight-medium);
-  line-height: var(--nightly-line-height-tight);
-  text-decoration: none;
+  border: none;
   cursor: pointer;
-  transition: all var(--nightly-transition-fast);
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
-  background-color: var(--nightly-interactive-secondary);
-  border-color: var(--nightly-border-primary);
-  color: var(--nightly-text-primary);
-  min-width: 44px;
-  min-height: 44px;
+  font-family: inherit;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: var(--nightly-space-xs);
-}
-.wp-block-nightly-toggle .nightly-toggle-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-.wp-block-nightly-toggle .nightly-toggle-button:focus {
-  outline: 2px solid var(--nightly-border-focus);
-  outline-offset: 2px;
-}
-.wp-block-nightly-toggle .nightly-toggle-button:hover:not(:disabled) {
-  background-color: var(--nightly-interactive-secondary-hover);
-}
-.wp-block-nightly-toggle .nightly-toggle-button:active:not(:disabled) {
-  background-color: var(--nightly-interactive-secondary-pressed);
-}
-@media (hover: none) and (pointer: coarse) {
-  .wp-block-nightly-toggle .nightly-toggle-button {
-    min-width: 48px;
-    min-height: 48px;
-  }
-}
-.wp-block-nightly-toggle .nightly-toggle-button:focus {
-  outline: 2px solid var(--nightly-border-focus);
-  outline-offset: 2px;
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-.wp-block-nightly-toggle .nightly-toggle-button:focus-visible {
-  outline: 2px solid var(--nightly-border-focus);
-  outline-offset: 2px;
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus-visible {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus-visible {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-.wp-block-nightly-toggle .nightly-toggle-button:focus:not(:focus-visible) {
+  justify-content: center;
+  position: relative;
+  text-decoration: none;
   outline: none;
 }
-.wp-block-nightly-toggle .nightly-toggle-button[tabindex="-1"]:focus {
+.wp-block-nightly-toggle .nightly-toggle-button:focus {
   outline: none;
+  box-shadow: 0 0 0 3px rgba(121, 192, 255, 0.3);
+}
+.wp-block-nightly-toggle .nightly-toggle-button:active {
+  transform: translateY(1px);
+}
+.wp-block-nightly-toggle .nightly-button-rounded {
+  border-radius: 8px;
+}
+.wp-block-nightly-toggle .nightly-button-square {
+  border-radius: 0;
+}
+.wp-block-nightly-toggle .nightly-button-pill {
+  border-radius: 50px;
+}
+.wp-block-nightly-toggle .nightly-button-circle {
+  border-radius: 50%;
+  aspect-ratio: 1;
+  min-width: 44px;
+  min-height: 44px;
+}
+.wp-block-nightly-toggle .nightly-button-small {
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 14px;
+}
+.wp-block-nightly-toggle .nightly-button-medium {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 16px;
+}
+.wp-block-nightly-toggle .nightly-button-large {
+  min-width: 56px;
+  min-height: 56px;
+  font-size: 18px;
+}
+.wp-block-nightly-toggle .nightly-button-xlarge {
+  min-width: 72px;
+  min-height: 72px;
+  font-size: 20px;
+}
+.wp-block-nightly-toggle .nightly-toggle-button:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
 }
 .wp-block-nightly-toggle .nightly-toggle-button[aria-pressed=true] {
-  background-color: var(--nightly-interactive-primary);
-  color: var(--nightly-text-inverse);
-  border-color: var(--nightly-interactive-primary);
+  position: relative;
 }
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button[aria-pressed=true] {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button[aria-pressed=true] {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-}
-.wp-block-nightly-toggle .nightly-toggle-button:disabled, .wp-block-nightly-toggle .nightly-toggle-button[aria-disabled=true] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button:disabled, .wp-block-nightly-toggle .nightly-toggle-button[aria-disabled=true] {
-    opacity: 1;
-    background: GrayText;
-    color: HighlightText;
-    border-color: GrayText;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button:disabled, .wp-block-nightly-toggle .nightly-toggle-button[aria-disabled=true] {
-    opacity: 1;
-    background: GrayText;
-    color: HighlightText;
-    border-color: GrayText;
-  }
-}
-.wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-.wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon[aria-hidden=true] {
-  pointer-events: none;
-}
-.wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon .nightly-icon-light {
-  display: block;
-}
-.wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon .nightly-icon-dark {
-  display: none;
-}
-[data-nightly-theme=dark] .wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon .nightly-icon-light {
-  display: none;
-}
-[data-nightly-theme=dark] .wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon .nightly-icon-dark {
-  display: block;
-}
-.wp-block-nightly-toggle .nightly-toggle-button:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-focused {
-  outline: 2px solid var(--nightly-border-focus);
-  outline-offset: 2px;
-  z-index: 1;
-  box-shadow: 0 0 0 4px rgba(0, 132, 96, 0.2);
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-focused {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-focused {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-focused {
-    box-shadow: 0 0 0 4px Highlight;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-focused {
-    box-shadow: 0 0 0 4px Highlight;
-  }
-}
-@media (prefers-contrast: high) {
-  .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus {
-    border-width: 3px;
-  }
-  .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus.nightly-focused {
-    outline: 4px solid Highlight;
-    outline-offset: 3px;
-    box-shadow: 0 0 0 6px Highlight;
-  }
-}
-@media (forced-colors: active) {
-  .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus {
-    border-width: 3px;
-  }
-  .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus:focus, .wp-block-nightly-toggle .nightly-toggle-button.nightly-high-contrast-focus.nightly-focused {
-    outline: 4px solid Highlight;
-    outline-offset: 3px;
-    box-shadow: 0 0 0 6px Highlight;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wp-block-nightly-toggle .nightly-toggle-button {
-    transition: none;
-  }
-}
-
-.editor-styles-wrapper .wp-block-nightly-toggle {
-  font-family: var(--nightly-font-family-base);
-}
-.editor-styles-wrapper .wp-block-nightly-toggle .nightly-toggle-button.is-toggled {
-  background-color: var(--nightly-interactive-primary);
-  color: var(--nightly-text-inverse);
-  border-color: var(--nightly-interactive-primary);
-}
-.editor-styles-wrapper .wp-block-nightly-toggle .nightly-editor-notice {
-  margin-top: var(--nightly-space-xs);
-  font-size: var(--nightly-font-size-xs);
-  color: var(--nightly-text-secondary);
-  font-style: italic;
-}
-.editor-styles-wrapper .wp-block-nightly-toggle .nightly-editor-notice[role=note] {
-  padding: var(--nightly-space-xs);
-  border-right: 3px solid var(--nightly-border-secondary);
-}
-@media (prefers-contrast: high) {
-  .editor-styles-wrapper .wp-block-nightly-toggle .nightly-editor-notice[role=note] {
-    border-right-color: Highlight;
-  }
-}
-@media (forced-colors: active) {
-  .editor-styles-wrapper .wp-block-nightly-toggle .nightly-editor-notice[role=note] {
-    border-right-color: Highlight;
-  }
+.wp-block-nightly-toggle .nightly-toggle-button[aria-pressed=true]::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 8px;
+  height: 8px;
+  background: #4CAF50;
+  border-radius: 50%;
+  border: 2px solid #fff;
 }
 
 .wp-block-nightly-toggle .screen-reader-text {
   position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-.wp-block-nightly-toggle .nightly-sr-state {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-.wp-block-nightly-toggle .nightly-toggle-description {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-@media (forced-colors: active) {
-  .nightly-high-contrast .wp-block-nightly-toggle .nightly-toggle-button {
-    background: ButtonFace;
-    color: ButtonText;
-    border-color: ButtonText;
-  }
-  .nightly-high-contrast .wp-block-nightly-toggle .nightly-toggle-button:hover {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-  .nightly-high-contrast .wp-block-nightly-toggle .nightly-toggle-button:focus {
-    outline: 3px solid Highlight;
-    outline-offset: 2px;
-  }
-  .nightly-high-contrast .wp-block-nightly-toggle .nightly-toggle-button[aria-pressed=true] {
-    background: Highlight;
-    color: HighlightText;
-    border-color: Highlight;
-  }
-  .nightly-high-contrast .wp-block-nightly-toggle .nightly-toggle-button:disabled {
-    background: GrayText;
-    color: HighlightText;
-    border-color: GrayText;
-  }
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .wp-block-nightly-toggle .nightly-toggle-button {
-    min-width: 48px;
-    min-height: 48px;
-    padding: var(--nightly-space-sm) var(--nightly-space-md);
-  }
-}
-@media (hover: none) and (pointer: coarse) and (hover: none) and (pointer: coarse) {
   .wp-block-nightly-toggle .nightly-toggle-button {
     min-width: 48px;
     min-height: 48px;
@@ -665,25 +451,23 @@
 @media (prefers-reduced-motion: reduce) {
   .wp-block-nightly-toggle .nightly-toggle-button {
     transition: none !important;
-    animation: none !important;
+    transform: none !important;
+  }
+}
+@media (prefers-contrast: high) {
+  .wp-block-nightly-toggle .nightly-toggle-button {
+    border-width: 2px;
+  }
+  .wp-block-nightly-toggle .nightly-toggle-button:focus {
+    outline: 3px solid;
+    outline-offset: 2px;
   }
 }
 @media print {
-  .wp-block-nightly-toggle .screen-reader-text,
-  .wp-block-nightly-toggle .nightly-sr-state,
-  .wp-block-nightly-toggle .nightly-toggle-description {
-    display: none !important;
-  }
   .wp-block-nightly-toggle .nightly-toggle-button {
-    background: transparent !important;
-    color: black !important;
-    border: 1px solid black !important;
-  }
-  .wp-block-nightly-toggle .nightly-toggle-button::after {
-    content: " (Dark mode toggle)";
-    font-size: 0.8em;
-  }
-  .wp-block-nightly-toggle .nightly-toggle-button .nightly-toggle-icon {
-    display: none !important;
+    background: #f0f0f0 !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
   }
 }

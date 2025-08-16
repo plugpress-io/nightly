@@ -26,6 +26,7 @@ class Block
     {
         add_action('init', array($this, 'register_block'));
         add_action('enqueue_block_editor_assets', array($this, 'enqueue_block_editor_assets'));
+        add_action('enqueue_block_editor_assets', array($this, 'add_navigation_support'));
     }
 
     /**
@@ -33,10 +34,8 @@ class Block
      */
     public function register_block()
     {
-        // Register the block type with no custom attributes - keep it simple
-        register_block_type('nightly/toggle', array(
-            'render_callback' => array($this, 'render_block')
-        ));
+        // Register the block type using the block.json file
+        register_block_type(NIGHTLY_PLUGIN_DIR . 'build/js/block/block.json');
     }
 
     /**
@@ -73,43 +72,26 @@ class Block
     }
 
     /**
-     * Render the block on the frontend
-     *
-     * @param array $attributes Block attributes
-     * @param string $content Block content
-     * @return string Rendered block HTML
+     * Add navigation support for the Nightly block
      */
-    public function render_block($attributes, $content)
+    public function add_navigation_support()
     {
-        // Simple HTML structure that matches the floating button exactly
-        ob_start();
-?>
-        <div class="nightly-toggle-block">
-            <button
-                class="nightly-toggle-button"
-                type="button"
-                aria-pressed="false"
-                aria-label="<?php esc_attr_e('Toggle between light and dark mode', 'nightly'); ?>"
-                data-nightly-toggle="true">
-                <span class="nightly-toggle-switch" aria-hidden="true">
-                    <span class="nightly-toggle-track">
-                        <span class="nightly-toggle-thumb">
-                            <svg class="nightly-icon nightly-icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 6.34L4.93 4.93M19.07 19.07l-1.41-1.41" stroke="currentColor" stroke-width="2" />
-                            </svg>
-                            <svg class="nightly-icon nightly-icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" fill="currentColor" />
-                            </svg>
-                        </span>
-                    </span>
-                </span>
-                <span class="screen-reader-text nightly-sr-state">
-                    <?php esc_html_e('Current theme: light', 'nightly'); ?>
-                </span>
-            </button>
-        </div>
-<?php
-        return ob_get_clean();
+        wp_add_inline_script('wp-blocks', "
+            (function({ addFilter }) {
+                addFilter(
+                    'blocks.registerBlockType',
+                    'nightly/extend-nav-children',
+                    (settings, name) => {
+                        if (name !== 'core/navigation') return settings;
+
+                        const extra = 'nightly/toggle';
+                        const current = settings.allowedBlocks || [];
+                        if (current.includes(extra)) return settings;
+
+                        return { ...settings, allowedBlocks: [...current, extra] };
+                    }
+                );
+            })(window.wp.hooks);
+        ");
     }
 }

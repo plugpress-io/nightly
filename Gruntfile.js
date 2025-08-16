@@ -1,20 +1,27 @@
 module.exports = function (grunt) {
+	var version = require('./package.json').version;
+
 	grunt.initConfig({
 		// Clean directories
 		clean: {
 			build: ['build/**/*'],
 			dist: ['nightly/**/*'],
 			zip: ['*.zip'],
-			all: ['build', 'nightly', '*.zip']
+			all: ['build', 'nightly', '*.zip'],
 		},
 
 		// Run webpack build
 		webpack: {
 			options: {
-				stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+				stats:
+					!process.env.NODE_ENV ||
+					process.env.NODE_ENV === 'development',
 			},
 			prod: require('./webpack.config.js'),
-			dev: Object.assign({ watch: false }, require('./webpack.config.js'))
+			dev: Object.assign(
+				{ watch: false },
+				require('./webpack.config.js')
+			),
 		},
 
 		// Generate POT file for translations
@@ -27,19 +34,19 @@ module.exports = function (grunt) {
 						'node_modules/.*',
 						'vendor/.*',
 						'tests/.*',
-						'bin/.*'
+						'bin/.*',
 					],
 					mainFile: 'nightly.php',
 					potFilename: 'nightly.pot',
 					potHeaders: {
 						poedit: true,
-						'x-poedit-keywordslist': true
+						'x-poedit-keywordslist': true,
 					},
 					type: 'wp-plugin',
 					updateTimestamp: true,
-					updatePoFiles: true
-				}
-			}
+					updatePoFiles: true,
+				},
+			},
 		},
 
 		// Process language files
@@ -84,7 +91,7 @@ module.exports = function (grunt) {
 					'!phpcs.xml',
 					'!phpunit.xml',
 					'!composer.json',
-					'!composer.lock'
+					'!composer.lock',
 				],
 				dest: 'nightly/',
 			},
@@ -93,26 +100,26 @@ module.exports = function (grunt) {
 				cwd: 'languages/',
 				src: ['*.mo', '*.po', '*.pot'],
 				dest: 'nightly/languages/',
-			}
+			},
 		},
 
 		// Create zip file
 		compress: {
 			main: {
 				options: {
-					archive: 'nightly.zip',
+					archive: 'nightly-' + version + '.zip',
 					mode: 'zip',
-					level: 9
+					level: 9,
 				},
 				files: [
 					{
 						expand: true,
 						cwd: 'nightly/',
 						src: ['**/*'],
-						dest: 'nightly/'
-					}
-				]
-			}
+						dest: 'nightly/',
+					},
+				],
+			},
 		},
 
 		// Watch for changes during development
@@ -122,26 +129,26 @@ module.exports = function (grunt) {
 				tasks: ['webpack:dev'],
 				options: {
 					spawn: false,
-				}
+				},
 			},
 			languages: {
 				files: ['languages/*.po'],
 				tasks: ['po2mo'],
 				options: {
 					spawn: false,
-				}
-			}
+				},
+			},
 		},
 
 		// Version bump
 		version: {
 			options: {
-				prefix: 'Version:\\s*'
+				prefix: 'Version:\\s*',
 			},
 			project: {
-				src: ['nightly.php', 'readme.txt']
-			}
-		}
+				src: ['nightly.php', 'readme.txt'],
+			},
+		},
 	});
 
 	// Load npm tasks
@@ -155,44 +162,25 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-version');
 
 	// Register tasks
-	grunt.registerTask('build', [
-		'clean:build',
-		'webpack:prod'
-	]);
+	grunt.registerTask('build', ['clean:build', 'webpack:prod']);
 
-	grunt.registerTask('build:dev', [
-		'clean:build',
-		'webpack:dev'
-	]);
+	grunt.registerTask('build:dev', ['clean:build', 'webpack:dev']);
 
-	grunt.registerTask('i18n', [
-		'makepot',
-		'po2mo'
-	]);
+	grunt.registerTask('i18n', ['makepot', 'po2mo']);
 
 	grunt.registerTask('dist', [
 		'clean:all',
 		'build',
 		'i18n',
 		'copy:main',
-		'copy:languages'
+		'copy:languages',
 	]);
 
-	grunt.registerTask('release', [
-		'dist',
-		'compress',
-		'clean:dist'
-	]);
+	grunt.registerTask('release', ['dist', 'compress', 'clean:dist']);
 
-	grunt.registerTask('release-keep-files', [
-		'dist',
-		'compress'
-	]);
+	grunt.registerTask('release-keep-files', ['dist', 'compress']);
 
-	grunt.registerTask('dev', [
-		'build:dev',
-		'watch'
-	]);
+	grunt.registerTask('dev', ['build:dev', 'watch']);
 
 	grunt.registerTask('default', ['build']);
 };

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nightly — Dark Mode Toggle 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/nightly\n"
-"POT-Creation-Date: 2025-08-13 04:12:46+00:00\n"
+"POT-Creation-Date: 2025-08-16 09:22:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,79 +32,11 @@ msgstr ""
 msgid "Nightly"
 msgstr ""
 
-#: includes/class-api.php:82
-msgid "You must be logged in."
-msgstr ""
-
-#: includes/class-api.php:87
-msgid "You cannot manage plugin settings."
-msgstr ""
-
-#: includes/class-api.php:93
-msgid "Invalid security token."
-msgstr ""
-
-#: includes/class-api.php:143
-msgid "Could not save settings."
-msgstr ""
-
-#: includes/class-api.php:148
-msgid "Settings saved successfully."
-msgstr ""
-
-#: includes/class-api.php:176
-msgid "Settings must be an object."
-msgstr ""
-
-#: includes/class-api.php:184
-msgid "auto_inject must be true or false."
-msgstr ""
-
-#: includes/class-api.php:193
-msgid "Invalid floating position."
-msgstr ""
-
-#: includes/class-api.php:201
-msgid "respect_system_preference must be true or false."
-msgstr ""
-
-#: includes/class-api.php:210
-msgid "Transition duration must be 0-2000ms."
-msgstr ""
-
-#: includes/class-api.php:226
-msgid "Enable automatic injection of floating toggle for classic themes."
-msgstr ""
-
-#: includes/class-api.php:233
-msgid "Position of the floating toggle button."
-msgstr ""
-
-#: includes/class-api.php:244
-msgid "Respect user's system color scheme preference."
-msgstr ""
-
-#: includes/class-api.php:251
-msgid "Duration of theme transition animation in milliseconds."
-msgstr ""
-
-#: includes/class-block.php:38 includes/class-block.php:97
-msgid "Toggle Dark Mode"
-msgstr ""
-
-#: includes/class-block.php:120
-msgid "Toggle between light and dark mode"
-msgstr ""
-
-#: includes/class-block.php:142
-msgid "Current theme: light"
-msgstr ""
-
-#: nightly.php:86
+#: nightly.php:89
 msgid "Nightly requires WordPress 5.0 or higher."
 msgstr ""
 
-#: nightly.php:92
+#: nightly.php:95
 msgid "Nightly requires PHP 7.4 or higher."
 msgstr ""
 
