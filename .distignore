@@ -3,6 +3,7 @@
 /.github
 /node_modules
 /.kiro
+/src
 
 .distignore
 .DS_Store
