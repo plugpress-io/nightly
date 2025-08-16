@@ -16,7 +16,7 @@ Add a professional dark mode toggle to your WordPress site. Works with any theme
 
 Nightly is a lightweight, professional dark mode plugin that seamlessly integrates with any WordPress theme. Whether you're using modern FSE (Full Site Editing) themes or classic themes, Nightly provides the perfect dark mode solution for your website.
 
-= 🌙 Why Choose Nightly? =
+= Why Choose Nightly? =
 
 * **Universal Compatibility** - Works with FSE themes, classic themes, and everything in between
 * **Smart Theme Detection** - Automatically adapts interface based on your theme type
@@ -26,28 +26,9 @@ Nightly is a lightweight, professional dark mode plugin that seamlessly integrat
 * **User Preference Respect** - Automatically detects and honors system dark mode preferences
 * **Smooth Transitions** - Customizable animation speeds for seamless theme switching
 
-= 🚀 Perfect for Any Website =
 
-* **Business Websites** - Professional appearance with improved user experience
-* **Blogs & News Sites** - Reduce eye strain for readers, especially during evening hours
-* **E-commerce Stores** - Modern shopping experience that customers expect
-* **Portfolio Sites** - Showcase your work with elegant dark mode aesthetics
-* **Documentation Sites** - Essential for developer-focused content
-* **Any WordPress Site** - Universal solution that works everywhere
+= Key Features =
 
-= ⚡ Key Features =
-
-**For FSE (Block) Themes:**
-* Dedicated admin dashboard for global floating toggle configuration
-* Gutenberg block for page-specific toggle placement
-* Clean, streamlined interface focused on what you need
-
-**For Classic Themes:**
-* Full-featured admin dashboard with all configuration options
-* Auto-injection of floating toggle for site-wide coverage
-* Gutenberg block also available for flexible placement
-
-**Universal Features:**
 * System preference detection (respects prefers-color-scheme)
 * Customizable transition animations (0-1000ms)
 * Multiple floating toggle positions (all four corners)
@@ -56,7 +37,7 @@ Nightly is a lightweight, professional dark mode plugin that seamlessly integrat
 * Mobile-responsive design
 * RTL language support
 
-= 🎨 Easy to Use =
+= Easy to Use =
 
 **Getting Started is Simple:**
 
@@ -84,15 +65,6 @@ Nightly is a lightweight, professional dark mode plugin that seamlessly integrat
 * **Lightweight** - Minimal impact on page load times
 * **Conditional Loading** - Assets only load when needed
 
-= 🎯 Use Cases =
-
-* Add dark mode to any WordPress theme without coding
-* Improve user experience for evening and night browsing
-* Reduce eye strain for visitors reading long-form content
-* Create a modern, professional appearance
-* Meet accessibility requirements for your website
-* Provide user choice and customization options
-
 == Installation ==
 
 = Automatic Installation =
@@ -113,13 +85,6 @@ Nightly is a lightweight, professional dark mode plugin that seamlessly integrat
 
 = Quick Setup =
 
-**For FSE Themes:**
-1. Go to Appearance → Nightly
-2. Enable "Enable floating toggle"
-3. Choose your preferred corner position
-4. Save settings - done!
-
-**For Classic Themes:**
 1. Go to Appearance → Nightly
 2. Enable "Auto-inject floating toggle"
 3. Customize position and animation settings

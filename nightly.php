@@ -4,7 +4,7 @@
  * Plugin Name: Nightly — Dark Mode Toggle
  * Plugin URI: https://plugpress.io/
  * Description: A lightweight WordPress plugin that provides a minimal dark mode toggle functionality for websites. Includes a custom Gutenberg block and React-based admin interface.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: PlugPress
  * Author URI: https://plugpress.io/
  * License: GPL v2 or later
@@ -12,23 +12,8 @@
  * Text Domain: nightly
  * Domain Path: /languages
  * Requires at least: 5.0
- * Tested up to: 6.4
+ * Tested up to: 6.8
  * Requires PHP: 7.4
- * Network: false
- *
- * Nightly is a modern dark mode toggle plugin that follows WordPress best practices.
- * It provides both a Gutenberg block for content editors and an automatic floating
- * toggle for classic themes. The plugin uses CSS custom properties for smooth theme
- * transitions and respects user system preferences.
- *
- * Key Features:
- * - Gutenberg block for flexible placement
- * - Automatic floating toggle for classic themes
- * - System preference detection
- * - Smooth CSS transitions
- * - Full accessibility support
- * - Performance optimized
- * - Clean, maintainable code
  *
  * @package Nightly
  * @since 1.0.0
@@ -40,7 +25,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('NIGHTLY_VERSION', '1.0.0');
+define('NIGHTLY_VERSION', '1.0.1');
 define('NIGHTLY_PLUGIN_FILE', __FILE__);
 define('NIGHTLY_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('NIGHTLY_PLUGIN_URL', plugin_dir_url(__FILE__));
