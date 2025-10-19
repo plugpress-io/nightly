@@ -1,6 +1,6 @@
 === Nightly — Dark Mode Toggle ===
 Contributors: badhonrocks, plugpressco
-Tags: dark mode, night mode, dark theme, light mode, toggle, accessibility, gutenberg, block, FSE, classic themes
+Tags: dark mode, night mode, dark theme, light mode
 Requires at least: 5.0
 Requires PHP: 7.4
 Tested up to: 6.8
@@ -19,7 +19,7 @@ Nightly is a lightweight, professional dark mode plugin that seamlessly integrat
 = Why Choose Nightly? =
 
 * **Universal Compatibility** - Works with FSE themes, classic themes, and everything in between
-* **Smart Theme Detection** - Automatically adapts interface based on your theme type
+* **Smart Theme Detection** - Automatically adapts the interface based on your theme type
 * **Multiple Implementation Options** - Gutenberg block, floating toggle, or manual integration
 * **Accessibility First** - WCAG 2.1 AA compliant with full keyboard navigation and screen reader support
 * **Performance Optimized** - Lightweight code that won't slow down your site
