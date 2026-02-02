@@ -1,0 +1,25 @@
+{
+  "name": "nightly",
+  "version": "1.0.2",
+  "private": true,
+  "scripts": {
+    "build": "wp-scripts build --webpack-config webpack.config.js",
+    "start": "wp-scripts start --webpack-config webpack.config.js",
+    "format": "wp-scripts format",
+    "lint": "wp-scripts lint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.66.0",
+    "clsx": "^2.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.2.1"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^27.9.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
+  }
+}
