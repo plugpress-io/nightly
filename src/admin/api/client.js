@@ -1,14 +1,3 @@
-export type NightlyConfig = {
-  restUrlBase: string;
-  nonce: string;
-};
-
-declare global {
-  interface Window {
-    NIGHTLY?: NightlyConfig;
-  }
-}
-
 const config = window.NIGHTLY;
 
 if (!config) {
@@ -16,7 +5,7 @@ if (!config) {
   console.warn('Nightly config is not available');
 }
 
-export const apiFetch = async <T>(path: string, options: RequestInit = {}) => {
+export const apiFetch = async (path, options = {}) => {
   if (!config) {
     throw new Error('Nightly config is missing.');
   }
@@ -36,5 +25,5 @@ export const apiFetch = async <T>(path: string, options: RequestInit = {}) => {
     throw new Error(error?.message || 'Request failed');
   }
 
-  return (await response.json()) as T;
+  return response.json();
 };

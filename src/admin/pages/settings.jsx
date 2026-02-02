@@ -8,15 +8,7 @@ import { Switch } from '../components/ui/switch';
 import { Textarea } from '../components/ui/textarea';
 import { PageShell } from '../components/layout/page-shell';
 
-type NightlySettings = {
-  enabled: boolean;
-  default_mode: 'system' | 'dark' | 'light';
-  show_toggle: boolean;
-  toggle_position: 'bottom-right' | 'bottom-left';
-  exclude_selectors: string;
-};
-
-const defaultSettings: NightlySettings = {
+const defaultSettings = {
   enabled: false,
   default_mode: 'system',
   show_toggle: true,
@@ -33,8 +25,8 @@ const Settings = () => {
     queryFn: getSettings,
   });
 
-  const [formState, setFormState] = useState<NightlySettings>(defaultSettings);
-  const [initialState, setInitialState] = useState<NightlySettings | null>(null);
+  const [formState, setFormState] = useState(defaultSettings);
+  const [initialState, setInitialState] = useState(null);
   const [touchedExclude, setTouchedExclude] = useState(false);
 
   useEffect(() => {
@@ -45,7 +37,7 @@ const Settings = () => {
         show_toggle: Boolean(data.show_toggle),
         toggle_position: data.toggle_position ?? 'bottom-right',
         exclude_selectors: data.exclude_selectors ?? '',
-      } satisfies NightlySettings;
+      };
       setFormState(nextState);
       setInitialState(nextState);
     }
@@ -127,7 +119,7 @@ const Settings = () => {
                     onChange={(event) =>
                       setFormState((prev) => ({
                         ...prev,
-                        default_mode: event.target.value as NightlySettings['default_mode'],
+                        default_mode: event.target.value,
                       }))
                     }
                   >
@@ -165,7 +157,7 @@ const Settings = () => {
                     onChange={(event) =>
                       setFormState((prev) => ({
                         ...prev,
-                        toggle_position: event.target.value as NightlySettings['toggle_position'],
+                        toggle_position: event.target.value,
                       }))
                     }
                   >
@@ -218,7 +210,9 @@ const Settings = () => {
               <span className="text-sm text-muted-foreground">{statusLabel}</span>
               {mutation.isError ? (
                 <span className="text-sm text-destructive">
-                  {(mutation.error as Error).message}
+                  {mutation.error instanceof Error
+                    ? mutation.error.message
+                    : 'Something went wrong.'}
                 </span>
               ) : null}
             </div>

@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 
-type PageShellProps = React.HTMLAttributes<HTMLDivElement> & {
-  title: string;
-  description?: string;
-};
-
-export const PageShell = ({ title, description, className, children, ...props }: PageShellProps) => (
+export const PageShell = ({ title, description, className, children, ...props }) => (
   <section className={cn('space-y-6', className)} {...props}>
     <header className="space-y-1">
       <h1 className="text-2xl font-semibold">{title}</h1>
