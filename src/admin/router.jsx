@@ -3,15 +3,13 @@ import Dashboard from './pages/dashboard';
 import Settings from './pages/settings';
 import { Button } from './components/ui/button';
 
-export type RouteKey = 'dashboard' | 'settings';
-
-const routes: Record<RouteKey, { label: string; component: JSX.Element }> = {
+const routes = {
   dashboard: { label: 'Dashboard', component: <Dashboard /> },
   settings: { label: 'Settings', component: <Settings /> },
 };
 
 const Router = () => {
-  const [active, setActive] = useState<RouteKey>('dashboard');
+  const [active, setActive] = useState('dashboard');
 
   return (
     <div className="space-y-6">
@@ -20,7 +18,7 @@ const Router = () => {
           <Button
             key={key}
             variant={active === key ? 'default' : 'secondary'}
-            onClick={() => setActive(key as RouteKey)}
+            onClick={() => setActive(key)}
           >
             {route.label}
           </Button>
