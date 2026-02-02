@@ -13,7 +13,7 @@ class Assets {
 
 	public function enqueue_admin_assets( string $hook ) : void {
 		$screen = get_current_screen();
-		if ( ! $screen || 'toplevel_page_' . PLUGIN_SLUG !== $screen->id ) {
+		if ( ! $screen || 'settings_page_' . PLUGIN_SLUG !== $screen->id ) {
 			return;
 		}
 
@@ -41,14 +41,13 @@ class Assets {
 		}
 
 		$settings = array(
-			'restUrl' => esc_url_raw( rest_url( REST_NAMESPACE ) ),
+			'restUrlBase' => esc_url_raw( rest_url( REST_NAMESPACE ) ),
 			'nonce' => wp_create_nonce( 'wp_rest' ),
-			'pluginUrl' => plugin_url(),
 		);
 
 		wp_add_inline_script(
 			'nightly-admin',
-			'window.NightlyConfig = ' . wp_json_encode( $settings ) . ';',
+			'window.NIGHTLY = ' . wp_json_encode( $settings ) . ';',
 			'before'
 		);
 	}

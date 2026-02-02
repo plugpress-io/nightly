@@ -1,31 +1,31 @@
 export type NightlyConfig = {
-  restUrl: string;
+  restUrlBase: string;
   nonce: string;
-  pluginUrl: string;
 };
 
 declare global {
   interface Window {
-    NightlyConfig?: NightlyConfig;
+    NIGHTLY?: NightlyConfig;
   }
 }
 
-const config = window.NightlyConfig;
+const config = window.NIGHTLY;
 
 if (!config) {
   // eslint-disable-next-line no-console
-  console.warn('NightlyConfig is not available');
+  console.warn('Nightly config is not available');
 }
 
 export const apiFetch = async <T>(path: string, options: RequestInit = {}) => {
   if (!config) {
-    throw new Error('NightlyConfig is missing.');
+    throw new Error('Nightly config is missing.');
   }
 
-  const response = await fetch(`${config.restUrl}${path}`, {
+  const normalizedPath = path.startsWith('/') ? path.slice(1) : path;
+  const response = await fetch(`${config.restUrlBase}${normalizedPath}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json.',
       'X-WP-Nonce': config.nonce,
       ...(options.headers || {}),
     },

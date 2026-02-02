@@ -12,14 +12,12 @@ class Admin {
 	}
 
 	public function register_menu() : void {
-		add_menu_page(
+		add_options_page(
 			__( 'Nightly', TEXT_DOMAIN ),
 			__( 'Nightly', TEXT_DOMAIN ),
 			'manage_options',
 			PLUGIN_SLUG,
-			array( $this, 'render_page' ),
-			'dashicons-moon',
-			58
+			array( $this, 'render_page' )
 		);
 	}
 
