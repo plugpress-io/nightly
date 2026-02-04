@@ -41,17 +41,21 @@ class Sanitize {
 			&& in_array( $values['toggle_size'], array( 'xs', 's', 'm', 'l', 'xl' ), true )
 			? $values['toggle_size']
 			: 'm';
-		// Filter settings
+		// Filter settings (relative values: -50 to +50 for brightness/contrast, 0-100 for sepia/grayscale)
 		$sanitized['brightness'] = isset( $values['brightness'] )
-			? max( 50, min( 150, (int) $values['brightness'] ) )
-			: 100;
+			? max( -50, min( 50, (int) $values['brightness'] ) )
+			: 0;
 
 		$sanitized['contrast'] = isset( $values['contrast'] )
-			? max( 50, min( 150, (int) $values['contrast'] ) )
-			: 100;
+			? max( -50, min( 50, (int) $values['contrast'] ) )
+			: 0;
 
 		$sanitized['sepia'] = isset( $values['sepia'] )
 			? max( 0, min( 100, (int) $values['sepia'] ) )
+			: 0;
+
+		$sanitized['grayscale'] = isset( $values['grayscale'] )
+			? max( 0, min( 100, (int) $values['grayscale'] ) )
 			: 0;
 
 		// Sanitize exclude_selectors with strict pattern

@@ -9,9 +9,10 @@ const Preview = ({ settings }) => {
 	const toggleSize = settings?.toggle_size || 'm';
 	const showToggle = settings?.show_toggle ?? true;
 	const theme = settings?.theme || 'classic';
-	const brightness = settings?.brightness || 100;
-	const contrast = settings?.contrast || 100;
-	const sepia = settings?.sepia || 0;
+	const brightness = settings?.brightness ?? 0;
+	const contrast = settings?.contrast ?? 0;
+	const sepia = settings?.sepia ?? 0;
+	const grayscale = settings?.grayscale ?? 0;
 	const transitionEnabled = settings?.transition_enabled ?? true;
 	const transitionDuration = settings?.transition_duration || 300;
 
@@ -31,14 +32,16 @@ const Preview = ({ settings }) => {
 
 		let baseFilter = themeFilters[theme] || themeFilters.classic;
 
-		// Add custom filters for all themes including custom
+		// Add custom filters (only if non-zero)
 		const customFilters = [];
-		if (brightness !== 100) customFilters.push(`brightness(${brightness}%)`);
-		if (contrast !== 100) customFilters.push(`contrast(${contrast}%)`);
-		if (sepia > 0) customFilters.push(`sepia(${sepia}%)`);
+		if (brightness !== 0) customFilters.push(`brightness(${100 + brightness}%)`);
+		if (contrast !== 0) customFilters.push(`contrast(${100 + contrast}%)`);
+		if (sepia !== 0) customFilters.push(`sepia(${sepia}%)`);
+		if (grayscale !== 0) customFilters.push(`grayscale(${grayscale}%)`);
 
 		if (customFilters.length > 0) {
-			baseFilter = `invert(1) hue-rotate(180deg) ${customFilters.join(' ')}`;
+			const filterParts = ['invert(1)', 'hue-rotate(180deg)', ...customFilters];
+			baseFilter = filterParts.join(' ');
 		}
 
 		return baseFilter;
@@ -118,7 +121,7 @@ const Preview = ({ settings }) => {
 			return (
 				<button
 					onClick={handleClick}
-					className={cn(baseClasses, 'rounded-full relative border-0')}
+					className={cn(baseClasses, 'rounded-full border-0')}
 					style={{
 						width: pillWidth,
 						height: size.size,

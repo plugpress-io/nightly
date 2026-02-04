@@ -69,6 +69,9 @@ class Rest_Routes {
 						'sepia' => array(
 							'type' => 'integer',
 						),
+						'grayscale' => array(
+							'type' => 'integer',
+						),
 						'transition_enabled' => array(
 							'type' => 'boolean',
 						),
@@ -130,6 +133,7 @@ class Rest_Routes {
 			'brightness' => $request->get_param( 'brightness' ),
 			'contrast' => $request->get_param( 'contrast' ),
 			'sepia' => $request->get_param( 'sepia' ),
+			'grayscale' => $request->get_param( 'grayscale' ),
 			'transition_enabled' => $request->get_param( 'transition_enabled' ),
 			'transition_duration' => $request->get_param( 'transition_duration' ),
 			'schedule_enabled' => $request->get_param( 'schedule_enabled' ),

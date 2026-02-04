@@ -266,55 +266,73 @@ const Appearance = ({ formState, setFormState }) => {
 			<div className="border-t border-gray-200 pt-6">
 				<h3 className="text-sm font-semibold text-gray-900 mb-4">Universal Filter Settings</h3>
 				<p className="text-xs text-gray-600 mb-4">
-					These filters apply globally to all content in dark mode. Adjust to fine-tune the appearance.
+					Fine-tune dark mode appearance. Values at 0 are OFF (no adjustment applied).
 				</p>
 
 				<div className="space-y-4">
 					<FormField
 						label="Brightness"
-						helper="Adjust the overall brightness of dark mode (50-150%)"
+						helper="Adjust brightness relative to base (-50 to +50, 0 = no adjustment)"
 					>
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-2">
 							<Slider
-								min={50}
-								max={150}
+								min={-50}
+								max={50}
 								step={5}
 								value={formState.brightness}
 								disabled={isDisabled}
 								onValueChange={(value) => setFormState((prev) => ({ ...prev, brightness: value }))}
 								className="flex-1"
 							/>
-							<span className="text-sm font-medium text-gray-900 w-14 text-right tabular-nums">
-								{formState.brightness}%
+							<span className="text-sm font-medium text-gray-900 w-16 text-right tabular-nums">
+								{formState.brightness > 0 ? '+' : ''}{formState.brightness}
 							</span>
+							<button
+								type="button"
+								onClick={() => setFormState((prev) => ({ ...prev, brightness: 0 }))}
+								disabled={isDisabled || formState.brightness === 0}
+								className="text-xs text-gray-600 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed px-2 py-1 border border-gray-300 rounded"
+								title="Reset to default (0)"
+							>
+								Reset
+							</button>
 						</div>
 					</FormField>
 
 					<FormField
 						label="Contrast"
-						helper="Adjust the contrast levels (50-150%)"
+						helper="Adjust contrast relative to base (-50 to +50, 0 = no adjustment)"
 					>
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-2">
 							<Slider
-								min={50}
-								max={150}
+								min={-50}
+								max={50}
 								step={5}
 								value={formState.contrast}
 								disabled={isDisabled}
 								onValueChange={(value) => setFormState((prev) => ({ ...prev, contrast: value }))}
 								className="flex-1"
 							/>
-							<span className="text-sm font-medium text-gray-900 w-14 text-right tabular-nums">
-								{formState.contrast}%
+							<span className="text-sm font-medium text-gray-900 w-16 text-right tabular-nums">
+								{formState.contrast > 0 ? '+' : ''}{formState.contrast}
 							</span>
+							<button
+								type="button"
+								onClick={() => setFormState((prev) => ({ ...prev, contrast: 0 }))}
+								disabled={isDisabled || formState.contrast === 0}
+								className="text-xs text-gray-600 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed px-2 py-1 border border-gray-300 rounded"
+								title="Reset to default (0)"
+							>
+								Reset
+							</button>
 						</div>
 					</FormField>
 
 					<FormField
 						label="Sepia"
-						helper="Add a warm sepia tone to reduce blue light (0-100%)"
+						helper="Add warm sepia tone to reduce blue light (0-100%, 0 = OFF)"
 					>
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-2">
 							<Slider
 								min={0}
 								max={100}
@@ -324,9 +342,47 @@ const Appearance = ({ formState, setFormState }) => {
 								onValueChange={(value) => setFormState((prev) => ({ ...prev, sepia: value }))}
 								className="flex-1"
 							/>
-							<span className="text-sm font-medium text-gray-900 w-14 text-right tabular-nums">
+							<span className="text-sm font-medium text-gray-900 w-16 text-right tabular-nums">
 								{formState.sepia}%
 							</span>
+							<button
+								type="button"
+								onClick={() => setFormState((prev) => ({ ...prev, sepia: 0 }))}
+								disabled={isDisabled || formState.sepia === 0}
+								className="text-xs text-gray-600 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed px-2 py-1 border border-gray-300 rounded"
+								title="Reset to default (0)"
+							>
+								Reset
+							</button>
+						</div>
+					</FormField>
+
+					<FormField
+						label="Grayscale"
+						helper="Remove color saturation for black & white effect (0-100%, 0 = OFF)"
+					>
+						<div className="flex items-center gap-2">
+							<Slider
+								min={0}
+								max={100}
+								step={5}
+								value={formState.grayscale}
+								disabled={isDisabled}
+								onValueChange={(value) => setFormState((prev) => ({ ...prev, grayscale: value }))}
+								className="flex-1"
+							/>
+							<span className="text-sm font-medium text-gray-900 w-16 text-right tabular-nums">
+								{formState.grayscale}%
+							</span>
+							<button
+								type="button"
+								onClick={() => setFormState((prev) => ({ ...prev, grayscale: 0 }))}
+								disabled={isDisabled || formState.grayscale === 0}
+								className="text-xs text-gray-600 hover:text-gray-900 disabled:opacity-40 disabled:cursor-not-allowed px-2 py-1 border border-gray-300 rounded"
+								title="Reset to default (0)"
+							>
+								Reset
+							</button>
 						</div>
 					</FormField>
 

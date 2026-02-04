@@ -87,21 +87,35 @@ class Frontend {
 		echo ' { filter: invert(1) hue-rotate(180deg) !important; }';
 		echo '</style>' . "\n";
 
-		// Output custom filter settings
-		$brightness = $this->settings['brightness'] ?? 100;
-		$contrast = $this->settings['contrast'] ?? 100;
+		// Output custom filter settings (relative values: -50 to +50 for brightness/contrast, 0-100 for sepia/grayscale)
+		$brightness = $this->settings['brightness'] ?? 0;
+		$contrast = $this->settings['contrast'] ?? 0;
 		$sepia = $this->settings['sepia'] ?? 0;
+		$grayscale = $this->settings['grayscale'] ?? 0;
 
-		if ( $brightness !== 100 || $contrast !== 100 || $sepia > 0 ) {
-			$filters = sprintf(
-				'invert(1) hue-rotate(180deg) brightness(%s%%) contrast(%s%%) sepia(%s%%)',
-				$brightness,
-				$contrast,
-				$sepia
-			);
+		// Only output if any filter is active (non-zero)
+		if ( $brightness !== 0 || $contrast !== 0 || $sepia !== 0 || $grayscale !== 0 ) {
+			// Build filter string with base inversion
+			$filter_parts = array( 'invert(1)', 'hue-rotate(180deg)' );
+
+			// Add filters only if they're non-zero
+			if ( $brightness !== 0 ) {
+				$filter_parts[] = sprintf( 'brightness(%s%%)', 100 + $brightness );
+			}
+			if ( $contrast !== 0 ) {
+				$filter_parts[] = sprintf( 'contrast(%s%%)', 100 + $contrast );
+			}
+			if ( $sepia !== 0 ) {
+				$filter_parts[] = sprintf( 'sepia(%s%%)', $sepia );
+			}
+			if ( $grayscale !== 0 ) {
+				$filter_parts[] = sprintf( 'grayscale(%s%%)', $grayscale );
+			}
+
+			$filters = implode( ' ', $filter_parts );
 
 			echo '<style id="nightly-filters">';
-			echo 'html.nightly-dark { filter: ' . esc_attr( $filters ) . ' !important; }';
+			echo 'html.nightly-dark[data-theme] { filter: ' . esc_attr( $filters ) . ' !important; }';
 			echo '</style>' . "\n";
 		}
 	}

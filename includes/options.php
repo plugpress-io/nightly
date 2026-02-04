@@ -19,10 +19,11 @@ class Options {
 			'toggle_style' => 'classic',
 			'toggle_size' => 'm',
 			'exclude_selectors' => '#wpadminbar',
-			// Filter settings
-			'brightness' => 100,
-			'contrast' => 100,
+			// Filter settings (relative values: -50 to +50, where 0 = no adjustment)
+			'brightness' => 0,
+			'contrast' => 0,
 			'sepia' => 0,
+			'grayscale' => 0,
 			// Transition settings
 			'transition_enabled' => true,
 			'transition_duration' => 300,
