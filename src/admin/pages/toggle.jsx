@@ -1,6 +1,7 @@
 import { Switch } from '../components/ui/switch';
 import { Select } from '../components/ui/select';
 import { cn } from '../lib/utils';
+import { SunIcon, SunIconOutline } from '../components/icons';
 
 const FormField = ({ label, children, helper }) => (
 	<div className="space-y-2">
@@ -15,9 +16,7 @@ const ToggleDesignOption = ({ design, label, isSelected, onClick, disabled }) =>
 		classic: (
 			<div className="w-full h-16 bg-gray-100 rounded-lg flex items-center justify-center">
 				<div className="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center shadow-sm">
-					<svg width="16" height="16" viewBox="0 0 20 20" fill="white">
-						<path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-					</svg>
+					<SunIcon width={16} height={16} fill="white" />
 				</div>
 			</div>
 		),
@@ -25,9 +24,7 @@ const ToggleDesignOption = ({ design, label, isSelected, onClick, disabled }) =>
 			<div className="w-full h-16 bg-gray-100 rounded-lg flex items-center justify-center px-4">
 				<div className="w-16 h-9 bg-gray-300 rounded-full relative p-0.5">
 					<div className="absolute left-0.5 top-0.5 w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center">
-						<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
-							<circle cx="10" cy="10" r="4" />
-						</svg>
+						<SunIcon width={16} height={16} fill="gray" />
 					</div>
 				</div>
 			</div>
@@ -35,10 +32,7 @@ const ToggleDesignOption = ({ design, label, isSelected, onClick, disabled }) =>
 		minimal: (
 			<div className="w-full h-16 bg-gray-100 rounded-lg flex items-center justify-center">
 				<div className="w-10 h-10 rounded-lg border border-gray-300 bg-transparent flex items-center justify-center">
-					<svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
-						<circle cx="10" cy="10" r="3" />
-						<path d="M10 1v2M10 17v2M1 10h2M17 10h2M3.5 3.5l1.5 1.5M15 15l1.5 1.5M3.5 16.5l1.5-1.5M15 5l1.5-1.5" strokeLinecap="round" />
-					</svg>
+					<SunIconOutline width={16} height={16} />
 				</div>
 			</div>
 		),

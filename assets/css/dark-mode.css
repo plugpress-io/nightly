@@ -16,7 +16,14 @@ html.nightly-dark video,
 html.nightly-dark iframe,
 html.nightly-dark canvas,
 html.nightly-dark embed,
-html.nightly-dark object {
+html.nightly-dark object,
+html.nightly-dark[data-theme] img,
+html.nightly-dark[data-theme] picture,
+html.nightly-dark[data-theme] video,
+html.nightly-dark[data-theme] iframe,
+html.nightly-dark[data-theme] canvas,
+html.nightly-dark[data-theme] embed,
+html.nightly-dark[data-theme] object {
 	filter: invert(1) hue-rotate(180deg) !important;
 }
 
@@ -24,7 +31,11 @@ html.nightly-dark object {
 html.nightly-dark .nightly-toggle svg,
 html.nightly-dark .nightly-toggle svg *,
 html.nightly-dark .nightly-pill-thumb svg,
-html.nightly-dark .nightly-pill-thumb svg * {
+html.nightly-dark .nightly-pill-thumb svg *,
+html.nightly-dark[data-theme] .nightly-toggle svg,
+html.nightly-dark[data-theme] .nightly-toggle svg *,
+html.nightly-dark[data-theme] .nightly-pill-thumb svg,
+html.nightly-dark[data-theme] .nightly-pill-thumb svg * {
 	filter: none !important;
 }
 
@@ -35,7 +46,8 @@ html.nightly-dark .nightly-pill-thumb svg * {
 }
 
 /* Re-invert background images */
-html.nightly-dark [style*="background-image"] {
+html.nightly-dark [style*="background-image"],
+html.nightly-dark[data-theme] [style*="background-image"] {
 	filter: invert(1) hue-rotate(180deg) !important;
 }
 
@@ -43,7 +55,11 @@ html.nightly-dark [style*="background-image"] {
 html.nightly-dark .wp-block-image,
 html.nightly-dark .wp-block-cover,
 html.nightly-dark .custom-logo,
-html.nightly-dark .site-logo {
+html.nightly-dark .site-logo,
+html.nightly-dark[data-theme] .wp-block-image,
+html.nightly-dark[data-theme] .wp-block-cover,
+html.nightly-dark[data-theme] .custom-logo,
+html.nightly-dark[data-theme] .site-logo {
 	filter: invert(1) hue-rotate(180deg) !important;
 }
 

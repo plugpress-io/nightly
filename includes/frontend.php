@@ -139,33 +139,28 @@ class Frontend {
 
 	/**
 	 * Output media-specific brightness filters
+	 * ALWAYS output to ensure images are double-inverted (prevents negative appearance)
 	 */
 	public function output_media_brightness_css() : void {
 		$image_brightness = $this->settings['image_brightness'] ?? 100;
 		$video_brightness = $this->settings['video_brightness'] ?? 100;
 		$bg_brightness = $this->settings['background_brightness'] ?? 100;
 
-		// Only output if any value differs from default
-		if ( $image_brightness === 100 && $video_brightness === 100 && $bg_brightness === 100 ) {
-			return;
-		}
-
 		echo '<style id="nightly-media">';
 
-		// Images and picture elements
-		if ( $image_brightness !== 100 ) {
-			echo 'html.nightly-dark img, html.nightly-dark picture { filter: invert(1) hue-rotate(180deg) brightness(' . absint( $image_brightness ) . '%) !important; } ';
-		}
+		// Images and picture elements - always double-invert to restore original colors
+		// Using both selectors to ensure it works with and without data-theme attribute
+		echo 'html.nightly-dark img, html.nightly-dark picture, ';
+		echo 'html.nightly-dark[data-theme] img, html.nightly-dark[data-theme] picture { ';
+		echo 'filter: invert(1) hue-rotate(180deg) brightness(' . absint( $image_brightness ) . '%) !important; } ';
 
 		// Video elements
-		if ( $video_brightness !== 100 ) {
-			echo 'html.nightly-dark video { filter: invert(1) hue-rotate(180deg) brightness(' . absint( $video_brightness ) . '%) !important; } ';
-		}
+		echo 'html.nightly-dark video, html.nightly-dark[data-theme] video { ';
+		echo 'filter: invert(1) hue-rotate(180deg) brightness(' . absint( $video_brightness ) . '%) !important; } ';
 
 		// Background images
-		if ( $bg_brightness !== 100 ) {
-			echo 'html.nightly-dark [style*="background-image"] { filter: invert(1) hue-rotate(180deg) brightness(' . absint( $bg_brightness ) . '%) !important; } ';
-		}
+		echo 'html.nightly-dark [style*="background-image"], html.nightly-dark[data-theme] [style*="background-image"] { ';
+		echo 'filter: invert(1) hue-rotate(180deg) brightness(' . absint( $bg_brightness ) . '%) !important; } ';
 
 		echo '</style>' . "\n";
 	}
