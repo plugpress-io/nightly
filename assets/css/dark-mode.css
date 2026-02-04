@@ -1,0 +1,443 @@
+/**
+ * Nightly Dark Mode - Universal Inversion
+ * Simplified, professional toggle designs with size system
+ */
+
+/* Apply dark mode when nightly-dark class is present (fallback only) */
+html.nightly-dark:not([data-theme]) {
+	filter: invert(1) hue-rotate(180deg);
+	background-color: #000;
+}
+
+/* Re-invert media elements to restore original colors */
+html.nightly-dark img,
+html.nightly-dark picture,
+html.nightly-dark video,
+html.nightly-dark iframe,
+html.nightly-dark canvas,
+html.nightly-dark embed,
+html.nightly-dark object {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Exclude toggle button SVGs from inversion */
+html.nightly-dark .nightly-toggle svg,
+html.nightly-dark .nightly-toggle svg *,
+html.nightly-dark .nightly-pill-thumb svg,
+html.nightly-dark .nightly-pill-thumb svg * {
+	filter: none !important;
+}
+
+/* Ensure SVG icons render correctly */
+.nightly-toggle svg {
+	pointer-events: none !important;
+	vertical-align: middle !important;
+}
+
+/* Re-invert background images */
+html.nightly-dark [style*="background-image"] {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Re-invert common WordPress image classes */
+html.nightly-dark .wp-block-image,
+html.nightly-dark .wp-block-cover,
+html.nightly-dark .custom-logo,
+html.nightly-dark .site-logo {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Exclude WordPress admin bar from dark mode */
+html.nightly-dark #wpadminbar {
+	filter: none !important;
+}
+
+/* Utility class to prevent inversion */
+html.nightly-dark .nightly-noinvert {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* ============================================
+   BASE TOGGLE STYLES
+   ============================================ */
+.nightly-toggle {
+	--toggle-size: 40px;
+	--toggle-icon: 18px;
+	--toggle-padding: 10px;
+	--toggle-radius: 10px;
+
+	/* Critical positioning - prevent theme overrides */
+	position: fixed !important;
+	z-index: 999999 !important;
+
+	/* Reset common theme interferences */
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	box-sizing: border-box !important;
+
+	/* Display and layout */
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+
+	/* Interaction */
+	cursor: pointer !important;
+	pointer-events: auto !important;
+
+	/* Reset text styles that themes might apply to buttons */
+	font-family: inherit !important;
+	font-size: inherit !important;
+	font-weight: normal !important;
+	line-height: 1 !important;
+	text-align: center !important;
+	text-decoration: none !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+
+	/* Reset appearance */
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+
+	/* Animation */
+	transition: all 0.15s ease !important;
+
+	/* Prevent theme shadows/borders from showing */
+	outline: none !important;
+	box-shadow: none !important;
+
+	/* Prevent overflow */
+	overflow: hidden !important;
+
+	/* Ensure button can be clicked */
+	user-select: none !important;
+	-webkit-user-select: none !important;
+	-moz-user-select: none !important;
+}
+
+.nightly-toggle:focus {
+	outline: 2px solid rgba(59, 130, 246, 0.5) !important;
+	outline-offset: 2px !important;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+.nightly-toggle.nightly-size-xs {
+	--toggle-size: 28px;
+	--toggle-icon: 12px;
+	--toggle-padding: 7px;
+	--toggle-radius: 7px;
+}
+
+.nightly-toggle.nightly-size-s {
+	--toggle-size: 34px;
+	--toggle-icon: 15px;
+	--toggle-padding: 9px;
+	--toggle-radius: 8px;
+}
+
+.nightly-toggle.nightly-size-m {
+	--toggle-size: 40px;
+	--toggle-icon: 18px;
+	--toggle-padding: 10px;
+	--toggle-radius: 10px;
+}
+
+.nightly-toggle.nightly-size-l {
+	--toggle-size: 48px;
+	--toggle-icon: 22px;
+	--toggle-padding: 12px;
+	--toggle-radius: 12px;
+}
+
+.nightly-toggle.nightly-size-xl {
+	--toggle-size: 56px;
+	--toggle-icon: 26px;
+	--toggle-padding: 14px;
+	--toggle-radius: 14px;
+}
+
+/* ============================================
+   POSITION
+   ============================================ */
+.nightly-toggle-bottom-right {
+	bottom: 24px !important;
+	right: 24px !important;
+	top: auto !important;
+	left: auto !important;
+}
+
+.nightly-toggle-bottom-left {
+	bottom: 24px !important;
+	left: 24px !important;
+	top: auto !important;
+	right: auto !important;
+}
+
+/* ============================================
+   STYLE 1: CLASSIC - Contrast circle
+   ============================================ */
+.nightly-toggle.nightly-style-classic {
+	width: var(--toggle-size) !important;
+	height: var(--toggle-size) !important;
+	min-width: var(--toggle-size) !important;
+	min-height: var(--toggle-size) !important;
+	max-width: var(--toggle-size) !important;
+	max-height: var(--toggle-size) !important;
+	border-radius: 50% !important;
+	background: #1f2937 !important;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+	padding: 0 !important;
+}
+
+.nightly-toggle.nightly-style-classic:hover {
+	background: #374151 !important;
+}
+
+.nightly-toggle.nightly-style-classic svg {
+	width: var(--toggle-icon) !important;
+	height: var(--toggle-icon) !important;
+	color: #fbbf24 !important;
+	display: block !important;
+	flex-shrink: 0 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-classic {
+	background: #f9fafb !important;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-classic:hover {
+	background: #f3f4f6 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-classic svg {
+	color: #6366f1 !important;
+}
+
+/* ============================================
+   STYLE 2: PILL - Switch toggle
+   ============================================ */
+.nightly-toggle.nightly-style-pill {
+	width: calc(var(--toggle-size) * 1.75) !important;
+	height: var(--toggle-size) !important;
+	min-width: calc(var(--toggle-size) * 1.75) !important;
+	min-height: var(--toggle-size) !important;
+	max-width: calc(var(--toggle-size) * 1.75) !important;
+	max-height: var(--toggle-size) !important;
+	border-radius: var(--toggle-size) !important;
+	background: #e5e7eb !important;
+	padding: 3px !important;
+	justify-content: flex-start !important;
+}
+
+.nightly-toggle.nightly-style-pill:hover {
+	background: #d1d5db !important;
+}
+
+.nightly-pill-thumb {
+	position: relative !important;
+	width: calc(var(--toggle-size) - 6px) !important;
+	height: calc(var(--toggle-size) - 6px) !important;
+	border-radius: 50% !important;
+	background: white !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	transition: transform 0.2s ease !important;
+	flex-shrink: 0 !important;
+	overflow: hidden !important;
+}
+
+.nightly-toggle.nightly-style-pill svg {
+	width: calc(var(--toggle-icon) * 0.85) !important;
+	height: calc(var(--toggle-icon) * 0.85) !important;
+	color: #9ca3af !important;
+	display: block !important;
+	flex-shrink: 0 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-pill {
+	background: #4f46e5 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-pill:hover {
+	background: #4338ca !important;
+}
+
+html.nightly-dark .nightly-pill-thumb {
+	transform: translateX(calc(var(--toggle-size) * 0.75)) !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-pill svg {
+	color: #6366f1 !important;
+}
+
+/* ============================================
+   STYLE 3: MINIMAL - Ghost button
+   ============================================ */
+.nightly-toggle.nightly-style-minimal {
+	width: var(--toggle-size) !important;
+	height: var(--toggle-size) !important;
+	min-width: var(--toggle-size) !important;
+	min-height: var(--toggle-size) !important;
+	max-width: var(--toggle-size) !important;
+	max-height: var(--toggle-size) !important;
+	border-radius: var(--toggle-radius) !important;
+	background: transparent !important;
+	border: 1px solid #e5e7eb !important;
+	padding: 0 !important;
+}
+
+.nightly-toggle.nightly-style-minimal:hover {
+	background: #f9fafb !important;
+	border-color: #d1d5db !important;
+}
+
+.nightly-toggle.nightly-style-minimal svg {
+	width: var(--toggle-icon) !important;
+	height: var(--toggle-icon) !important;
+	color: #6b7280 !important;
+	display: block !important;
+	flex-shrink: 0 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-minimal {
+	border-color: #374151 !important;
+	background: transparent !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-minimal:hover {
+	background: #1f2937 !important;
+	border-color: #4b5563 !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-minimal svg {
+	color: #9ca3af !important;
+}
+
+/* ============================================
+   ICON VISIBILITY
+   ============================================ */
+/* Light mode: show light icon, hide dark icon */
+/* Higher specificity to override base SVG rules */
+.nightly-toggle.nightly-style-classic .nightly-icon-light,
+.nightly-toggle.nightly-style-pill .nightly-icon-light,
+.nightly-toggle.nightly-style-minimal .nightly-icon-light,
+.nightly-pill-thumb .nightly-icon-light {
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+	filter: none !important;
+	width: var(--toggle-icon) !important;
+	height: var(--toggle-icon) !important;
+}
+
+.nightly-toggle.nightly-style-classic .nightly-icon-dark,
+.nightly-toggle.nightly-style-pill .nightly-icon-dark,
+.nightly-toggle.nightly-style-minimal .nightly-icon-dark,
+.nightly-pill-thumb .nightly-icon-dark {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	position: absolute !important;
+	filter: none !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
+	overflow: hidden !important;
+}
+
+/* Dark mode: hide light icon, show dark icon */
+html.nightly-dark .nightly-toggle.nightly-style-classic .nightly-icon-light,
+html.nightly-dark .nightly-toggle.nightly-style-pill .nightly-icon-light,
+html.nightly-dark .nightly-toggle.nightly-style-minimal .nightly-icon-light,
+html.nightly-dark .nightly-pill-thumb .nightly-icon-light {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	position: absolute !important;
+	filter: none !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
+	overflow: hidden !important;
+}
+
+html.nightly-dark .nightly-toggle.nightly-style-classic .nightly-icon-dark,
+html.nightly-dark .nightly-toggle.nightly-style-pill .nightly-icon-dark,
+html.nightly-dark .nightly-toggle.nightly-style-minimal .nightly-icon-dark,
+html.nightly-dark .nightly-pill-thumb .nightly-icon-dark {
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	position: relative !important;
+	filter: none !important;
+	width: var(--toggle-icon) !important;
+	height: var(--toggle-icon) !important;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+	.nightly-toggle-bottom-right,
+	.nightly-toggle-bottom-left {
+		bottom: 16px !important;
+	}
+
+	.nightly-toggle-bottom-right {
+		right: 16px !important;
+		left: auto !important;
+	}
+
+	.nightly-toggle-bottom-left {
+		left: 16px !important;
+		right: auto !important;
+	}
+}
+
+/* ============================================
+   THEME VARIANTS
+   ============================================ */
+
+/* Classic theme (default) - Neutral dark mode */
+html.nightly-dark[data-theme="classic"] {
+	filter: invert(1) hue-rotate(180deg) !important;
+	background-color: #0a0a0a !important;
+}
+
+/* Cool theme - Blue-tinted, reduced saturation for eye comfort */
+html.nightly-dark[data-theme="cool"] {
+	filter: invert(1) hue-rotate(200deg) saturate(0.7) brightness(92%) !important;
+	background-color: #0d1117 !important;
+}
+
+/* Warm theme - Sepia/amber tones for reduced blue light */
+html.nightly-dark[data-theme="warm"] {
+	filter: invert(1) hue-rotate(160deg) sepia(25%) saturate(1.1) brightness(98%) !important;
+	background-color: #1a1410 !important;
+}
+
+/* High contrast theme - Maximum readability (WCAG AAA) */
+html.nightly-dark[data-theme="high-contrast"] {
+	filter: invert(1) hue-rotate(180deg) contrast(140%) saturate(1.4) brightness(105%) !important;
+	background-color: #000000 !important;
+}
+
+/* Pure black theme - True black for OLED displays */
+html.nightly-dark[data-theme="pure-black"] {
+	filter: invert(1) hue-rotate(180deg) brightness(75%) contrast(130%) saturate(0.9) !important;
+	background-color: #000000 !important;
+}
+
+/* Custom theme - Uses filter inversion with custom color variables */
+html.nightly-dark[data-theme="custom"] {
+	filter: invert(1) hue-rotate(180deg) !important;
+	background: var(--nightly-bg-primary, #000) !important;
+	color: var(--nightly-text-primary, #fff) !important;
+}

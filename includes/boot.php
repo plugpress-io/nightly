@@ -15,6 +15,8 @@ require_once __DIR__ . '/assets.php';
 require_once __DIR__ . '/rest.php';
 require_once __DIR__ . '/notices.php';
 require_once __DIR__ . '/uninstall.php';
+require_once __DIR__ . '/frontend.php';
+require_once __DIR__ . '/meta-boxes.php';
 
 function boot() : void {
 	$services = array(
@@ -22,6 +24,8 @@ function boot() : void {
 		new Assets(),
 		new Rest_Routes(),
 		new Notices(),
+		new Frontend(),
+		new Meta_Boxes(),
 	);
 
 	foreach ( $services as $service ) {

@@ -2,225 +2,190 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSettings, updateSettings } from '../api/endpoints';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Select } from '../components/ui/select';
-import { Switch } from '../components/ui/switch';
-import { Textarea } from '../components/ui/textarea';
-import { PageShell } from '../components/layout/page-shell';
+import { useToast } from '../components/ui/toast';
+import Navigation from '../components/navigation';
+import Preview from '../components/preview';
+import General from './general';
+import Toggle from './toggle';
+import Appearance from './appearance';
+import Advanced from './advanced';
 
 const defaultSettings = {
-  enabled: false,
-  default_mode: 'system',
-  show_toggle: true,
-  toggle_position: 'bottom-right',
-  exclude_selectors: '',
+	enabled: true,
+	default_mode: 'system',
+	show_toggle: true,
+	toggle_position: 'bottom-right',
+	toggle_style: 'classic',
+	toggle_size: 'm',
+	exclude_selectors: '#wpadminbar',
+	brightness: 100,
+	contrast: 100,
+	sepia: 0,
+	transition_enabled: true,
+	transition_duration: 300,
+	schedule_enabled: false,
+	schedule_start: '20:00',
+	schedule_end: '06:00',
+	keyboard_enabled: true,
+	keyboard_shortcut: 'Ctrl+Shift+D',
+	image_brightness: 100,
+	video_brightness: 100,
+	background_brightness: 100,
+	theme: 'classic',
+	custom_colors: {
+		bg_primary: '#000000',
+		bg_secondary: '#0a0a0a',
+		text_primary: '#ffffff',
+		text_secondary: '#a0a0a0',
+		border: '#1a1a1a',
+		accent: '#4a9eff',
+	},
 };
 
-const selectorPattern = /^[a-zA-Z0-9#.\-_\s,:>\[\]\(\)="'~+*\\/]*$/;
+const selectorPattern = /^[a-zA-Z0-9#.\-_\s,:>\[\]()="'~+*\/]*$/;
 
 const Settings = () => {
-  const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery({
-    queryKey: ['settings'],
-    queryFn: getSettings,
-  });
+	const queryClient = useQueryClient();
+	const { addToast } = useToast();
+	const [activeTab, setActiveTab] = useState('general');
 
-  const [formState, setFormState] = useState(defaultSettings);
-  const [initialState, setInitialState] = useState(null);
-  const [touchedExclude, setTouchedExclude] = useState(false);
+	const { data, isLoading } = useQuery({
+		queryKey: ['settings'],
+		queryFn: getSettings,
+	});
 
-  useEffect(() => {
-    if (data) {
-      const nextState = {
-        enabled: Boolean(data.enabled),
-        default_mode: data.default_mode ?? 'system',
-        show_toggle: Boolean(data.show_toggle),
-        toggle_position: data.toggle_position ?? 'bottom-right',
-        exclude_selectors: data.exclude_selectors ?? '',
-      };
-      setFormState(nextState);
-      setInitialState(nextState);
-    }
-  }, [data]);
+	const [formState, setFormState] = useState(defaultSettings);
+	const [initialState, setInitialState] = useState(defaultSettings);
 
-  const mutation = useMutation({
-    mutationFn: updateSettings,
-    onSuccess: (updated) => {
-      queryClient.setQueryData(['settings'], updated);
-      setInitialState(updated);
-    },
-  });
+	useEffect(() => {
+		if (data) {
+			const nextState = {
+				enabled: Boolean(data.enabled),
+				default_mode: data.default_mode ?? 'system',
+				show_toggle: Boolean(data.show_toggle),
+				toggle_position: data.toggle_position ?? 'bottom-right',
+				toggle_style: data.toggle_style ?? 'classic',
+				toggle_size: data.toggle_size ?? 'm',
+				exclude_selectors: data.exclude_selectors ?? '',
+				brightness: data.brightness ?? 100,
+				contrast: data.contrast ?? 100,
+				sepia: data.sepia ?? 0,
+				transition_enabled: data.transition_enabled ?? true,
+				transition_duration: data.transition_duration ?? 300,
+				schedule_enabled: data.schedule_enabled ?? false,
+				schedule_start: data.schedule_start ?? '20:00',
+				schedule_end: data.schedule_end ?? '06:00',
+				keyboard_enabled: data.keyboard_enabled ?? true,
+				keyboard_shortcut: data.keyboard_shortcut ?? 'Ctrl+Shift+D',
+				image_brightness: data.image_brightness ?? 100,
+				video_brightness: data.video_brightness ?? 100,
+				background_brightness: data.background_brightness ?? 100,
+				theme: data.theme ?? 'classic',
+				custom_colors: data.custom_colors ?? {
+					bg_primary: '#000000',
+					bg_secondary: '#0a0a0a',
+					text_primary: '#ffffff',
+					text_secondary: '#a0a0a0',
+					border: '#1a1a1a',
+					accent: '#4a9eff',
+				},
+			};
+			setFormState(nextState);
+			setInitialState(nextState);
+		}
+	}, [data]);
 
-  const isDirty = useMemo(() => {
-    if (!initialState) {
-      return false;
-    }
-    return JSON.stringify(formState) !== JSON.stringify(initialState);
-  }, [formState, initialState]);
+	const mutation = useMutation({
+		mutationFn: updateSettings,
+		onSuccess: (updated) => {
+			queryClient.setQueryData(['settings'], updated);
+			setInitialState(updated);
+			addToast('Settings saved successfully', 'success');
+		},
+		onError: (error) => {
+			addToast(error.message || 'Failed to save settings', 'error');
+		},
+	});
 
-  const excludeSelectorsError =
-    formState.exclude_selectors.trim().length > 0 &&
-    !selectorPattern.test(formState.exclude_selectors);
+	const isDirty = useMemo(() => {
+		return JSON.stringify(formState) !== JSON.stringify(initialState);
+	}, [formState, initialState]);
 
-  const statusLabel = mutation.isPending
-    ? 'Saving…'
-    : mutation.isError
-      ? 'Error'
-      : mutation.isSuccess && !isDirty
-        ? 'Saved'
-        : '';
+	const excludeSelectorsError = useMemo(() => {
+		const value = formState.exclude_selectors.trim();
+		return value.length > 0 && !selectorPattern.test(value);
+	}, [formState.exclude_selectors]);
 
-  const handleSave = () => {
-    mutation.mutate(formState);
-  };
+	const handleSave = () => {
+		mutation.mutate(formState);
+	};
 
-  const isDisabled = !formState.enabled;
+	const handleReset = () => {
+		if (window.confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
+			setFormState(defaultSettings);
+			mutation.mutate(defaultSettings);
+		}
+	};
 
-  return (
-    <PageShell
-      title="Nightly"
-      description="Universal dark mode that follows the system, with a user override."
-    >
-      {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading settings…</p>
-      ) : (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Behavior</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <label className="text-sm font-medium" htmlFor="nightly-enabled">
-                    Enabled
-                  </label>
-                  <p className="text-xs text-muted-foreground">
-                    Turn the universal dark mode on or off.
-                  </p>
-                </div>
-                <Switch
-                  id="nightly-enabled"
-                  checked={formState.enabled}
-                  onChange={(event) =>
-                    setFormState((prev) => ({ ...prev, enabled: event.target.checked }))
-                  }
-                />
-              </div>
-              <div className={isDisabled ? 'space-y-6 opacity-50' : 'space-y-6'}>
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="nightly-default-mode">
-                    Default mode
-                  </label>
-                  <Select
-                    id="nightly-default-mode"
-                    value={formState.default_mode}
-                    disabled={isDisabled}
-                    onChange={(event) =>
-                      setFormState((prev) => ({
-                        ...prev,
-                        default_mode: event.target.value,
-                      }))
-                    }
-                  >
-                    <option value="system">System</option>
-                    <option value="dark">Always Dark</option>
-                    <option value="light">Always Light</option>
-                  </Select>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <label className="text-sm font-medium" htmlFor="nightly-show-toggle">
-                      Show toggle button
-                    </label>
-                    <p className="text-xs text-muted-foreground">
-                      Allow users to override the system preference.
-                    </p>
-                  </div>
-                  <Switch
-                    id="nightly-show-toggle"
-                    checked={formState.show_toggle}
-                    disabled={isDisabled}
-                    onChange={(event) =>
-                      setFormState((prev) => ({ ...prev, show_toggle: event.target.checked }))
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <label className="text-sm font-medium" htmlFor="nightly-toggle-position">
-                    Toggle position
-                  </label>
-                  <Select
-                    id="nightly-toggle-position"
-                    value={formState.toggle_position}
-                    disabled={isDisabled}
-                    onChange={(event) =>
-                      setFormState((prev) => ({
-                        ...prev,
-                        toggle_position: event.target.value,
-                      }))
-                    }
-                  >
-                    <option value="bottom-right">Bottom right</option>
-                    <option value="bottom-left">Bottom left</option>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Compatibility</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className={isDisabled ? 'space-y-2 opacity-50' : 'space-y-2'}>
-                <label className="text-sm font-medium" htmlFor="nightly-exclude-selectors">
-                  Exclude selectors
-                </label>
-                <Textarea
-                  id="nightly-exclude-selectors"
-                  placeholder=".site-logo, .hero img, .brand-mark"
-                  value={formState.exclude_selectors}
-                  disabled={isDisabled}
-                  onBlur={() => setTouchedExclude(true)}
-                  onChange={(event) =>
-                    setFormState((prev) => ({ ...prev, exclude_selectors: event.target.value }))
-                  }
-                />
-                <p className="text-xs text-muted-foreground">
-                  Comma-separated CSS selectors to exclude from inversion.
-                </p>
-                {touchedExclude && excludeSelectorsError ? (
-                  <p className="text-xs text-destructive">
-                    Only commas, spaces, and common selector characters are allowed.
-                  </p>
-                ) : null}
-              </div>
-            </CardContent>
-          </Card>
-          <div className="sticky bottom-0 z-10 -mx-6 border-t border-border bg-background/95 px-6 py-4 backdrop-blur">
-            <div className="mx-auto flex max-w-4xl flex-wrap items-center gap-4">
-              <Button
-                type="button"
-                disabled={!isDirty || mutation.isPending || excludeSelectorsError}
-                onClick={handleSave}
-              >
-                Save changes
-              </Button>
-              <span className="text-sm text-muted-foreground">{statusLabel}</span>
-              {mutation.isError ? (
-                <span className="text-sm text-destructive">
-                  {mutation.error instanceof Error
-                    ? mutation.error.message
-                    : 'Something went wrong.'}
-                </span>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      )}
-    </PageShell>
-  );
+	if (isLoading) {
+		return (
+			<div className="p-6">
+				<p className="text-sm text-gray-600">Loading...</p>
+			</div>
+		);
+	}
+
+	return (
+		<div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-8">
+			{/* Left Side - Content */}
+			<div>
+				<Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+
+				<div className="bg-white rounded-lg border border-gray-200 p-6">
+					{activeTab === 'general' && (
+						<General formState={formState} setFormState={setFormState} />
+					)}
+					{activeTab === 'toggle' && (
+						<Toggle formState={formState} setFormState={setFormState} />
+					)}
+					{activeTab === 'appearance' && (
+						<Appearance formState={formState} setFormState={setFormState} />
+					)}
+					{activeTab === 'advanced' && (
+						<Advanced formState={formState} setFormState={setFormState} />
+					)}
+				</div>
+
+				{/* Save Button */}
+				<div className="mt-6 flex items-center gap-4">
+					<Button
+						type="button"
+						disabled={!isDirty || mutation.isPending || excludeSelectorsError}
+						onClick={handleSave}
+						className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					>
+						{mutation.isPending ? 'Saving...' : 'Save Changes'}
+					</Button>
+					<Button
+						type="button"
+						disabled={mutation.isPending}
+						onClick={handleReset}
+						className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 px-6 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					>
+						Reset to Defaults
+					</Button>
+					{isDirty && (
+						<span className="text-xs text-amber-600">You have unsaved changes</span>
+					)}
+				</div>
+			</div>
+
+			{/* Right Side - Preview */}
+			<div className="mt-14">
+				<Preview settings={formState} />
+			</div>
+		</div>
+	);
 };
 
 export default Settings;

@@ -14,7 +14,7 @@ export const apiFetch = async (path, options = {}) => {
   const response = await fetch(`${config.restUrlBase}${normalizedPath}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json.',
+      'Content-Type': 'application/json',
       'X-WP-Nonce': config.nonce,
       ...(options.headers || {}),
     },

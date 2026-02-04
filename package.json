@@ -3,8 +3,8 @@
   "version": "1.0.2",
   "private": true,
   "scripts": {
-    "build": "wp-scripts build --webpack-config webpack.config.js",
-    "start": "wp-scripts start --webpack-config webpack.config.js",
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
     "format": "wp-scripts format",
     "lint": "wp-scripts lint"
   },

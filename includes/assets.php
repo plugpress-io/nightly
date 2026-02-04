@@ -17,16 +17,25 @@ class Assets {
 			return;
 		}
 
-		$asset_path = plugin_dir() . 'build/admin';
-		$script_file = $asset_path . '/index.js';
-		$style_file = $asset_path . '/index.css';
+		$asset_file = plugin_dir() . 'build/index.asset.php';
+		$script_file = plugin_dir() . 'build/index.js';
+		$style_file = plugin_dir() . 'build/index.css';
+
+		if ( file_exists( $asset_file ) ) {
+			$asset_data = include $asset_file;
+		} else {
+			$asset_data = array(
+				'dependencies' => array(),
+				'version' => filemtime( $script_file ),
+			);
+		}
 
 		if ( file_exists( $script_file ) ) {
 			wp_enqueue_script(
 				'nightly-admin',
-				plugin_url() . 'build/admin/index.js',
-				array( 'wp-element' ),
-				filemtime( $script_file ),
+				plugin_url() . 'build/index.js',
+				$asset_data['dependencies'],
+				$asset_data['version'],
 				true
 			);
 		}
@@ -34,14 +43,14 @@ class Assets {
 		if ( file_exists( $style_file ) ) {
 			wp_enqueue_style(
 				'nightly-admin',
-				plugin_url() . 'build/admin/index.css',
+				plugin_url() . 'build/index.css',
 				array(),
 				filemtime( $style_file )
 			);
 		}
 
 		$settings = array(
-			'restUrlBase' => esc_url_raw( rest_url( REST_NAMESPACE ) ),
+			'restUrlBase' => esc_url_raw( rest_url( REST_NAMESPACE ) ) . '/',
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 		);
 
