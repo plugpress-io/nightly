@@ -100,18 +100,13 @@ Use the "Dark Mode Settings" meta box in the post/page editor to disable dark mo
 
 == Screenshots ==
 
-1. Admin dashboard with all settings
-2. Six beautiful color theme options
-3. Toggle button customization
-4. Live preview of dark mode
-5. Auto-scheduling settings
-6. Custom color palette creator
-7. Per-page dark mode control
-8. Frontend toggle button on live site
+1. Admin ettings
+2. Toggle button customization
+3. Six beautiful color theme options
 
 == Changelog ==
 
-= 1.0.2 - 2025-02-04 =
+= 1.0.2 =
 * Added 6 color scheme variants (Classic, Cool, Warm, High Contrast, Pure Black, Custom)
 * Added auto-scheduling with custom time ranges
 * Added per-page dark mode control with meta boxes
