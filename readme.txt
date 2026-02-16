@@ -4,15 +4,15 @@ Tags: dark mode, night mode, dark theme, eye care
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Dark Mode Toggle for WordPress with smart scheduling, multiple themes, and customization options.
+Dark Mode Toggle with smart scheduling, multiple themes, and customization options.
 
 == Description ==
 
-Nightly is a Dark Mode Toggle that adds a professional dark mode to your WordPress site with one click. Give your visitors a comfortable viewing experience with automatic dark mode that reduces eye strain and saves battery life.
+Nightly is a Dark Mode Toggle that adds a dark mode to your site with one click. Give your visitors a comfortable viewing experience with automatic dark mode that reduces eye strain and saves battery life.
 
 = Why Dark Mode? =
 
@@ -55,6 +55,15 @@ Lightweight and fast with no impact on page speed.
 3. Click **Install** and then **Activate**
 4. Navigate to **Settings → Nightly** to configure
 5. Enable dark mode and customize your preferences
+
+= Build from Source =
+
+To build the plugin from source, clone the repository and install dependencies:
+
+`git clone https://github.com/plugpress-io/nightly.git`
+`cd nightly`
+`npm install`
+`npm run build`
 
 == Frequently Asked Questions ==
 
@@ -100,7 +109,7 @@ Use the "Dark Mode Settings" meta box in the post/page editor to disable dark mo
 
 == Screenshots ==
 
-1. Admin ettings
+1. Admin Settings
 2. Toggle button customization
 3. Six beautiful color theme options
 

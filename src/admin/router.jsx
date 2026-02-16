@@ -23,7 +23,7 @@ const Router = () => {
 							<h1 className="text-lg font-semibold text-gray-900">Nightly</h1>
 						</div>
 						<div className="flex items-center gap-3">
-							<span className="text-xs text-gray-500 font-medium">v1.0.2</span>
+							<span className="text-xs text-gray-500 font-medium">v1.0.3</span>
 							<a
 								href="https://plugpress.io/docs"
 								target="_blank"

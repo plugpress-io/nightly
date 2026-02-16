@@ -13,8 +13,8 @@ class Admin {
 
 	public function register_menu() : void {
 		add_options_page(
-			__( 'Nightly', TEXT_DOMAIN ),
-			__( 'Nightly', TEXT_DOMAIN ),
+			__( 'Nightly', 'nightly' ),
+			__( 'Nightly', 'nightly' ),
 			'manage_options',
 			PLUGIN_SLUG,
 			array( $this, 'render_page' )

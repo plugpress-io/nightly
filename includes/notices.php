@@ -46,17 +46,17 @@ class Notices {
 		);
 
 		echo '<div class="notice notice-info is-dismissible">';
-		echo '<p>' . esc_html__( 'Enjoying Nightly? Please consider leaving a review.', TEXT_DOMAIN ) . '</p>';
+		echo '<p>' . esc_html__( 'Enjoying Nightly? Please consider leaving a review.', 'nightly' ) . '</p>';
 		echo '<p>';
-		echo '<a class="button button-primary" href="' . esc_url( $review_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Leave a review', TEXT_DOMAIN ) . '</a> ';
-		echo '<a class="button" href="' . esc_url( $dismiss_url ) . '">' . esc_html__( 'Dismiss', TEXT_DOMAIN ) . '</a>';
+		echo '<a class="button button-primary" href="' . esc_url( $review_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Leave a review', 'nightly' ) . '</a> ';
+		echo '<a class="button" href="' . esc_url( $dismiss_url ) . '">' . esc_html__( 'Dismiss', 'nightly' ) . '</a>';
 		echo '</p>';
 		echo '</div>';
 	}
 
 	public function dismiss_review() : void {
 		if ( ! Permissions::can_manage() ) {
-			wp_die( esc_html__( 'You do not have permission to do that.', TEXT_DOMAIN ) );
+			wp_die( esc_html__( 'You do not have permission to do that.', 'nightly' ) );
 		}
 
 		check_admin_referer( 'nightly_dismiss_review' );

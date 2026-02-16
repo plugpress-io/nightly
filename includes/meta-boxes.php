@@ -18,7 +18,7 @@ class Meta_Boxes {
 
 		add_meta_box(
 			'nightly_dark_mode_control',
-			__( 'Dark Mode Settings', TEXT_DOMAIN ),
+			__( 'Dark Mode Settings', 'nightly' ),
 			array( $this, 'render_meta_box' ),
 			$post_types,
 			'side',
@@ -64,11 +64,11 @@ class Meta_Boxes {
 					style="margin-top: 2px;"
 				/>
 				<span>
-					<?php esc_html_e( 'Disable dark mode for this content', TEXT_DOMAIN ); ?>
+					<?php esc_html_e( 'Disable dark mode for this content', 'nightly' ); ?>
 				</span>
 			</label>
 			<p class="description" style="margin: 8px 0 0 26px;">
-				<?php esc_html_e( 'When enabled, dark mode will not be applied to this post/page.', TEXT_DOMAIN ); ?>
+				<?php esc_html_e( 'When enabled, dark mode will not be applied to this post/page.', 'nightly' ); ?>
 			</p>
 		</div>
 		<?php

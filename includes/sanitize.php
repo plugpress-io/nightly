@@ -67,7 +67,7 @@ class Sanitize {
 			} else {
 				return new WP_Error(
 					'nightly_invalid_selectors',
-					__( 'Invalid CSS selectors provided.', TEXT_DOMAIN ),
+					__( 'Invalid CSS selectors provided.', 'nightly' ),
 					array( 'status' => 400 )
 				);
 			}
@@ -163,7 +163,7 @@ class Sanitize {
 		if ( strlen( $sanitized['example_text'] ) > 200 ) {
 			return new WP_Error(
 				'nightly_invalid_text',
-				__( 'Example text is too long.', TEXT_DOMAIN ),
+				__( 'Example text is too long.', 'nightly' ),
 				array( 'status' => 400 )
 			);
 		}
