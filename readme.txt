@@ -8,7 +8,7 @@ Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Dark Mode Toggle with smart scheduling, multiple themes, and customization options.
+Nightly Dark Mode customizable dark mode plugin for site that allows you to easily add a dark theme.
 
 == Description ==
 
