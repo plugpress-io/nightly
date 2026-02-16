@@ -12,11 +12,11 @@ Nightly Dark Mode customizable dark mode plugin for site that allows you to easi
 
 == Description ==
 
-Nightly is a Dark Mode Toggle that adds a dark mode to your site with one click. Give your visitors a comfortable viewing experience with automatic dark mode that reduces eye strain and saves battery life.
+Nightly Dark Mode adds dark mode to your website in one click. Give visitors a more comfortable viewing experience with automatic dark mode that can help reduce eye strain. With customizable color schemes, scheduling options, and a floating toggle button, Nightly makes it easy to offer a dark theme for your site.
 
 = Why Dark Mode? =
 
-Dark mode reduces eye strain during nighttime browsing and in low-light environments. Studies show 68% of users prefer dark mode for evening use. It also saves battery life on OLED screens and provides a modern, professional look.
+Dark mode makes your site more comfortable to browse in low light. Many users prefer it at night, and OLED screens may use less power with darker colors. It also gives your site a modern look.
 
 = How It Works =
 
