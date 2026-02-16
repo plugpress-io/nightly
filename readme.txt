@@ -1,4 +1,4 @@
-=== Dark Mode for WordPress - Nightly ===
+=== Nightly Dark Mode ===
 Contributors: badhonrocks, plugpressco
 Tags: dark mode, night mode, dark theme, eye care
 Requires at least: 6.0
