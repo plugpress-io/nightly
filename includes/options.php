@@ -9,9 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Options {
 	public static function defaults() : array {
 		return array(
-			'example_text' => '',
-			'enable_feature' => false,
-			// Dark mode settings
 			'enabled' => true,
 			'default_mode' => 'system',
 			'show_toggle' => true,

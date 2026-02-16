@@ -30,12 +30,6 @@ class Rest_Routes {
 					'callback' => array( $this, 'update_settings' ),
 					'permission_callback' => array( Permissions::class, 'can_manage' ),
 					'args' => array(
-						'example_text' => array(
-							'type' => 'string',
-						),
-						'enable_feature' => array(
-							'type' => 'boolean',
-						),
 						'enabled' => array(
 							'type' => 'boolean',
 						),
@@ -57,7 +51,8 @@ class Rest_Routes {
 						'toggle_size' => array(
 							'type' => 'string',
 							'enum' => array( 'xs', 's', 'm', 'l', 'xl' ),
-						),						'exclude_selectors' => array(
+						),
+						'exclude_selectors' => array(
 							'type' => 'string',
 						),
 						'brightness' => array(
@@ -120,33 +115,12 @@ class Rest_Routes {
 	}
 
 	public function update_settings( WP_REST_Request $request ) {
-		$data = array(
-			'example_text' => $request->get_param( 'example_text' ),
-			'enable_feature' => $request->get_param( 'enable_feature' ),
-			'enabled' => $request->get_param( 'enabled' ),
-			'default_mode' => $request->get_param( 'default_mode' ),
-			'show_toggle' => $request->get_param( 'show_toggle' ),
-			'toggle_position' => $request->get_param( 'toggle_position' ),
-			'toggle_style' => $request->get_param( 'toggle_style' ),
-			'toggle_size' => $request->get_param( 'toggle_size' ),
-			'exclude_selectors' => $request->get_param( 'exclude_selectors' ),
-			'brightness' => $request->get_param( 'brightness' ),
-			'contrast' => $request->get_param( 'contrast' ),
-			'sepia' => $request->get_param( 'sepia' ),
-			'grayscale' => $request->get_param( 'grayscale' ),
-			'transition_enabled' => $request->get_param( 'transition_enabled' ),
-			'transition_duration' => $request->get_param( 'transition_duration' ),
-			'schedule_enabled' => $request->get_param( 'schedule_enabled' ),
-			'schedule_start' => $request->get_param( 'schedule_start' ),
-			'schedule_end' => $request->get_param( 'schedule_end' ),
-			'keyboard_enabled' => $request->get_param( 'keyboard_enabled' ),
-			'keyboard_shortcut' => $request->get_param( 'keyboard_shortcut' ),
-			'image_brightness' => $request->get_param( 'image_brightness' ),
-			'video_brightness' => $request->get_param( 'video_brightness' ),
-			'background_brightness' => $request->get_param( 'background_brightness' ),
-			'theme' => $request->get_param( 'theme' ),
-			'custom_colors' => $request->get_param( 'custom_colors' ),
-		);
+		$defaults = Options::defaults();
+		$data = array();
+
+		foreach ( array_keys( $defaults ) as $key ) {
+			$data[ $key ] = $request->get_param( $key );
+		}
 
 		$sanitized = Sanitize::options( $data );
 		if ( is_wp_error( $sanitized ) ) {
