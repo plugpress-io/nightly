@@ -20,7 +20,7 @@ Dark mode makes your site more comfortable to browse in low light. Many users pr
 
 = How It Works =
 
-Nightly uses smart CSS filters to automatically invert your site's colors when dark mode is active. Your visitors can toggle between light and dark modes using a floating button, or you can set automatic scheduling based on time of day.
+Nightly applies a smart CSS-based filter to create a dark version of your site when dark mode is enabled. Visitors can switch between light and dark using a floating toggle button, or you can enable automatic scheduling based on the time of day. The plugin also intelligently re-inverts images and media so they look correct in dark mode.
 
 = Key Features =
 
